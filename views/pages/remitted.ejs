@@ -1,0 +1,288 @@
+<%- include('../partials/header') %>
+  <%- include('../partials/left-sidebar') %>
+
+  <main>
+    <div class="container-fluid">
+        <!-- header breadcrumb part start here  -->
+        <div class="row">
+            <div class="col-12">
+                <h1>Remitted Transactions</h1>
+                <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
+                    <ol class="breadcrumb pt-0">
+                        <li class="breadcrumb-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="#">Finance</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Remitted Transactions</li>
+                    </ol>
+                </nav>
+                <div class="separator mb-5"></div>
+            </div>
+        </div>
+        <!-- header breadcrumb part end here  -->
+        <!-- body part start here  -->
+        <div class="row mb-4">
+          <div class="col-12 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <table id="datatable_2" class="data-table data-table-feature">
+                  <thead>
+                    <tr>
+                      <th>Bank Name</th>
+                      <th>Branch Name</th>
+                      <th>IFSC Code</th>
+                      <th>Transaction Date</th>
+                      <th>UTR Number</th>
+                      <th>Order Date</th>
+                      <th>LR Number</th>
+                      <th>PO Number</th>
+                      <th>Client Name</th>
+                      <th>Delivery Date</th>
+                      <th>Total Remittance Amount</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (result && result.length > 0) { %>
+                      <% result.forEach(row => { %>
+                        <tr>
+                          <td><%= row.bank_name %></td>
+                          <td><%= row.branch_name %></td>
+                          <td><%= row.ifsc_code %></td>
+                          <td><%= row.transaction_date %></td>
+                          <td><%= row.utr_number %></td>
+                          <td><%= row.Order_Date %></td>
+                          <td><%= row.lr_no %></td>
+                          <td><%= row.po_id %></td>
+                          <td><%= row.client_name %></td>
+                          <td><%= row.Delivery_Date %></td>
+                          <td><%= row.total_remittance_amount %></td>
+                          <td>
+                            <button class="btn btn-sm btn-outline-primary view-details" title="View Details">
+                              <i class="fas fa-eye"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      <% }); %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="12" class="text-center text-muted">No Data Found</td>
+                      </tr>
+                    <% } %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+         <!-- body part end  -->
+    </div>
+</main>
+
+  <%- include('../partials/footer') %>
+  <script>
+    $(document).ready(function() {
+        // Initialize DataTable with pagination
+        var table = $('#datatable_2').DataTable({
+          // Basic configuration
+          paging: true,
+          pageLength: 10,
+          lengthChange: true,
+          lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+          searching: true,
+          ordering: true,
+          info: true,
+          autoWidth: false,
+          responsive: true,
+          
+          // DOM layout with pagination controls
+          dom: 'lBfrtip',
+          
+          // Language configuration
+          language: {
+            lengthMenu: "Show _MENU_ entries",
+            zeroRecords: "No data available in table",
+            info: "Showing _START_ to _END_ of _TOTAL_ entries",
+            infoEmpty: "Showing 0 to 0 of 0 entries",
+            infoFiltered: "(filtered from _MAX_ total entries)",
+            search: "Search:",
+            paginate: {
+              first: "First",
+              last: "Last",
+              next: "Next",
+              previous: "Previous"
+            }
+          },
+          
+          // Pagination type
+          pagingType: "full_numbers",
+          
+          // Column definitions
+          columnDefs: [
+            {
+              // Date columns formatting in Indian format
+              targets: [3, 5, 9],
+              render: function (data, type, row) {
+                if (!data) return "-";
+                let d = new Date(data);
+                if (isNaN(d)) return data;
+    
+                // Indian format: DD/MM/YYYY
+                let optionsDate = { 
+                  year: 'numeric', 
+                  month: '2-digit', 
+                  day: '2-digit' 
+                };
+                let optionsTime = { 
+                  hour: '2-digit', 
+                  minute: '2-digit', 
+                  hour12: true 
+                };
+    
+                let dateStr = d.toLocaleDateString('en-IN', optionsDate);
+                let timeStr = d.toLocaleTimeString('en-IN', optionsTime);
+    
+                return `<div class="d-flex align-items-center">
+                          <i class="fas fa-arrow-up text-success me-2"></i>
+                          <div>
+                            <div class="fw-bold">${timeStr}</div>
+                            <small class="text-muted">${dateStr}</small>
+                          </div>
+                        </div>`;
+              }
+            },
+            {
+              // Amount column formatting
+              targets: [10],
+              render: function (data, type, row) {
+                return `<div class="d-flex align-items-center">
+                          <i class="fas fa-arrow-up text-success me-2"></i>
+                          <span class="fw-bold text-success">₹${data || '0'}</span>
+                        </div>`;
+              }
+            },
+            { 
+              targets: [11], 
+              orderable: false,
+              searchable: false 
+            }
+          ],
+        
+        drawCallback: function() {
+          // Style pagination buttons
+          $('.paginate_button').addClass('btn btn-sm').css({
+            'background-color': '#f8f9fa',
+            'border': '1px solid #dee2e6',
+            'color': '#495057',
+            'margin': '0 2px',
+            'border-radius': '0.25rem',
+            'padding': '0.375rem 0.75rem'
+          });
+          
+          $('.paginate_button.current').css({
+            'background-color': '#007bff',
+            'color': '#fff',
+            'border-color': '#007bff'
+          });
+          
+          $('.paginate_button:hover:not(.current)').css({
+            'background-color': '#e9ecef',
+            'border-color': '#adb5bd'
+          });
+          
+          $('.paginate_button.disabled').css({
+            'opacity': '0.5',
+            'cursor': 'not-allowed'
+          });
+          
+          // Style search input
+          $('.dataTables_filter input').addClass('form-control').css({
+            'width': '200px',
+            'display': 'inline-block'
+          });
+          
+          // Style length select
+          $('.dataTables_length select').addClass('form-select').css({
+            'width': '80px',
+            'display': 'inline-block'
+          });
+        }
+      });
+      
+      // View button click handler
+      $('#datatable_2').on('click', '.view-details', function() {
+        const row = $(this).closest('tr');
+        const bank = row.find('td:eq(0)').text().trim();
+        const branch = row.find('td:eq(1)').text().trim();
+        const ifsc = row.find('td:eq(2)').text().trim();
+        const transactionDate = row.find('td:eq(3)').text().trim();
+        const utr = row.find('td:eq(4)').text().trim();
+        const orderDate = row.find('td:eq(5)').text().trim();
+        const lrNumber = row.find('td:eq(6)').text().trim();
+        const poNumber = row.find('td:eq(7)').text().trim();
+        const client = row.find('td:eq(8)').text().trim();
+        const deliveryDate = row.find('td:eq(9)').text().trim();
+        const amount = row.find('td:eq(10)').text().trim();
+        
+        Swal.fire({
+          title: '<h4 class="text-primary fw-bold mb-4">Transaction Details</h4>',
+          html: `
+            <div class="text-start">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                      <h6 class="card-title text-primary mb-3">Bank Information</h6>
+                      <p class="mb-2"><strong>Bank:</strong> ${bank}</p>
+                      <p class="mb-2"><strong>Branch:</strong> ${branch}</p>
+                      <p class="mb-0"><strong>IFSC:</strong> ${ifsc}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                      <h6 class="card-title text-success mb-3">Transaction Info</h6>
+                      <p class="mb-2"><strong>UTR:</strong> ${utr}</p>
+                      <p class="mb-2"><strong>Date:</strong> ${transactionDate}</p>
+                      <p class="mb-0"><strong>Amount:</strong> <span class="text-warning fw-bold">${amount}</span></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                      <h6 class="card-title text-info mb-3">Order Details</h6>
+                      <p class="mb-2"><strong>Client:</strong> ${client}</p>
+                      <p class="mb-2"><strong>PO Number:</strong> ${poNumber}</p>
+                      <p class="mb-0"><strong>LR Number:</strong> ${lrNumber}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                      <h6 class="card-title text-secondary mb-3">Delivery Info</h6>
+                      <p class="mb-2"><strong>Order Date:</strong> ${orderDate}</p>
+                      <p class="mb-0"><strong>Delivery Date:</strong> ${deliveryDate}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `,
+          icon: 'info',
+          showCloseButton: true,
+          confirmButtonText: 'Close',
+          confirmButtonColor: '#007bff',
+          width: '800px',
+          customClass: {
+            popup: 'swal-wide'
+          }
+        });
+      });
+    });
+  </script>
+  

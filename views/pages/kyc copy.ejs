@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <%- include('../partials/head') %>
+    <!-- Scoped visual clean-up -->
+    <style>
+      /* Merged, panel-scoped UI helpers for #panel-kyc-documents and Tailwind→Bootstrap compatibility helpers */
+
+      /* #panel-kyc-documents styles */
+      #panel-kyc-documents .error-summary {
+        position: sticky;
+        top: .5rem;
+        z-index: 2;
+        border-left: 4px solid #dc3545;
+        background: #fff3f3;
+        padding: .75rem .75rem .75rem 1rem;
+        border-radius: .5rem;
+        margin-bottom: 1rem;
+        font-size: .92rem;
+      }
+
+      #panel-kyc-documents .error-summary h6 {
+        margin: 0 0 .25rem;
+        color: #842029;
+        font-weight: 700;
+        font-size: .95rem;
+      }
+
+      #panel-kyc-documents .error-summary ul {
+        margin: 0;
+        padding-left: 1.1rem;
+      }
+
+      #panel-kyc-documents .error-outline {
+        box-shadow: 0 0 0 .15rem rgba(220, 53, 69, .25) !important;
+      }
+
+      #panel-kyc-documents .is-valid {
+        box-shadow: 0 0 0 .15rem rgba(25, 135, 84, .25) !important;
+      }
+
+      #panel-kyc-documents .spinner-inline {
+        width: 1rem;
+        height: 1rem;
+        border: .15rem solid #fff;
+        border-right-color: transparent;
+        border-radius: 50%;
+        display: inline-block;
+        animation: sp .6s linear infinite;
+        margin-left: .5rem;
+      }
+
+      @keyframes sp {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      #panel-kyc-documents .form-control {
+        border: 0 !important;
+        background: #f8f9fa;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+      }
+
+      #panel-kyc-documents input.form-control-sm,
+      #panel-kyc-documents .form-select.form-control-sm {
+        font-size: 0.9rem;
+        padding-top: .375rem;
+        padding-bottom: .375rem;
+      }
+
+      #panel-kyc-documents .form-label {
+        margin-bottom: .35rem;
+      }
+
+      #panel-kyc-documents .border-primary {
+        border-color: transparent !important;
+      }
+
+      #panel-kyc-documents .section-title {
+        border-bottom: 1px solid #ececec;
+        padding-bottom: .5rem;
+        margin-bottom: .75rem;
+      }
+
+      #panel-kyc-documents .hint {
+        font-size: .85rem;
+      }
+
+      /* --- Tailwind → Bootstrap compatibility helpers so your JS keeps working --- */
+      .hidden {
+        display: none !important;
+      }
+
+      .text-purple-600 {
+        color: #7c3aed !important;
+      }
+
+      .bg-purple-100 {
+        background-color: #ede9fe !important;
+      }
+
+      .text-gray-800 {
+        color: #343a40 !important;
+      }
+
+      .text-gray-900 {
+        color: #212529 !important;
+      }
+
+      .text-gray-700 {
+        color: #495057 !important;
+      }
+
+      .text-gray-600 {
+        color: #6c757d !important;
+      }
+
+      .text-gray-500 {
+        color: #6c757d !important;
+      }
+
+      .bg-gray-100 {
+        background-color: #f8f9fa !important;
+      }
+
+      .border-gray-200 {
+        border-color: #e9ecef !important;
+      }
+
+      .border-gray-300 {
+        border-color: #dee2e6 !important;
+      }
+
+      .rounded-xl {
+        border-radius: 12px !important;
+      }
+
+      .rounded-md {
+        border-radius: .375rem !important;
+      }
+
+      .w-28 {
+        width: 7rem !important;
+      }
+
+      .h-28 {
+        height: 7rem !important;
+      }
+
+      .max-w-\[1280px\] {
+        max-width: 1280px !important;
+      }
+
+      .gap-2 {
+        gap: .5rem !important;
+      }
+
+      .gap-3 {
+        gap: 12px !important;
+      }
+
+      .gap-6 {
+        gap: 1.5rem !important;
+      }
+
+      .gap-8 {
+        gap: 2rem !important;
+      }
+
+      .px-5 {
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+      }
+
+      .py-3 {
+        padding-top: .75rem !important;
+        padding-bottom: .75rem !important;
+      }
+
+      .p-6 {
+        padding: 1.5rem !important;
+      }
+
+      .p-4 {
+        padding: 12px !important;
+      }
+
+      .mb-6 {
+        margin-bottom: 1.5rem !important;
+      }
+
+      .mb-8 {
+        margin-bottom: 2rem !important;
+      }
+
+      .ml-0 {
+        margin-left: 0 !important;
+      }
+
+      .md\:ml-10 {
+        margin-left: 2.5rem !important;
+      }
+
+      .focus\:ring-2:focus {
+        box-shadow: 0 0 0 .2rem rgba(124, 58, 237, .25) !important;
+      }
+
+      .focus\:ring-purple-600:focus {
+        box-shadow: 0 0 0 .2rem rgba(124, 58, 237, .25) !important;
+      }
+
+      /* Our design tokens */
+      :root {
+        --ds-primary: #7c3aed;
+        --ds-primary-700: #6d28d9;
+      }
+
+      .btn-ds {
+        background: var(--ds-primary);
+        border-color: var(--ds-primary);
+        color: #fff;
+        font-weight: 600;
+      }
+
+      .btn-ds:hover {
+        background: var(--ds-primary-700);
+        border-color: var(--ds-primary-700);
+        color: #fff;
+      }
+
+      video,
+      canvas {
+        border-radius: .375rem;
+        border: 1px solid #d1d5db;
+        max-width: 100%;
+        height: auto;
+      }
+
+      .tab-panel.ds-frame {
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+      }
+
+      /* Convert some Tailwind grid/flex feelings */
+      .tw-vertical-nav .nav-link {
+        border-radius: .75rem;
+        font-weight: 600;
+        color: #212529;
+        padding: .75rem 12px;
+      }
+
+      .tw-vertical-nav .nav-link.active {
+        background: #ede9fe;
+        color: #6d28d9;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+      }
+
+      .tw-vertical-nav .nav-link:not(.active):hover {
+        background: #f8f9fa;
+      }
+
+      .border-dashed {
+        border-style: dashed !important;
+      }
+
+      /* Professional SweetAlert2 customization */
+      .swal2-popup {
+        font-family: 'Nunito', sans-serif;
+        border-radius: 12px;
+      }
+
+      .swal2-title {
+        font-weight: 700;
+        color: #2c3e50;
+      }
+
+      .swal2-confirm {
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 12px 24px;
+      }
+
+      .swal2-cancel {
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 12px 24px;
+      }
+
+      /* Enhanced button styling */
+      .btn-primary {
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .btn-primary:active {
+        transform: translateY(0);
+      }
+    </style>
+</head>
+
+<body data-theme="light" class="font-nunito">
+  <div id="wrapper" class="theme-cyan">
+    <!-- HEADER SECTION -->
+    <%- include('../partials/header') %>
+
+      <!-- SIDEBAR SECTIONS -->
+      <%- include('../partials/left-sidebar') %>
+        <%- include('../partials/right-iconbar') %>
+
+          <!-- MAIN CONTENT AREA -->
+          <div id="main-content">
+            <div class="container pt-4">
+              <div class="block-header">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h2>KYC</h2>
+                    <ul class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-dashboard"></i></a></li>
+                      <li class="breadcrumb-item">Vas Setting</li>
+                      <li class="breadcrumb-item active">KYC</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex flex-column flex-md-row p-4 p-md-5 p-lg-5 p-xl-5 max-w-[1280px] mx-auto w-100 gap-4">
+
+                <!-- Sidebar -->
+                <aside class="w-100" style="max-width:220px;">
+                  <div class="border border-gray-200 rounded-xl p-4 mb-3">
+                    <h2 class="text-uppercase small fw-semibold text-gray-600 mb-3" style="letter-spacing:.15em;">CLIENT
+                      ONBOARDING</h2>
+                    <nav class="nav flex-column gap-2 tw-vertical-nav" role="tablist" aria-orientation="vertical">
+                      <button id="tab-client-details" class="nav-link text-start" data-bs-toggle="tab"
+                        data-bs-target="#panel-client-details" type="button" role="tab"
+                        aria-controls="panel-client-details" aria-selected="true">
+                        <i class="fas fa-user-circle me-2"></i> Client Details
+                      </button>
+                      <button id="tab-kyc-documents" class="nav-link text-start" data-bs-toggle="tab"
+                        data-bs-target="#panel-kyc-documents" type="button" role="tab"
+                        aria-controls="panel-kyc-documents" aria-selected="false">
+                        <i class="fas fa-file-alt me-2"></i> KYC Documents
+                      </button>
+                      <button id="tab-subscription-plan" class="nav-link text-start" data-bs-toggle="tab"
+                        data-bs-target="#panel-subscription-plan" type="button" role="tab"
+                        aria-controls="panel-subscription-plan" aria-selected="false">
+                        <i class="fas fa-clipboard-list me-2"></i> Subscription Plan
+                      </button>
+                    </nav>
+                  </div>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="flex-grow-1 ms-0 ms-md-4">
+                  <section class="tab-content p-0" tabindex="0">
+
+                    <!-- Client Details Panel (Professional Design with Enhanced Spacing, Small Inputs & Centered Upload Logo) -->
+                    <div id="panel-client-details" class="tab-panel tab-pane fade show active mb-5" role="tabpanel"
+                         aria-labelledby="tab-client-details" tabindex="0">
+                      <div class="bg-white border border-gray-200 rounded-3 shadow-sm p-4">
+                        <h3 class="h6 fw-bold text-gray-900 mb-2" style="font-size:1.05rem;">Client Details</h3>
+                        <p class="small text-gray-600 mb-3" style="font-size:0.92rem;">
+                          Fill and submit all the required information to onboard the client.
+                        </p>
+                  
+                        <form id="clientDetailsForm" class="needs-validation" action="#" method="POST" enctype="multipart/form-data" novalidate>
+                          <!-- Section 1: Client Details -->
+                          <section class="mb-4">
+                            <h4 class="h6 fw-semibold text-gray-900 mb-3 pb-2 border-bottom" style="font-size:12px;">Client Details</h4>
+                            <div class="row g-4 align-items-start">
+                              <div class="col-12 col-md-8">
+                                <div class="row gy-3">
+                                  <div class="col-12">
+                                    <label for="clientName" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                      Client Name <span class="text-danger">*</span>
+                                    </label>
+                                    <input id="clientName" disabled name="clientName" type="text"
+                                           value="<%= userData.first_name %>" required aria-required="true"
+                                           aria-describedby="clientNameError" class="form-control form-control-sm" style="font-size:0.95rem;" />
+                                    <div id="clientNameError" class="invalid-feedback d-none" style="font-size:0.92rem;">
+                                      <%= userData.first_name %>
+                                    </div>
+                                  </div>
+                  
+                                  <div class="col-12">
+                                    <label for="clientEmail" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                      Email Address <span class="text-danger">*</span>
+                                    </label>
+                                    <input id="clientEmail" disabled name="clientEmail" type="email"
+                                           value="<%= userData.email %>" required aria-required="true"
+                                           aria-describedby="clientEmailError" class="form-control form-control-sm" style="font-size:0.95rem;" />
+                                    <div id="clientEmailError" class="invalid-feedback d-none" style="font-size:0.92rem;">
+                                      <%= userData.email %>
+                                    </div>
+                                  </div>
+                  
+                                  <div class="col-12">
+                                    <label for="clientPhone" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                      Phone Number <span class="text-danger">*</span>
+                                    </label>
+                                    <input id="clientPhone" disabled value="<%= userData.phone_no%>" name="clientPhone"
+                                           type="tel" placeholder="<%= userData.phone_no %>" pattern="^\d{10}$" required
+                                           aria-required="true" aria-describedby="clientPhoneError"
+                                           class="form-control form-control-sm" style="font-size:0.95rem;" />
+                                    <div id="clientPhoneError" class="invalid-feedback d-none" style="font-size:0.92rem;">
+                                      Please enter a valid 10-digit phone number.
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                  
+                              <!-- Upload Section: Centered Upload Logo, Required -->
+                              <div class="col-12 col-md-4 d-flex flex-column align-items-center justify-content-center">
+                                <div class="d-flex flex-column align-items-center gap-2 position-relative p-3 border border-dashed rounded-3 bg-light w-100"
+                                     style="min-height: 180px; max-width:240px;">
+                                  <label for="clientLogo" class="text-primary small fw-semibold text-center mb-2"
+                                         role="button" style="cursor:pointer; font-size:0.95rem;">
+                                    <i class="fas fa-upload me-1"></i> Upload Logo <span class="text-danger">*</span>
+                                  </label>
+                                  <input type="file" id="clientLogo" name="clientLogo" accept="image/*"
+                                         aria-describedby="clientLogoHelp clientLogoError clientLogoSizeError"
+                                         class="d-none" required aria-required="true" />
+                                  <div id="clientLogoHelp" class="text-muted text-center mb-2"
+                                       style="font-size:.8rem; line-height:1.2;">Max 1 MB<br><span style="font-size:.7rem;">(250×150px)</span></div>
+                                  <div class="w-100 d-flex justify-content-center align-items-center" style="height: 80px;">
+                                    <img id="previewLogo" alt="Preview of uploaded client logo" class="d-none"
+                                         style="object-fit:contain; border-radius:.375rem; max-width:100%; max-height:80px;" />
+                                  </div>
+                                  <div id="clientLogoError" class="invalid-feedback d-none text-center" style="font-size:0.92rem;">
+                                    Please upload a company logo.
+                                  </div>
+                                  <div id="clientLogoSizeError" class="text-danger small d-none text-center" style="font-size:0.92rem;">
+                                    Max file size is 1MB
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                  
+                            <!-- Camera Capture (optional wiring; safe to leave) -->
+                            <div class="mt-4">
+                              <label class="form-label small fw-semibold text-gray-600 mb-2" style="font-size:0.92rem;">
+                                Capture Profile Photo
+                              </label>
+                              <div class="row g-3 align-items-start">
+                                <div class="col-12 col-md-6 d-flex flex-column align-items-center gap-2">
+                                  <div class="bg-light rounded-3 d-flex align-items-center justify-content-center"
+                                       style="width: 260px; height: 160px;">
+                                    <video id="video" autoplay playsinline
+                                           style="width: 240px; height: 140px; border-radius: .5rem;"></video>
+                                  </div>
+                                  <div class="d-flex flex-wrap gap-2 mt-2">
+                                    <button type="button" id="startCameraBtn" class="btn btn-outline-primary btn-sm px-2" style="font-size:0.92rem;">Start Camera</button>
+                                    <button type="button" id="captureBtn" class="btn btn-success btn-sm px-2 d-none" style="font-size:0.92rem;">Capture</button>
+                                    <button type="button" id="retakeBtn" class="btn btn-warning btn-sm text-white px-2 d-none" style="font-size:0.92rem;">Retake</button>
+                                  </div>
+                                </div>
+                                <div class="col-12 col-md-6 d-flex flex-column align-items-center gap-2">
+                                  <div class="bg-light rounded-3 d-flex align-items-center justify-content-center"
+                                       style="width: 260px; height: 160px;">
+                                    <canvas id="canvas" class="d-none"
+                                            style="width: 240px; height: 140px; border-radius: .5rem;"></canvas>
+                                  </div>
+                                  <p id="cameraStatus" class="small text-muted mt-2" style="font-size:0.92rem;"></p>
+                                </div>
+                              </div>
+                              <input type="hidden" id="capturedImage" name="capturedImage" />
+                            </div>
+                          </section>
+                  
+                          <!-- Section 2: Company Branding Details -->
+                          <section>
+                            <h4 class="h6 fw-semibold text-gray-900 mb-3 pb-2 border-bottom" style="font-size:12px;">Company Branding Details</h4>
+                            <div class="row gy-3 gx-4">
+                              <div class="col-12 col-md-6">
+                                <label for="registeredCompanyName" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                  Registered Company Name <span class="text-danger">*</span>
+                                </label>
+                                <input id="registeredCompanyName" name="registeredCompanyName" type="text"
+                                       placeholder="Enter Company Name" required aria-required="true"
+                                       aria-describedby="registeredCompanyNameError" class="form-control form-control-sm" style="font-size:0.95rem;" />
+                                <div id="registeredCompanyNameError" class="invalid-feedback d-none" style="font-size:0.92rem;">
+                                  Please enter the registered company name.
+                                </div>
+                              </div>
+                  
+                              <div class="col-12 col-md-6">
+                                <label for="brandName" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                  Brand Name (Optional)
+                                </label>
+                                <input id="brandName" name="brandName" type="text" placeholder="Enter Brand name"
+                                       class="form-control form-control-sm" style="font-size:0.95rem;" />
+                              </div>
+                  
+                              <div class="col-12 col-md-6">
+                                <label for="companyEmail" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                  Company Email ID <span class="text-danger">*</span>
+                                </label>
+                                <input id="companyEmail" name="companyEmail" type="email" placeholder="superadmin@dispatch.co.in"
+                                       required aria-required="true" aria-describedby="companyEmailError"
+                                       class="form-control form-control-sm" style="font-size:0.95rem;" />
+                                <div id="companyEmailError" class="invalid-feedback d-none" style="font-size:0.92rem;">
+                                  Please enter a valid company email.
+                                </div>
+                              </div>
+                  
+                              <div class="col-12 col-md-6">
+                                <label for="website" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                  Website (Optional)
+                                </label>
+                                <input id="website" name="website" type="url" placeholder="https://example.com"
+                                       class="form-control form-control-sm" style="font-size:0.95rem;" />
+                              </div>
+                            </div>
+                          </section>
+                        </form>
+                      </div>
+                    </div>
+                  
+                    <!-- KYC Documents Panel -->
+                    <div id="panel-kyc-documents" class="tab-panel tab-pane fade" role="tabpanel"
+                         aria-labelledby="tab-kyc-documents" tabindex="0">
+                      <div class="mb-2">
+                        <h3 class="h5 fw-bold text-primary mb-1">KYC Documents</h3>
+                        <p class="text-muted mb-0" style="font-size:12px;">Please upload the required documents for KYC verification. All information is kept confidential and secure.</p>
+                      </div>
+                  
+                      <!-- IMPORTANT: Entire KYC fields wrapped in ONE form -->
+                      <form id="kycForm" class="needs-validation" action="#" method="POST" enctype="multipart/form-data" novalidate>
+                        <div class="border border-2 border-light rounded-4 shadow-sm p-4 mb-3 bg-white">
+                  
+                          <!-- Company Type Radio Buttons -->
+                          <fieldset class="mb-4 border-0 p-0">
+                            <legend class="small fw-semibold text-secondary mb-3" style="font-size:16px;">Company Type</legend>
+                            <div class="d-flex flex-wrap gap-4">
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="companyType" value="Individual" id="ctInd" checked>
+                                <label class="form-check-label small fw-medium" for="ctInd" style="font-size:14px;">Individual</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="companyType" value="Proprietor" id="ctProp">
+                                <label class="form-check-label small fw-medium" for="ctProp" style="font-size:14px;">Proprietor</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="companyType" value="Company" id="ctComp">
+                                <label class="form-check-label small fw-medium" for="ctComp" style="font-size:14px;">Company</label>
+                              </div>
+                            </div>
+                          </fieldset>
+                  
+                          <!-- Aadhaar Section -->
+                          <section class="mb-4">
+                            <div class="mb-3 border-bottom pb-2">
+                              <h4 class="fw-semibold text-dark mb-0" style="font-size:1.05rem;">Aadhaar</h4>
+                            </div>
+                            <div class="row g-3 align-items-end">
+                              <div class="col-12 col-md-3">
+                                <label for="aadhaarNumber" class="form-label fw-semibold text-secondary" style="font-size:14px;">Aadhaar Number</label>
+                                <input type="text" id="aadhaarNumber" name="aadhaarNumber" placeholder="12-digit Aadhaar"
+                                       pattern="^\d{12}$" aria-describedby="aadhaarNumberError"
+                                       class="form-control form-control-sm border-primary" style="font-size:12px;" />
+                                <div id="aadhaarNumberError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please enter a valid 12-digit Aadhaar number.
+                                </div>
+                              </div>
+                              <div class="col-12 col-md-4">
+                                <label for="aadhaarFrontUpload" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  Aadhaar Front <span class="text-danger">*</span>
+                                </label>
+                                <input type="file" id="aadhaarFrontUpload" name="aadhaarFrontUpload"
+                                       accept="image/*,application/pdf"
+                                       aria-describedby="aadhaarFrontUploadError aadhaarFrontUploadSizeError"
+                                       class="form-control form-control-sm border-primary file-1mb" style="font-size:12px;" />
+                                <div id="aadhaarFrontUploadError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please upload Aadhaar front side.
+                                </div>
+                                <div id="aadhaarFrontUploadSizeError" class="text-danger small d-none" style="font-size:0.95rem;">
+                                  Max file size is 1MB
+                                </div>
+                              </div>
+                              <div class="col-12 col-md-4">
+                                <label for="aadhaarBackUpload" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  Aadhaar Back <span class="text-danger">*</span>
+                                </label>
+                                <input type="file" id="aadhaarBackUpload" name="aadhaarBackUpload"
+                                       accept="image/*,application/pdf"
+                                       aria-describedby="aadhaarBackUploadError aadhaarBackUploadSizeError"
+                                       class="form-control form-control-sm border-primary file-1mb" style="font-size:12px;" />
+                                <div id="aadhaarBackUploadError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please upload Aadhaar back side.
+                                </div>
+                                <div id="aadhaarBackUploadSizeError" class="text-danger small d-none" style="font-size:0.95rem;">
+                                  Max file size is 1MB
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                  
+                          <!-- GST Section -->
+                          <section class="mb-4">
+                            <div class="mb-3 border-bottom pb-2">
+                              <h4 class="fw-semibold text-dark mb-0" style="font-size:1.05rem;">GST</h4>
+                            </div>
+                            <div class="row g-3 align-items-end">
+                              <div class="col-12 col-sm-6">
+                                <label for="gstNo" class="form-label fw-semibold text-secondary" style="font-size:14px;">GST Number</label>
+                                <input type="text" id="gstNo" name="gstNo" maxlength="15" placeholder="Enter GST No"
+                                       class="form-control form-control-sm border-primary" style="font-size:12px;" />
+                                <input type="hidden" id="hidden_trade_name" name="trade_name">
+                                <input type="hidden" id="hidden_constitution" name="constitution_of_business">
+                                <input type="hidden" id="hidden_nature" name="nature_of_business">
+                                <div id="gstError" class="text-danger small d-none" style="font-size:0.95rem;"></div>
+                                <div id="gstResponse" class="text-muted small mt-1" style="font-size:0.95rem;"></div>
+                                <span id="gstSuccess" class="text-success fw-bold d-none" style="font-size:12px;">✔</span>
+                              </div>
+                              <div class="col-12 col-sm-6">
+                                <label for="gstdoc" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  GST Document <span class="text-danger">*</span>
+                                </label>
+                                <input type="file" id="gstdoc" name="gstdoc" accept="image/*"
+                                       class="form-control form-control-sm border-primary file-1mb" style="font-size:12px;" disabled />
+                                <div id="gstdocSizeError" class="text-danger small d-none" style="font-size:0.95rem;">Max file size is 1MB</div>
+                              </div>
+                            </div>
+                          </section>
+                  
+                          <!-- PAN Section -->
+                          <section class="mb-4">
+                            <div class="mb-3 border-bottom pb-2">
+                              <h4 class="fw-semibold text-dark mb-0" style="font-size:1.05rem;">PAN</h4>
+                            </div>
+                            <div class="row g-3 align-items-end">
+                              <div class="col-12 col-sm-6">
+                                <label for="company_pan" class="form-label fw-semibold text-secondary" style="font-size:14px;">PAN Number</label>
+                                <input type="text" id="company_pan" name="company_pan" maxlength="10" placeholder="Enter PAN"
+                                       class="form-control form-control-sm border-primary" style="font-size:12px;" />
+                                <input type="hidden" id="hidden_pan_holder_name" name="pan_holder_name">
+                                <div id="pan_error" class="text-danger small d-none" style="font-size:0.95rem;"></div>
+                                <div id="pan_response" class="text-muted small mt-1" style="font-size:0.95rem;"></div>
+                              </div>
+                              <div class="col-12 col-sm-6">
+                                <label for="pandoc" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  PAN Document <span class="text-danger">*</span>
+                                </label>
+                                <input type="file" id="pandoc" name="pandoc" accept="image/*"
+                                       class="form-control form-control-sm border-primary file-1mb" style="font-size:12px;" />
+                                <div id="pandocSizeError" class="text-danger small d-none" style="font-size:0.95rem;">Max file size is 1MB</div>
+                              </div>
+                            </div>
+                          </section>
+                  
+                          <!-- Company Registration Section -->
+                          <section class="mb-5">
+                            <div class="mb-3 border-bottom pb-2">
+                              <h4 class="fw-semibold text-dark mb-0" style="font-size:1.05rem;">Company Registration</h4>
+                            </div>
+                            <div class="row g-3 align-items-end">
+                              <div class="col-12 col-sm-6">
+                                <label for="companyRegNumber" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  Registration Number
+                                </label>
+                                <input type="text" id="companyRegNumber" name="companyRegNumber" placeholder="Company Reg. Number"
+                                       aria-describedby="companyRegNumberError" class="form-control form-control-sm border-primary" style="font-size:12px;" />
+                                <div id="companyRegNumberError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please enter company registration number.
+                                </div>
+                              </div>
+                              <div class="col-12 col-sm-6">
+                                <label for="companyRegUpload" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  Registration Document
+                                </label>
+                                <input type="file" id="companyRegUpload" name="companyRegUpload"
+                                       accept="image/*,application/pdf"
+                                       aria-describedby="companyRegUploadError companyRegUploadSizeError"
+                                       class="form-control form-control-sm border-primary file-1mb" style="font-size:12px;" />
+                                <div id="companyRegUploadError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please upload company registration document.
+                                </div>
+                                <div id="companyRegUploadSizeError" class="text-danger small d-none" style="font-size:0.95rem;">
+                                  Max file size is 1MB
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                  
+                          <!-- Cancelled Cheque Section -->
+                          <section class="mb-4">
+                            <div class="mb-3 border-bottom pb-2">
+                              <h4 class="fw-semibold text-dark mb-0" style="font-size:1.05rem;">Cancelled Cheque</h4>
+                            </div>
+                            <div class="row g-3 align-items-end">
+                              <div class="col-12 col-sm-6">
+                                <label for="cancelledCheckNumber" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  Cheque Number
+                                </label>
+                                <input type="text" id="cancelledCheckNumber" name="cancelledCheckNumber" placeholder="Cheque Number"
+                                       aria-describedby="cancelledCheckNumberError" class="form-control form-control-sm border-primary" style="font-size:12px;" />
+                                <div id="cancelledCheckNumberError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please enter cancelled cheque number.
+                                </div>
+                              </div>
+                              <div class="col-12 col-sm-6">
+                                <label for="cancelledCheckUpload" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  Cancelled Cheque Document
+                                </label>
+                                <input type="file" id="cancelledCheckUpload" name="cancelledCheckUpload"
+                                       accept="image/*,application/pdf"
+                                       aria-describedby="cancelledCheckUploadError cancelledCheckUploadSizeError"
+                                       class="form-control form-control-sm border-primary file-1mb" style="font-size:12px;" />
+                                <div id="cancelledCheckUploadError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please upload cancelled cheque document.
+                                </div>
+                                <div id="cancelledCheckUploadSizeError" class="text-danger small d-none" style="font-size:0.95rem;">
+                                  Max file size is 1MB
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                  
+                          <div class="d-flex justify-content-end mt-4">
+                            <button type="submit" id="submitKycBtn" class="btn btn-primary btn-lg px-5 shadow-sm" style="font-size:1.05rem;">
+                              <i class="fas fa-upload me-2"></i>Upload Documents
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                  
+                      <!-- KYC Status Section (outside the form) -->
+                      <div id="kycStatusSection" class="mb-5 border border-1 border-light rounded-4 p-4 mx-auto bg-light" style="max-width: 720px;">
+                        <h4 class="fw-semibold mb-3 text-dark" style="font-size:1.05rem;">KYC Status</h4>
+                        <div class="row g-3">
+                          <div class="col-12 col-md-6">
+                            <p class="mb-1 text-secondary" style="font-size:12px;">KYC Status</p>
+                            <span id="kycStatus" class="badge rounded-pill bg-warning text-dark px-3 py-2" style="font-size:12px;">Pending</span>
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <p class="mb-1 text-secondary" style="font-size:12px;">Documents Uploaded</p>
+                            <span id="kycDocs" class="badge rounded-pill bg-secondary-subtle text-secondary px-3 py-2" style="font-size:12px;">No documents</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  
+                    <!-- Subscription Plan Panel -->
+                    <div id="panel-subscription-plan" class="tab-panel tab-pane fade" role="tabpanel"
+                         aria-labelledby="tab-subscription-plan" tabindex="0">
+                      <div class="card shadow-sm border-0 rounded-4 mx-auto" style="max-width: 720px;">
+                        <div class="card-body p-4">
+                          <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-box-seam fs-3 text-primary me-3"></i>
+                            <div>
+                              <h3 class="h5 fw-bold mb-1 text-dark">Subscription Plan</h3>
+                              <p class="mb-0 text-secondary small">View and manage your subscription plan details.</p>
+                            </div>
+                          </div>
+                          <hr class="mb-4">
+                          <div class="row g-4">
+                            <div class="col-12 col-md-4">
+                              <div class="d-flex flex-column align-items-start">
+                                <span class="text-secondary small mb-1">Plan</span>
+                                <span id="planName" class="fw-semibold text-dark mb-2" style="font-size:12px;">Trial</span>
+                                <button id="upgradeBtn" type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none">
+                                  Upgrade
+                                </button>
+                              </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                              <div class="d-flex flex-column align-items-start">
+                                <span class="text-secondary small mb-1">Duration</span>
+                                <span id="planDuration" class="fw-semibold text-dark" style="font-size:12px;">15 Days</span>
+                              </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                              <div class="d-flex flex-column align-items-start">
+                                <span class="text-secondary small mb-1">Status</span>
+                                <span id="planStatus" class="badge rounded-pill px-3 py-2" style="background:#e0f7ef; color:#15803d; font-size:12px; letter-spacing:0.01em;">Active</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  
+                  </section>
+                  
+                </main>
+              </div>
+
+
+
+
+             
+
+
+              <script>
+                // Custom tab logic to fix: active tab not show on first click
+                document.addEventListener('DOMContentLoaded', function () {
+                  const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+                  const tabPanels = Array.from(document.querySelectorAll('.tab-panel'));
+                  // Remove all show/active/fade classes from panels
+                  tabPanels.forEach(panel => {
+                    panel.classList.remove('show', 'active', 'fade');
+                  });
+                  // Set first panel as active
+                  if (tabPanels[0]) {
+                    tabPanels[0].classList.add('show', 'active');
+                  }
+                  // Set first tab as active
+                  tabs.forEach((tab, idx) => {
+                    if (idx === 0) {
+                      tab.classList.add('active');
+                      tab.setAttribute('aria-selected', 'true');
+                    } else {
+                      tab.classList.remove('active');
+                      tab.setAttribute('aria-selected', 'false');
+                    }
+                  });
+
+                  tabs.forEach(tab => {
+                    tab.addEventListener('click', function (e) {
+                      e.preventDefault();
+                      // Remove active from all tabs
+                      tabs.forEach(t => {
+                        t.classList.remove('active');
+                        t.setAttribute('aria-selected', 'false');
+                      });
+                      // Add active to clicked tab
+                      tab.classList.add('active');
+                      tab.setAttribute('aria-selected', 'true');
+                      // Hide all panels
+                      tabPanels.forEach(panel => {
+                        panel.classList.remove('show', 'active');
+                      });
+                      // Show the selected panel
+                      const panelId = tab.getAttribute('data-bs-target') || tab.getAttribute('aria-controls');
+                      const panel = document.getElementById(panelId.replace('#', ''));
+                      if (panel) {
+                        panel.classList.add('show', 'active');
+                        panel.focus();
+                      }
+                    });
+                  });
+                });
+              </script>
+
+              <!-- SCRIPTS -->
+              <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+              <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+              <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+              <!-- 1) Load Tesseract (if not already loaded) -->
+              <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+              <script>
+                /* =========================================================
+                   KYC: Optional Aadhaar/PAN + Strict Match If Provided
+                   - Aadhaar/PAN are NOT required globally
+                   - If user types Aadhaar/PAN or uploads doc, the counterpart is required
+                   - Typed number must MATCH OCR from the uploaded doc (strict)
+                   - Logo and Selfie are REQUIRED
+                   - File-size/type checks preserved (1MB max as in your code)
+                   ========================================================= */
+                (function () {
+                  'use strict';
+                
+                  // ---------- helpers ----------
+                  const $  = (s, r=document) => r.querySelector(s);
+                  const byId = (id) => document.getElementById(id);
+                  const setText = (el, t) => { if (el) el.textContent = t; };
+                
+                  // ---------- root guard ----------
+                  const panel = byId('panel-kyc-documents');
+                  if (!panel) return;
+                
+                  // ---------- elements ----------
+                  const kycForm   = byId('kycForm');
+                  const submitBtn = panel.querySelector('button[type="submit"]');
+                
+                  const kycDocsBadge = byId('kycDocs');
+                
+                  // Aadhaar
+                  const aadhaarNum   = byId('aadhaarNumber');
+                  const aadhaarFront = byId('aadhaarFrontUpload');
+                  const aadhaarBack  = byId('aadhaarBackUpload');
+                
+                  // GST (unchanged behavior)
+                  const gstNo    = byId('gstNo');
+                  const gstDoc   = byId('gstdoc');
+                  const gstTick  = byId('gstSuccess');
+                
+                  // PAN
+                  const panNo   = byId('company_pan');
+                  const panDoc  = byId('pandoc');
+                
+                  // Company Reg / Cheque (left optional as per ask)
+                  const regNo    = byId('companyRegNumber');
+                  const regDoc   = byId('companyRegUpload');
+                  const chqNo    = byId('cancelledCheckNumber');
+                  const chqDoc   = byId('cancelledCheckUpload');
+                
+                  // Company type radios (keep GST logic)
+                  const radios = ['#ctInd','#ctProp','#ctComp'].map(s => byId(s.slice(1)));
+                
+                  // Logo (REQUIRED)
+                  const clientLogo  = byId('clientLogo');
+                  const previewLogo = byId('previewLogo');
+                
+                  // Camera / Selfie (REQUIRED)
+                  const video          = byId('video');
+                  const canvas         = byId('canvas');
+                  const startCameraBtn = byId('startCameraBtn');
+                  const captureBtn     = byId('captureBtn');
+                  const retakeBtn      = byId('retakeBtn');
+                  const cameraStatus   = byId('cameraStatus');
+                  const capturedImage  = byId('capturedImage');
+                  let stream = null;
+                
+                  // Hidden fields (PAN/GST API results)
+                  const hiddenPanName      = byId('hidden_pan_holder_name');
+                  const hiddenTradeName    = byId('hidden_trade_name');
+                  const hiddenConstitution = byId('hidden_constitution');
+                  const hiddenNature       = byId('hidden_nature');
+                
+                  // ---------- regex ----------
+                  const GST_REGEX     = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][A-Z0-9]Z[A-Z0-9]$/;
+                  const PAN_REGEX     = /^[A-Z]{5}\d{4}[A-Z]$/;
+                  const AADHAAR_REGEX = /^\d{12}$/;
+                
+                  // ---------- file validation ----------
+                  const MAX_BYTES = 1024 * 1024; // keep size limit
+                  function checkFileSize(input) {
+                    const f = input.files?.[0];
+                    if (!f) return true;
+                    if (f.size > MAX_BYTES) {
+                      Swal.fire('File too large', 'Max file size is 1MB', 'error');
+                      input.value = '';
+                      return false;
+                    }
+                    return true;
+                  }
+                  function checkAcceptType(input) {
+                    const f = input.files?.[0];
+                    if (!f) return true;
+                    const accept = (input.getAttribute('accept') || '').split(',').map(s => s.trim()).filter(Boolean);
+                    if (!accept.length) return true;
+                    const okByMime = accept.some(a => a && f.type && (f.type === a || f.type.startsWith(a.replace('*',''))));
+                    const okByExt  = accept.some(a => a.startsWith('.') && f.name.toLowerCase().endsWith(a.toLowerCase()));
+                    if (!(okByMime || okByExt)) {
+                      Swal.fire('Invalid file type', 'This file type is not allowed for this field.', 'error');
+                      input.value = '';
+                      return false;
+                    }
+                    return true;
+                  }
+                  function validateFileInput(input) {
+                    return checkFileSize(input) && checkAcceptType(input);
+                  }
+                
+                  // ---------- OCR ----------
+                  const OCR = {
+                    AADHAAR : (t) => /\b\d{4}\s?\d{4}\s?\d{4}\b/.test(t) || t.includes('AADHAAR') || t.includes('UIDAI'),
+                    PAN     : (t) => /\b[A-Z]{5}\d{4}[A-Z]\b/.test(t) || t.includes('PERMANENT ACCOUNT NUMBER') || t.includes('INCOME TAX'),
+                    GSTIN   : (t) => /\b\d{2}[A-Z]{5}\d{4}[A-Z][A-Z0-9]Z[A-Z0-9]\b/.test(t) || t.includes('GSTIN'),
+                    PASSPORT: (t) => /\b[A-Z]\d{7}\b/.test(t) || t.includes('PASSPORT'),
+                  };
+                  async function detectDocument(file) {
+                    if (!file) return { type: 'NONE', text: '' };
+                    try {
+                      const { data } = await Tesseract.recognize(file, 'eng');
+                      const t = (data?.text || '').toUpperCase();
+                      if (OCR.AADHAAR(t))  return { type: 'AADHAAR',  text: t };
+                      if (OCR.PAN(t))      return { type: 'PAN',      text: t };
+                      if (OCR.GSTIN(t))    return { type: 'GSTIN',    text: t };
+                      if (OCR.PASSPORT(t)) return { type: 'PASSPORT', text: t };
+                      return { type: 'OTHER', text: t };
+                    } catch (e) {
+                      console.error('OCR error:', e);
+                      return { type: 'ERROR', text: '' };
+                    }
+                  }
+                  // extraction / normalization
+                  function grabAadhaar(text='') {
+                    const m = text.match(/\b(\d{4}\s?\d{4}\s?\d{4})\b/);
+                    return m ? m[1].replace(/\s+/g, '') : null;
+                  }
+                  function grabPAN(text='') {
+                    const m = text.match(/\b([A-Z]{5}\d{4}[A-Z])\b/);
+                    return m ? m[1].toUpperCase() : null;
+                  }
+                  function normalizeAadhaar(s='') { return (s || '').replace(/\D/g, '').slice(0,12); }
+                  function normalizePAN(s='')     { return (s || '').toUpperCase(); }
+                
+                  // minor UI cues
+                  function flag(ok, inputEl) {
+                    if (!inputEl) return;
+                    inputEl.classList.remove('error-outline','is-valid');
+                    if (ok === true)  inputEl.classList.add('is-valid');
+                    if (ok === false) inputEl.classList.add('error-outline');
+                  }
+                  async function mismatch(title, typed, docVal) {
+                    await Swal.fire({
+                      icon: 'error',
+                      title,
+                      html: `<div style="text-align:left">
+                               <b>Typed:</b> ${typed || '<i>empty</i>'}<br>
+                               <b>From document (OCR):</b> ${docVal || '<i>not found</i>'}
+                             </div>`
+                    });
+                  }
+                  const toast = (title, icon='info') =>
+                    Swal.fire({ toast:true, position:'top-end', timer:2000, showConfirmButton:false, icon, title });
+                
+                  // store OCR readouts for matching
+                  const OCR_VALUES = { aadhaarFront: null, panDoc: null };
+                
+                  // aadhaar back: relaxed hints only
+                  function isAadhaarBackLikely(text='') {
+                    const t = text.toUpperCase();
+                    return t.includes('ADDRESS') || t.includes('S/O') || t.includes('D/O') || t.includes('W/O') ||
+                           t.includes('PINCODE') || t.includes('PIN CODE') || /\b\d{6}\b/.test(t);
+                  }
+                
+                  // expected targets
+                  const OCR_EXPECT = [
+                    { input: aadhaarFront, expect: ['AADHAAR'], type: 'front' },
+                    { input: aadhaarBack,  expect: ['AADHAAR'], type: 'back'  },
+                    { input: panDoc,       expect: ['PAN'],     type: 'pan'   },
+                    { input: gstDoc,       expect: ['GSTIN'],   type: 'gst'   },
+                  ];
+                
+                  // file change: validate + OCR + store result
+                  [aadhaarFront, aadhaarBack, gstDoc, panDoc, regDoc, chqDoc, clientLogo]
+                    .filter(Boolean).forEach(inp => {
+                      inp.addEventListener('change', async (e) => {
+                        const input = e.currentTarget;
+                        if (!validateFileInput(input)) return;
+                
+                        const map = OCR_EXPECT.find(m => m.input === input);
+                        if (!map || !input.files?.[0]) { updateDocsBadge(); return; }
+                
+                        const result = await detectDocument(input.files[0]);
+                
+                        if (result.type === 'ERROR' || result.type === 'NONE') {
+                          await Swal.fire('Low quality document', 'We could not read the document clearly. Please ensure good lighting and clarity.', 'warning');
+                          updateDocsBadge();
+                          return;
+                        }
+                
+                        if (map.type === 'front') {
+                          if (result.type !== 'AADHAAR') {
+                            await Swal.fire('Wrong document', `Expected <b>Aadhaar Front</b>, detected <b>${result.type}</b>.`, 'error');
+                            input.value = ''; OCR_VALUES.aadhaarFront = null; flag(null, aadhaarNum); updateDocsBadge(); return;
+                          }
+                          OCR_VALUES.aadhaarFront = grabAadhaar(result.text);
+                          const typed = normalizeAadhaar(aadhaarNum?.value || '');
+                          if (typed && OCR_VALUES.aadhaarFront) {
+                            const ok = typed === OCR_VALUES.aadhaarFront;
+                            flag(ok, aadhaarNum);
+                            if (!ok) await mismatch('Aadhaar mismatch', typed, OCR_VALUES.aadhaarFront);
+                          } else {
+                            flag(null, aadhaarNum);
+                          }
+                          toast('Aadhaar front looks valid','success'); updateDocsBadge(); return;
+                        }
+                
+                        if (map.type === 'back') {
+                          if (result.type === 'AADHAAR' || isAadhaarBackLikely(result.text)) {
+                            toast('Aadhaar back accepted','success');
+                          } else {
+                            const choice = await Swal.fire({
+                              title: 'Aadhaar back not recognized',
+                              html: 'We couldn’t detect back-side hints (address/pincode). Do you still want to accept this file?',
+                              icon: 'question', showCancelButton: true,
+                              confirmButtonText: 'Accept anyway', cancelButtonText: 'Choose another'
+                            });
+                            if (!choice.isConfirmed) input.value = '';
+                            else toast('Accepted by user','info');
+                          }
+                          updateDocsBadge(); return;
+                        }
+                
+                        if (map.type === 'pan') {
+                          if (result.type !== 'PAN') {
+                            await Swal.fire('Wrong document', `Expected <b>PAN</b>, detected <b>${result.type}</b>.`, 'error');
+                            input.value=''; OCR_VALUES.panDoc=null; flag(null, panNo); updateDocsBadge(); return;
+                          }
+                          OCR_VALUES.panDoc = grabPAN(result.text);
+                          const typed = normalizePAN(panNo?.value || '');
+                          if (typed && OCR_VALUES.panDoc) {
+                            const ok = typed === OCR_VALUES.panDoc;
+                            flag(ok, panNo);
+                            if (!ok) await mismatch('PAN mismatch', typed, OCR_VALUES.panDoc);
+                          } else {
+                            flag(null, panNo);
+                          }
+                          toast('Document looks correct','success'); updateDocsBadge(); return;
+                        }
+                
+                        if (map.type === 'gst') {
+                          if (result.type !== 'GSTIN') {
+                            await Swal.fire('Wrong document', `Expected <b>GST</b>, detected <b>${result.type}</b>.`, 'error');
+                            input.value = '';
+                          } else {
+                            toast('Document looks correct','success');
+                          }
+                          updateDocsBadge(); return;
+                        }
+                      });
+                    });
+                
+                  // docs badge
+                  function updateDocsBadge() {
+                    const list = [aadhaarFront, aadhaarBack, gstDoc, panDoc, regDoc, chqDoc, clientLogo].filter(Boolean);
+                    const count = list.reduce((n, el) => n + (el?.files?.length ? 1 : 0), 0);
+                    if (kycDocsBadge) kycDocsBadge.textContent = count ? `${count} document${count === 1 ? '' : 's'} uploaded` : 'No documents';
+                  }
+                  [aadhaarFront, aadhaarBack, gstDoc, panDoc, regDoc, chqDoc, clientLogo].forEach(i => i?.addEventListener('change', updateDocsBadge));
+                  updateDocsBadge();
+                
+                  // ---------- requireds policy ----------
+                  // Aadhaar/PAN NOT required globally; GST depends on company type; LOGO + SELFIE required.
+                  function applyRequired() {
+                    // clear "required" on Aadhaar/PAN/cheque/reg
+                    [aadhaarFront, aadhaarBack, panNo, panDoc, chqNo, chqDoc, regNo, regDoc].forEach(el => { if (el) el.required = false; });
+                
+                    // GST required only if not Individual
+                    const companyType = ($('input[name="companyType"]:checked', panel)?.value) || 'Individual';
+                    const needGST = (companyType !== 'Individual');
+                    if (gstNo)  gstNo.required  = needGST;
+                    if (gstDoc) gstDoc.required = needGST;
+                    if (!needGST && gstDoc) { gstDoc.disabled = true; gstDoc.value = ''; }
+                    if (needGST && gstDoc && GST_REGEX.test((gstNo?.value || '').trim().toUpperCase())) {
+                      gstDoc.disabled = false;
+                    }
+                
+                    // Make LOGO required (we'll enforce in submit)
+                    if (clientLogo) clientLogo.required = true;
+                    // Selfie required via capturedImage presence (enforce in submit)
+                  }
+                  radios.forEach(r => r && r.addEventListener('change', applyRequired));
+                  applyRequired();
+                
+                  // ---------- GST live enable + verify (unchanged) ----------
+                  gstNo?.addEventListener('input', () => {
+                    const val = (gstNo.value || '').trim().toUpperCase();
+                    gstNo.value = val;
+                    if (val.length === 15 && GST_REGEX.test(val)) {
+                      if (gstDoc) gstDoc.disabled = false;
+                      gstTick?.classList.remove('d-none');
+                      toast('GST format looks valid','success');
+                    } else {
+                      if (gstDoc) { gstDoc.disabled = true; gstDoc.value = ''; }
+                      gstTick?.classList.add('d-none');
+                    }
+                  });
+                  gstNo?.addEventListener('blur', async () => {
+                    const gstNumber = (gstNo.value || '').trim().toUpperCase();
+                    if (!gstNumber) return; // optional when Individual
+                    if (gstNumber.length !== 15 || !GST_REGEX.test(gstNumber)) {
+                      return Swal.fire('Invalid GSTIN', 'Please enter a valid 15-character GSTIN.', 'error');
+                    }
+                    try {
+                      const res = await axios.post('/client-gstin-verification', { gstNumber });
+                      if (res?.data?.success) {
+                        const { gstin, tradeName, constitutionOfBusiness, natureOfBusinessActivities } = res.data;
+                        hiddenTradeName    && (hiddenTradeName.value    = tradeName || '');
+                        hiddenConstitution && (hiddenConstitution.value = constitutionOfBusiness || '');
+                        hiddenNature       && (hiddenNature.value       = natureOfBusinessActivities || '');
+                        gstDoc && (gstDoc.disabled = false);
+                        gstTick?.classList.remove('d-none');
+                        Swal.fire({
+                          icon: 'success',
+                          title: 'GST Verified',
+                          html: `✅ <b>GSTIN:</b> ${gstin}<br><b>Trade Name:</b> ${tradeName}<br><b>Constitution:</b> ${constitutionOfBusiness}<br><b>Nature:</b> ${natureOfBusinessActivities}`
+                        });
+                      } else {
+                        gstDoc && (gstDoc.disabled = true);
+                        Swal.fire('GST Invalid', res?.data?.message || 'Invalid GST number.', 'error');
+                      }
+                    } catch (error) {
+                      gstDoc && (gstDoc.disabled = true);
+                      Swal.fire('Verification failed', error?.response?.data?.message || 'Something went wrong!', 'error');
+                    }
+                  });
+                
+                  // ---------- PAN verify (API) + blur matching ----------
+                  panNo?.addEventListener('blur', async () => {
+                    const typed = normalizePAN(panNo.value || '');
+                    if (!typed) { flag(null, panNo); return; } // optional
+                
+                    if (!PAN_REGEX.test(typed)) {
+                      flag(false, panNo);
+                      return Swal.fire('Invalid PAN', '❌ Invalid PAN format', 'error');
+                    }
+                
+                    // if doc OCR exists, compare
+                    if (OCR_VALUES.panDoc) {
+                      const ok = typed === OCR_VALUES.panDoc;
+                      flag(ok, panNo);
+                      if (!ok) await mismatch('PAN mismatch', typed, OCR_VALUES.panDoc);
+                    }
+                
+                    // API verify (optional extra)
+                    try {
+                      const res = await axios.post('/client-kyc-verification', { docNumber: typed });
+                      const msg = res?.data?.data?.msg;
+                      const status = res?.data?.data?.status;
+                      if (status === 1 && (msg?.STATUS === 'Active' || msg?.Status === 'Active')) {
+                        hiddenPanName && (hiddenPanName.value = msg?.NameOnTheCard || '');
+                        panDoc && (panDoc.disabled = false);
+                        Swal.fire({
+                          icon: 'success',
+                          title: 'PAN Verified',
+                          html: `✅ PAN is <b>Active</b><br>Name on Card: <b>${msg?.NameOnTheCard || ''}</b>`
+                        });
+                      }
+                    } catch { /* silent */ }
+                  });
+                
+                  // ---------- Aadhaar blur (optional) ----------
+                  aadhaarNum?.addEventListener('blur', async () => {
+                    const typed = normalizeAadhaar(aadhaarNum.value || '');
+                    if (!typed) { flag(null, aadhaarNum); return; } // optional
+                    if (!AADHAAR_REGEX.test(typed)) {
+                      flag(false, aadhaarNum);
+                      return Swal.fire('Invalid Aadhaar', 'Enter a valid 12-digit Aadhaar number.', 'error');
+                    }
+                    if (OCR_VALUES.aadhaarFront) {
+                      const ok = typed === OCR_VALUES.aadhaarFront;
+                      flag(ok, aadhaarNum);
+                      if (!ok) await mismatch('Aadhaar mismatch', typed, OCR_VALUES.aadhaarFront);
+                    } else {
+                      // not blocking here; submit will enforce pairing
+                      flag(null, aadhaarNum);
+                    }
+                  });
+                
+                  // ---------- Logo preview ----------
+                  clientLogo?.addEventListener('change', (e) => {
+                    const input = e.currentTarget;
+                    if (!validateFileInput(input)) {
+                      if (previewLogo) { previewLogo.src=''; previewLogo.classList.add('d-none'); }
+                      return;
+                    }
+                    const file = input.files?.[0];
+                    if (!file) { if (previewLogo) { previewLogo.src=''; previewLogo.classList.add('d-none'); } return; }
+                    const reader = new FileReader();
+                    reader.onload = ev => { if (previewLogo) { previewLogo.src = ev.target.result; previewLogo.classList.remove('d-none'); } };
+                    reader.readAsDataURL(file);
+                    toast('Logo ready','success');
+                  });
+                
+                  // ---------- Camera / Selfie ----------
+                  startCameraBtn?.addEventListener('click', async () => {
+                    if (!navigator.mediaDevices?.getUserMedia) return Swal.fire('Unsupported','Camera API not supported.','info');
+                    try {
+                      stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                      if (video) video.srcObject = stream;
+                      setText(cameraStatus,'Camera started. Position yourself and click Capture.');
+                      startCameraBtn.classList.add('d-none'); captureBtn?.classList.remove('d-none'); retakeBtn?.classList.add('d-none'); canvas?.classList.add('d-none');
+                      toast('Camera started','success');
+                    } catch {
+                      setText(cameraStatus,''); Swal.fire('Permission needed','Please allow camera access.','warning');
+                    }
+                  });
+                  captureBtn?.addEventListener('click', () => {
+                    if (!stream || !video || !canvas) return;
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = video.videoWidth || 320; canvas.height = video.videoHeight || 200;
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    canvas.classList.remove('d-none'); video.classList.add('d-none');
+                    setText(cameraStatus,'Photo captured.');
+                    captureBtn.classList.add('d-none'); retakeBtn?.classList.remove('d-none');
+                    stream.getTracks().forEach(t=>t.stop()); stream = null;
+                    if (capturedImage) capturedImage.value = canvas.toDataURL('image/png');
+                    toast('Photo captured','success');
+                  });
+                  retakeBtn?.addEventListener('click', async () => {
+                    if (!navigator.mediaDevices?.getUserMedia) return Swal.fire('Unsupported','Camera API not supported.','info');
+                    try {
+                      stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                      if (video) { video.srcObject = stream; video.classList.remove('d-none'); }
+                      setText(cameraStatus,'Camera restarted. Position yourself and click Capture.');
+                      startCameraBtn?.classList.add('d-none'); captureBtn?.classList.remove('d-none'); retakeBtn?.classList.add('d-none'); canvas?.classList.add('d-none');
+                      if (capturedImage) capturedImage.value = '';
+                      toast('Camera ready','info');
+                    } catch {
+                      setText(cameraStatus,''); Swal.fire('Permission needed','Please allow camera access.','warning');
+                    }
+                  });
+                
+                  // ---------- submit ----------
+                  kycForm?.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                
+                    // Required: LOGO
+                    if (!clientLogo?.files?.length) {
+                      await Swal.fire('Logo required','Please upload your company logo.','error'); return;
+                    }
+                    // Required: SELFIE
+                    if (!capturedImage?.value) {
+                      await Swal.fire('Selfie required','Please capture a profile photo before submitting.','error'); return;
+                    }
+                
+                    // Pairing rules (Aadhaar/PAN optional but strict if provided)
+                    const aadhaarTyped = normalizeAadhaar(aadhaarNum?.value || '');
+                    const aadhaarDoc   = aadhaarFront?.files?.[0] || null;
+                
+                    const panTyped = normalizePAN(panNo?.value || '');
+                    const panDocF  = panDoc?.files?.[0] || null;
+                
+                    // If user provided Aadhaar number OR doc, require both + match
+                    if (aadhaarTyped || aadhaarDoc) {
+                      if (!aadhaarTyped)  { await Swal.fire('Aadhaar number missing','You entered Aadhaar document; please type the 12-digit Aadhaar number.','error'); return; }
+                      if (!AADHAAR_REGEX.test(aadhaarTyped)) { await Swal.fire('Invalid Aadhaar','Enter a valid 12-digit Aadhaar number.','error'); return; }
+                      if (!aadhaarDoc)    { await Swal.fire('Aadhaar document missing','Please upload Aadhaar Front.','error'); return; }
+                
+                      // ensure OCR present; if not, OCR now
+                      if (!OCR_VALUES.aadhaarFront) {
+                        const res = await detectDocument(aadhaarDoc);
+                        if (res.type !== 'AADHAAR') { await Swal.fire('Wrong document','Expected Aadhaar Front.','error'); return; }
+                        OCR_VALUES.aadhaarFront = grabAadhaar(res.text);
+                      }
+                      if (!OCR_VALUES.aadhaarFront || aadhaarTyped !== OCR_VALUES.aadhaarFront) {
+                        await mismatch('Aadhaar mismatch', aadhaarTyped, OCR_VALUES.aadhaarFront); return;
+                      }
+                    }
+                
+                    // If user provided PAN number OR doc, require both + match
+                    if (panTyped || panDocF) {
+                      if (!panTyped)    { await Swal.fire('PAN number missing','You uploaded a PAN document; please enter the PAN number.','error'); return; }
+                      if (!PAN_REGEX.test(panTyped)) { await Swal.fire('Invalid PAN','Enter a valid PAN (AAAAA9999A).','error'); return; }
+                      if (!panDocF)     { await Swal.fire('PAN document missing','Please upload PAN document.','error'); return; }
+                
+                      if (!OCR_VALUES.panDoc) {
+                        const res = await detectDocument(panDocF);
+                        if (res.type !== 'PAN') { await Swal.fire('Wrong document','Expected PAN document.','error'); return; }
+                        OCR_VALUES.panDoc = grabPAN(res.text);
+                      }
+                      if (!OCR_VALUES.panDoc || panTyped !== OCR_VALUES.panDoc) {
+                        await mismatch('PAN mismatch', panTyped, OCR_VALUES.panDoc); return;
+                      }
+                    }
+                
+                    // confirm
+                    const ok = await Swal.fire({
+                      title: 'Submit KYC Application?',
+                      text: 'Are you sure you want to submit your KYC application?',
+                      icon: 'question', showCancelButton: true,
+                      confirmButtonText: 'Yes, Submit!'
+                    });
+                    if (!ok.isConfirmed) return;
+                
+                    const originalText = submitBtn?.innerHTML;
+                    if (submitBtn) { submitBtn.disabled = true; submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...'; }
+                    Swal.fire({ title:'Submitting...', allowOutsideClick:false, allowEscapeKey:false, showConfirmButton:false, didOpen:()=>Swal.showLoading() });
+                
+                    try {
+                      const fd = new FormData();
+                
+                      // client basics
+                      fd.append('clientName', byId('clientName')?.value || '');
+                      fd.append('clientEmail', byId('clientEmail')?.value || '');
+                      fd.append('clientPhone', byId('clientPhone')?.value || '');
+                
+                      // selfie
+                      if (canvas && !canvas.classList.contains('d-none')) {
+                        const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+                        if (blob) fd.append('selfie', blob, 'selfie.png');
+                      } else if (capturedImage?.value) {
+                        // fallback: convert dataURL to blob
+                        const bin = atob(capturedImage.value.split(',')[1] || '');
+                        const arr = new Uint8Array(bin.length); for (let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
+                        fd.append('selfie', new Blob([arr], {type:'image/png'}), 'selfie.png');
+                      }
+                
+                      // company branding
+                      fd.append('registeredCompanyName', byId('registeredCompanyName')?.value || '');
+                      fd.append('brandName', byId('brandName')?.value || '');
+                      fd.append('companyEmail', byId('companyEmail')?.value || '');
+                      fd.append('website', byId('website')?.value || '');
+                
+                      // type
+                      const companyType = ($('input[name="companyType"]:checked', panel)?.value) || 'Individual';
+                      fd.append('companyType', companyType);
+                
+                      // Aadhaar (if provided pair)
+                      if (aadhaarTyped) fd.append('aadhaarNumber', aadhaarTyped);
+                      if (aadhaarFront?.files?.[0]) fd.append('aadhaarFrontUpload', aadhaarFront.files[0]);
+                      if (aadhaarBack?.files?.[0])  fd.append('aadhaarBackUpload',  aadhaarBack.files[0]);
+                
+                      // PAN (if provided pair)
+                      if (panTyped) fd.append('company_pan', panTyped);
+                      fd.append('pan_holder_name', hiddenPanName?.value || '');
+                      if (panDoc?.files?.[0]) fd.append('pandoc', panDoc.files[0]);
+                
+                      // GST (as per your earlier logic)
+                      if (companyType !== 'Individual') {
+                        const gst = (gstNo?.value || '').trim().toUpperCase();
+                        fd.append('gstNo', gst);
+                        fd.append('trade_name', hiddenTradeName?.value || '');
+                        fd.append('constitution_of_business', hiddenConstitution?.value || '');
+                        fd.append('nature_of_business', hiddenNature?.value || '');
+                        if (gstDoc?.files?.[0]) fd.append('gstdoc', gstDoc.files[0]);
+                      }
+                
+                      // optional docs
+                      if (regNo?.value) fd.append('companyRegNumber', regNo.value);
+                      if (regDoc?.files?.[0]) fd.append('companyRegUpload', regDoc.files[0]);
+                      if (chqNo?.value) fd.append('cancelledCheckNumber', chqNo.value);
+                      if (chqDoc?.files?.[0]) fd.append('cancelledCheckUpload', chqDoc.files[0]);
+                
+                      // logo (REQUIRED)
+                      if (clientLogo?.files?.[0]) fd.append('clientLogo', clientLogo.files[0]);
+                
+                      const resp = await axios.post('/submit-kyc', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+                      Swal.close();
+                
+                      if (resp?.data?.success) {
+                        await Swal.fire({ icon:'success', title:'Success! 🎉', text:'Your KYC application has been submitted successfully!' });
+                        location.reload();
+                      } else {
+                        await Swal.fire({ icon:'error', title:'Submission Failed', text: resp?.data?.message || 'An error occurred while submitting your application.' });
+                      }
+                    } catch (err) {
+                      Swal.close();
+                      console.error('Submit error:', err);
+                      await Swal.fire({ icon:'error', title:'Connection Error', text:'Unable to connect to the server. Please try again.' });
+                    } finally {
+                      if (submitBtn) { submitBtn.disabled = false; submitBtn.innerHTML = originalText || 'Upload Documents'; }
+                    }
+                  });
+                
+                  // backward compat
+                  window.handleFileUpload = function (e) {
+                    const input = e?.target || e?.currentTarget;
+                    if (!input) return;
+                    if (!checkFileSize(input)) return;
+                    if (!checkAcceptType(input)) return;
+                    toast('File looks good','success');
+                  };
+                })();
+                </script>
+                
+                
+                
+                
+
+
+              <!-- FOOTER -->
+              <%- include('../partials/footer') %>
+            </div>
+          </div>
+  </div>
+
+  <!-- Tab functionality is handled by Bootstrap 5, no custom script needed -->
+
+ 
+
+
+</body>
+
+</html>

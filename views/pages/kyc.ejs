@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <%- include('../partials/head') %>
+    <!-- Scoped visual clean-up -->
+    <style>
+      /* Merged, panel-scoped UI helpers for #panel-kyc-documents and Tailwind→Bootstrap compatibility helpers */
+
+      /* #panel-kyc-documents styles */
+      #panel-kyc-documents .error-summary {
+        position: sticky;
+        top: .5rem;
+        z-index: 2;
+        border-left: 4px solid #dc3545;
+        background: #fff3f3;
+        padding: .75rem .75rem .75rem 1rem;
+        border-radius: .5rem;
+        margin-bottom: 1rem;
+        font-size: .92rem;
+      }
+
+      #panel-kyc-documents .error-summary h6 {
+        margin: 0 0 .25rem;
+        color: #842029;
+        font-weight: 700;
+        font-size: .95rem;
+      }
+
+      #panel-kyc-documents .error-summary ul {
+        margin: 0;
+        padding-left: 1.1rem;
+      }
+
+      #panel-kyc-documents .error-outline {
+        box-shadow: 0 0 0 .15rem rgba(220, 53, 69, .25) !important;
+      }
+
+      #panel-kyc-documents .is-valid {
+        box-shadow: 0 0 0 .15rem rgba(25, 135, 84, .25) !important;
+      }
+
+      #panel-kyc-documents .spinner-inline {
+        width: 1rem;
+        height: 1rem;
+        border: .15rem solid #fff;
+        border-right-color: transparent;
+        border-radius: 50%;
+        display: inline-block;
+        animation: sp .6s linear infinite;
+        margin-left: .5rem;
+      }
+
+      @keyframes sp {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      #panel-kyc-documents .form-control {
+        border: 0 !important;
+        background: #f8f9fa;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+      }
+
+      #panel-kyc-documents input.form-control-sm,
+      #panel-kyc-documents .form-select.form-control-sm {
+        font-size: 0.9rem;
+        padding-top: .375rem;
+        padding-bottom: .375rem;
+      }
+
+      #panel-kyc-documents .form-label {
+        margin-bottom: .35rem;
+      }
+
+      #panel-kyc-documents .border-primary {
+        border-color: transparent !important;
+      }
+
+      #panel-kyc-documents .section-title {
+        border-bottom: 1px solid #ececec;
+        padding-bottom: .5rem;
+        margin-bottom: .75rem;
+      }
+
+      #panel-kyc-documents .hint {
+        font-size: .85rem;
+      }
+
+      /* --- Tailwind → Bootstrap compatibility helpers so your JS keeps working --- */
+      .hidden {
+        display: none !important;
+      }
+
+      .text-purple-600 {
+        color: #7c3aed !important;
+      }
+
+      .bg-purple-100 {
+        background-color: #ede9fe !important;
+      }
+
+      .text-gray-800 {
+        color: #343a40 !important;
+      }
+
+      .text-gray-900 {
+        color: #212529 !important;
+      }
+
+      .text-gray-700 {
+        color: #495057 !important;
+      }
+
+      .text-gray-600 {
+        color: #6c757d !important;
+      }
+
+      .text-gray-500 {
+        color: #6c757d !important;
+      }
+
+      .bg-gray-100 {
+        background-color: #f8f9fa !important;
+      }
+
+      .border-gray-200 {
+        border-color: #e9ecef !important;
+      }
+
+      .border-gray-300 {
+        border-color: #dee2e6 !important;
+      }
+
+      .rounded-xl {
+        border-radius: 12px !important;
+      }
+
+      .rounded-md {
+        border-radius: .375rem !important;
+      }
+
+      .w-28 {
+        width: 7rem !important;
+      }
+
+      .h-28 {
+        height: 7rem !important;
+      }
+
+      .max-w-\[1280px\] {
+        max-width: 1280px !important;
+      }
+
+      .gap-2 {
+        gap: .5rem !important;
+      }
+
+      .gap-3 {
+        gap: 12px !important;
+      }
+
+      .gap-6 {
+        gap: 1.5rem !important;
+      }
+
+      .gap-8 {
+        gap: 2rem !important;
+      }
+
+      .px-5 {
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+      }
+
+      .py-3 {
+        padding-top: .75rem !important;
+        padding-bottom: .75rem !important;
+      }
+
+      .p-6 {
+        padding: 1.5rem !important;
+      }
+
+      .p-4 {
+        padding: 12px !important;
+      }
+
+      .mb-6 {
+        margin-bottom: 1.5rem !important;
+      }
+
+      .mb-8 {
+        margin-bottom: 2rem !important;
+      }
+
+      .ml-0 {
+        margin-left: 0 !important;
+      }
+
+      .md\:ml-10 {
+        margin-left: 2.5rem !important;
+      }
+
+      .focus\:ring-2:focus {
+        box-shadow: 0 0 0 .2rem rgba(124, 58, 237, .25) !important;
+      }
+
+      .focus\:ring-purple-600:focus {
+        box-shadow: 0 0 0 .2rem rgba(124, 58, 237, .25) !important;
+      }
+
+      /* Our design tokens */
+      :root {
+        --ds-primary: #7c3aed;
+        --ds-primary-700: #6d28d9;
+      }
+
+      .btn-ds {
+        background: var(--ds-primary);
+        border-color: var(--ds-primary);
+        color: #fff;
+        font-weight: 600;
+      }
+
+      .btn-ds:hover {
+        background: var(--ds-primary-700);
+        border-color: var(--ds-primary-700);
+        color: #fff;
+      }
+
+      video,
+      canvas {
+        border-radius: .375rem;
+        border: 1px solid #d1d5db;
+        max-width: 100%;
+        height: auto;
+      }
+
+      .tab-panel.ds-frame {
+        border: 1px solid #e9ecef;
+        border-radius: 12px;
+      }
+
+      /* Convert some Tailwind grid/flex feelings */
+      .tw-vertical-nav .nav-link {
+        border-radius: .75rem;
+        font-weight: 600;
+        color: #212529;
+        padding: .75rem 12px;
+      }
+
+      .tw-vertical-nav .nav-link.active {
+        background: #ede9fe;
+        color: #6d28d9;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+      }
+
+      .tw-vertical-nav .nav-link:not(.active):hover {
+        background: #f8f9fa;
+      }
+
+      .border-dashed {
+        border-style: dashed !important;
+      }
+
+      /* Professional SweetAlert2 customization */
+      .swal2-popup {
+        font-family: 'Nunito', sans-serif;
+        border-radius: 12px;
+      }
+
+      .swal2-title {
+        font-weight: 700;
+        color: #2c3e50;
+      }
+
+      .swal2-confirm {
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 12px 24px;
+      }
+
+      .swal2-cancel {
+        border-radius: 8px;
+        font-weight: 600;
+        padding: 12px 24px;
+      }
+
+      /* Enhanced button styling */
+      .btn-primary {
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .btn-primary:active {
+        transform: translateY(0);
+      }
+
+      /* Close button styling */
+      #privacyPolicyCloseBtn {
+        font-size: 1.2rem;
+        opacity: 0.7;
+        transition: opacity 0.3s ease, transform 0.2s ease;
+      }
+
+      #privacyPolicyCloseBtn:hover {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+
+      #privacyPolicyCloseBtn:focus {
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+      }
+    </style>
+</head>
+
+<body data-theme="light" class="font-nunito">
+  <div id="wrapper" class="theme-cyan">
+    <!-- HEADER SECTION -->
+    <%- include('../partials/header') %>
+
+      <!-- SIDEBAR SECTIONS -->
+      <%- include('../partials/left-sidebar') %>
+        <%- include('../partials/right-iconbar') %>
+
+          <!-- MAIN CONTENT AREA -->
+          <div id="main-content">
+            <div class="container pt-4">
+              <div class="block-header">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h2>KYC</h2>
+                    <ul class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-dashboard"></i></a></li>
+                      <li class="breadcrumb-item">Vas Setting</li>
+                      <li class="breadcrumb-item active">KYC</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex flex-column flex-md-row p-4 p-md-5 p-lg-5 p-xl-5 max-w-[1280px] mx-auto w-100 gap-4">
+
+                <!-- Sidebar -->
+                <aside class="w-100" style="max-width:220px;">
+                  <div class="border border-gray-200 rounded-xl p-4 mb-3">
+                    <h2 class="text-uppercase small fw-semibold text-gray-600 mb-3" style="letter-spacing:.15em;">CLIENT
+                      ONBOARDING</h2>
+                    <nav class="nav flex-column gap-2 tw-vertical-nav" role="tablist" aria-orientation="vertical">
+                      <button id="tab-client-details" class="nav-link text-start" data-bs-toggle="tab"
+                        data-bs-target="#panel-client-details" type="button" role="tab"
+                        aria-controls="panel-client-details" aria-selected="true">
+                        <i class="fas fa-user-circle me-2"></i> Client Details
+                      </button>
+                      <button id="tab-kyc-documents" class="nav-link text-start" data-bs-toggle="tab"
+                        data-bs-target="#panel-kyc-documents" type="button" role="tab"
+                        aria-controls="panel-kyc-documents" aria-selected="false">
+                        <i class="fas fa-file-alt me-2"></i> KYC Documents
+                      </button>
+                      <button id="tab-subscription-plan" class="nav-link text-start" data-bs-toggle="tab"
+                        data-bs-target="#panel-subscription-plan" type="button" role="tab"
+                        aria-controls="panel-subscription-plan" aria-selected="false">
+                        <i class="fas fa-clipboard-list me-2"></i> Subscription Plan
+                      </button>
+                    </nav>
+                  </div>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="flex-grow-1 ms-0 ms-md-4">
+                  <section class="tab-content p-0" tabindex="0">
+<% if (userData.is_kyc_submitted == 0) { %>
+  <div class="alert alert-warning d-flex align-items-center mb-4" role="alert">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    <div>
+      Your KYC submission is <strong>pending</strong>. Please complete the form to proceed.
+    </div>
+  </div>
+<% } else if (userData.is_kyc_submitted == 1 && userData.is_kyc_verified == 0) { %>
+  <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+    <i class="fas fa-clock me-2"></i>
+    <div>
+      Your KYC documents have been submitted and are <strong>awaiting approval</strong>.
+    </div>
+  </div>
+<% } else if (userData.is_kyc_verified == 1) { %>
+  <div class="alert alert-success d-flex align-items-center mb-4" role="alert">
+    <i class="fas fa-check-circle me-2"></i>
+    <div>
+      Your KYC has been <strong>verified successfully</strong>. 🎉
+    </div>
+  </div>
+<% } %>
+
+                    <!-- Client Details Panel (Professional Design with Enhanced Spacing, Small Inputs & Centered Upload Logo) -->
+                    <div id="panel-client-details" class="tab-panel tab-pane fade show active mb-5" role="tabpanel"
+                         aria-labelledby="tab-client-details" tabindex="0">
+                      <div class="bg-white border border-gray-200 rounded-3 shadow-sm p-4">
+                        <h3 class="h6 fw-bold text-gray-900 mb-2" style="font-size:1.05rem;">Client Details</h3>
+                        <p class="small text-gray-600 mb-3" style="font-size:0.92rem;">
+                          Fill and submit all the required information to onboard the client.
+                        </p>
+                  
+                        <form id="clientDetailsForm" class="needs-validation" action="#" method="POST" enctype="multipart/form-data" novalidate>                          <!-- Section 1: Client Details -->
+                          <section class="mb-4">
+                            <h4 class="h6 fw-semibold text-gray-900 mb-3 pb-2 border-bottom" style="font-size:12px;">Client Details</h4>
+                            <div class="row g-4 align-items-start">
+                              <div class="col-12 col-md-8">
+                                <div class="row gy-3">
+                                  <div class="col-12">
+                                    <label for="clientName" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                      Client Name <span class="text-danger">*</span>
+                                    </label>
+                                    <input id="clientName" disabled name="clientName" type="text"
+                                           value="<%= userData.first_name %>" required aria-required="true"
+                                           aria-describedby="clientNameError" class="form-control form-control-sm" style="font-size:0.95rem;" />
+                                    <div id="clientNameError" class="invalid-feedback d-none" style="font-size:0.92rem;">
+                                      <%= userData.first_name %>
+                                    </div>
+                                  </div>
+                  
+                                  <div class="col-12">
+                                    <label for="clientEmail" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                      Email Address <span class="text-danger">*</span>
+                                    </label>
+                                    <input id="clientEmail" disabled name="clientEmail" type="email"
+                                           value="<%= userData.email %>" required aria-required="true"
+                                           aria-describedby="clientEmailError" class="form-control form-control-sm" style="font-size:0.95rem;" />
+                                    <div id="clientEmailError" class="invalid-feedback d-none" style="font-size:0.92rem;">
+                                      <%= userData.email %>
+                                    </div>
+                                  </div>
+                  
+                                  <div class="col-12">
+                                    <label for="clientPhone" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                      Phone Number <span class="text-danger">*</span>
+                                    </label>
+                                    <input id="clientPhone" disabled value="<%= userData.phone_no%>" name="clientPhone"
+                                           type="tel" placeholder="<%= userData.phone_no %>" pattern="^\d{10}$" required
+                                           aria-required="true" aria-describedby="clientPhoneError"
+                                           class="form-control form-control-sm" style="font-size:0.95rem;" />
+                                    <div id="clientPhoneError" class="invalid-feedback d-none" style="font-size:0.92rem;">
+                                      Please enter a valid 10-digit phone number.
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                  
+                              <!-- Upload Section: Centered Upload Logo, Required -->
+                              <div class="col-12 col-md-4 d-flex flex-column align-items-center justify-content-center">
+                                <div class="d-flex flex-column align-items-center gap-2 position-relative p-3 border border-dashed rounded-3 bg-light w-100"
+                                     style="min-height: 180px; max-width:240px;">
+                                  <label for="clientLogo" class="text-primary small fw-semibold text-center mb-2"
+                                         role="button" style="cursor:pointer; font-size:0.95rem;">
+                                    <i class="fas fa-upload me-1"></i> Upload Logo <span class="text-danger">*</span>
+                                  </label>
+                                  <input type="file" id="clientLogo" name="clientLogo" accept="image/*"
+                                         aria-describedby="clientLogoHelp clientLogoError clientLogoSizeError"
+                                         class="d-none" required aria-required="true" />
+                                  <div id="clientLogoHelp" class="text-muted text-center mb-2"
+                                       style="font-size:.8rem; line-height:1.2;">Max 1 MB<br><span style="font-size:.7rem;">(250×150px)</span></div>
+                                  <div class="w-100 d-flex justify-content-center align-items-center" style="height: 80px;">
+                                    <img id="previewLogo" alt="Preview of uploaded client logo" class="d-none"
+                                         style="object-fit:contain; border-radius:.375rem; max-width:100%; max-height:80px;" />
+                                  </div>
+                                  <div id="clientLogoError" class="invalid-feedback d-none text-center" style="font-size:0.92rem;">
+                                    Please upload a company logo.
+                                  </div>
+                                  <div id="clientLogoSizeError" class="text-danger small d-none text-center" style="font-size:0.92rem;">
+                                    Max file size is 1MB
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                  
+                            <!-- Camera Capture (optional wiring; safe to leave) -->
+                            <div class="mt-4">
+                              <label class="form-label small fw-semibold text-gray-600 mb-2" style="font-size:0.92rem;">
+                                Capture Profile Photo
+                              </label>
+                              <div class="row g-3 align-items-start">
+                                <div class="col-12 col-md-6 d-flex flex-column align-items-center gap-2">
+                                  <div class="bg-light rounded-3 d-flex align-items-center justify-content-center"
+                                       style="width: 260px; height: 160px;">
+                                    <video id="video" autoplay playsinline
+                                           style="width: 240px; height: 140px; border-radius: .5rem;"></video>
+                                  </div>
+                                  <div class="d-flex flex-wrap gap-2 mt-2">
+                                    <button type="button" id="startCameraBtn" class="btn btn-outline-primary btn-sm px-2" style="font-size:0.92rem;">Start Camera</button>
+                                    <button type="button" id="captureBtn" class="btn btn-success btn-sm px-2 d-none" style="font-size:0.92rem;">Capture</button>
+                                    <button type="button" id="retakeBtn" class="btn btn-warning btn-sm text-white px-2 d-none" style="font-size:0.92rem;">Retake</button>
+                                  </div>
+                                </div>
+                                <div class="col-12 col-md-6 d-flex flex-column align-items-center gap-2">
+                                  <div class="bg-light rounded-3 d-flex align-items-center justify-content-center"
+                                       style="width: 260px; height: 160px;">
+                                    <canvas id="canvas" class="d-none"
+                                            style="width: 240px; height: 140px; border-radius: .5rem;"></canvas>
+                                  </div>
+                                  <p id="cameraStatus" class="small text-muted mt-2" style="font-size:0.92rem;"></p>
+                                </div>
+                              </div>
+                              <input type="hidden" id="capturedImage" name="capturedImage" />
+                            </div>
+                          </section>
+                  
+                          <!-- Section 2: Company Branding Details -->
+                          <section>
+                            <h4 class="h6 fw-semibold text-gray-900 mb-3 pb-2 border-bottom" style="font-size:12px;">Company Branding Details</h4>
+                            <div class="row gy-3 gx-4">
+                              <div class="col-12 col-md-6">
+                                <label for="registeredCompanyName" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                  Registered Company Name <span class="text-danger">*</span>
+                                </label>
+                                <input id="registeredCompanyName" name="registeredCompanyName" type="text"
+                                       placeholder="Enter Company Name" required aria-required="true"
+                                       aria-describedby="registeredCompanyNameError" class="form-control form-control-sm" style="font-size:0.95rem;" />
+                                <div id="registeredCompanyNameError" class="invalid-feedback d-none" style="font-size:0.92rem;">
+                                  Please enter the registered company name.
+                                </div>
+                              </div>
+                  
+                              <div class="col-12 col-md-6">
+                                <label for="brandName" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                  Brand Name (Optional)
+                                </label>
+                                <input id="brandName" name="brandName" type="text" placeholder="Enter Brand name"
+                                       class="form-control form-control-sm" style="font-size:0.95rem;" />
+                              </div>
+                  
+                              <div class="col-12 col-md-6">
+                                <label for="companyEmail" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                  Company Email ID <span class="text-danger">*</span>
+                                </label>
+                                <input id="companyEmail" name="companyEmail" type="email" placeholder="superadmin@dispatch.co.in"
+                                       required aria-required="true" aria-describedby="companyEmailError"
+                                       class="form-control form-control-sm" style="font-size:0.95rem;" />
+                                <div id="companyEmailError" class="invalid-feedback d-none" style="font-size:0.92rem;">
+                                  Please enter a valid company email.
+                                </div>
+                              </div>
+                  
+                              <div class="col-12 col-md-6">
+                                <label for="website" class="form-label small fw-semibold text-gray-600 mb-1" style="font-size:0.92rem;">
+                                  Website (Optional)
+                                </label>
+                                <input id="website" name="website" type="url" placeholder="https://example.com"
+                                       class="form-control form-control-sm" style="font-size:0.95rem;" />
+                              </div>
+                            </div>
+                          </section>
+                        </form>
+                      </div>
+                    </div>
+                  
+                    <!-- KYC Documents Panel -->
+                    <div id="panel-kyc-documents" class="tab-panel tab-pane fade" role="tabpanel"
+                         aria-labelledby="tab-kyc-documents" tabindex="0">
+                      <div class="mb-2">
+                        <h3 class="h5 fw-bold text-primary mb-1">KYC Documents</h3>
+                        <p class="text-muted mb-0" style="font-size:12px;">Please upload the required documents for KYC verification. All information is kept confidential and secure.</p>
+                      </div>
+                  
+                      <!-- IMPORTANT: Entire KYC fields wrapped in ONE form -->
+                      <form id="kycForm" class="needs-validation" action="#" method="POST" enctype="multipart/form-data" novalidate>
+                        <div class="border border-2 border-light rounded-4 shadow-sm p-4 mb-3 bg-white">
+                  
+                          <!-- Company Type Radio Buttons -->
+                          <fieldset class="mb-4 border-0 p-0">
+                            <legend class="small fw-semibold text-secondary mb-3" style="font-size:16px;">Company Type</legend>
+                            <div class="d-flex flex-wrap gap-4">
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="companyType" value="Individual" id="ctInd" checked>
+                                <label class="form-check-label small fw-medium" for="ctInd" style="font-size:14px;">Individual</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="companyType" value="Proprietor" id="ctProp">
+                                <label class="form-check-label small fw-medium" for="ctProp" style="font-size:14px;">Proprietor</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="companyType" value="Company" id="ctComp">
+                                <label class="form-check-label small fw-medium" for="ctComp" style="font-size:14px;">Company</label>
+                              </div>
+                            </div>
+                          </fieldset>
+                  
+                          <!-- Aadhaar Section -->
+                          <section class="mb-4">
+                            <div class="mb-3 border-bottom pb-2">
+                              <h4 class="fw-semibold text-dark mb-0" style="font-size:1.05rem;">Aadhaar</h4>
+                            </div>
+                            <div class="row g-3 align-items-end">
+                              <div class="col-12 col-md-3">
+                                <label for="aadhaarNumber" class="form-label fw-semibold text-secondary" style="font-size:14px;">Aadhaar Number</label>
+                                <input type="text" id="aadhaarNumber" name="aadhaarNumber" placeholder="12-digit Aadhaar"
+                                       pattern="^\d{12}$" aria-describedby="aadhaarNumberError"
+                                       class="form-control form-control-sm border-primary" style="font-size:12px;" />
+                                <div id="aadhaarNumberError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please enter a valid 12-digit Aadhaar number.
+                                </div>
+                              </div>
+                              <div class="col-12 col-md-4">
+                                <label for="aadhaarFrontUpload" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  Aadhaar Front <span class="text-danger">*</span>
+                                </label>
+                                <input type="file" id="aadhaarFrontUpload" name="aadhaarFrontUpload"
+                                       accept="image/*,application/pdf"
+                                       aria-describedby="aadhaarFrontUploadError aadhaarFrontUploadSizeError"
+                                       class="form-control form-control-sm border-primary file-1mb" style="font-size:12px;" />
+                                <div id="aadhaarFrontUploadError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please upload Aadhaar front side.
+                                </div>
+                                <div id="aadhaarFrontUploadSizeError" class="text-danger small d-none" style="font-size:0.95rem;">
+                                  Max file size is 1MB
+                                </div>
+                              </div>
+                              <div class="col-12 col-md-4">
+                                <label for="aadhaarBackUpload" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  Aadhaar Back <span class="text-danger">*</span>
+                                </label>
+                                <input type="file" id="aadhaarBackUpload" name="aadhaarBackUpload"
+                                       accept="image/*,application/pdf"
+                                       aria-describedby="aadhaarBackUploadError aadhaarBackUploadSizeError"
+                                       class="form-control form-control-sm border-primary file-1mb" style="font-size:12px;" />
+                                <div id="aadhaarBackUploadError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please upload Aadhaar back side.
+                                </div>
+                                <div id="aadhaarBackUploadSizeError" class="text-danger small d-none" style="font-size:0.95rem;">
+                                  Max file size is 1MB
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                  
+                          <!-- GST Section -->
+                          <section class="mb-4">
+                            <div class="mb-3 border-bottom pb-2">
+                              <h4 class="fw-semibold text-dark mb-0" style="font-size:1.05rem;">GST</h4>
+                            </div>
+                            <div class="row g-3 align-items-end">
+                              <div class="col-12 col-sm-6">
+                                <label for="gstNo" class="form-label fw-semibold text-secondary" style="font-size:14px;">GST Number</label>
+                                <input type="text" id="gstNo" name="gstNo" maxlength="15" placeholder="Enter GST No"
+                                       class="form-control form-control-sm border-primary" style="font-size:12px;" />
+                                <input type="hidden" id="hidden_trade_name" name="trade_name">
+                                <input type="hidden" id="hidden_constitution" name="constitution_of_business">
+                                <input type="hidden" id="hidden_nature" name="nature_of_business">
+                                <div id="gstError" class="text-danger small d-none" style="font-size:0.95rem;"></div>
+                                <div id="gstResponse" class="text-muted small mt-1" style="font-size:0.95rem;"></div>
+                                <span id="gstSuccess" class="text-success fw-bold d-none" style="font-size:12px;">✔</span>
+                              </div>
+                              <div class="col-12 col-sm-6">
+                                <label for="gstdoc" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  GST Document <span class="text-danger">*</span>
+                                </label>
+                                <input type="file" id="gstdoc" name="gstdoc" accept="image/*"
+                                       class="form-control form-control-sm border-primary file-1mb" style="font-size:12px;" disabled />
+                                <div id="gstdocSizeError" class="text-danger small d-none" style="font-size:0.95rem;">Max file size is 1MB</div>
+                              </div>
+                            </div>
+                          </section>
+                  
+                          <!-- PAN Section -->
+                          <section class="mb-4">
+                            <div class="mb-3 border-bottom pb-2">
+                              <h4 class="fw-semibold text-dark mb-0" style="font-size:1.05rem;">PAN</h4>
+                            </div>
+                            <div class="row g-3 align-items-end">
+                              <div class="col-12 col-sm-6">
+                                <label for="company_pan" class="form-label fw-semibold text-secondary" style="font-size:14px;">PAN Number</label>
+                                <input type="text" id="company_pan" name="company_pan" maxlength="10" placeholder="Enter PAN"
+                                       class="form-control form-control-sm border-primary" style="font-size:12px;" />
+                                <input type="hidden" id="hidden_pan_holder_name" name="pan_holder_name">
+                                <div id="pan_error" class="text-danger small d-none" style="font-size:0.95rem;"></div>
+                                <div id="pan_response" class="text-muted small mt-1" style="font-size:0.95rem;"></div>
+                              </div>
+                              <div class="col-12 col-sm-6">
+                                <label for="pandoc" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  PAN Document <span class="text-danger">*</span>
+                                </label>
+                                <input type="file" id="pandoc" name="pandoc" accept="image/*"
+                                       class="form-control form-control-sm border-primary file-1mb" style="font-size:12px;" />
+                                <div id="pandocSizeError" class="text-danger small d-none" style="font-size:0.95rem;">Max file size is 1MB</div>
+                              </div>
+                            </div>
+                          </section>
+                  
+                          <!-- Company Registration Section -->
+                          <section class="mb-5">
+                            <div class="mb-3 border-bottom pb-2">
+                              <h4 class="fw-semibold text-dark mb-0" style="font-size:1.05rem;">Company Registration</h4>
+                            </div>
+                            <div class="row g-3 align-items-end">
+                              <div class="col-12 col-sm-6">
+                                <label for="companyRegNumber" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  Registration Number
+                                </label>
+                                <input type="text" id="companyRegNumber" name="companyRegNumber" placeholder="Company Reg. Number"
+                                       aria-describedby="companyRegNumberError" class="form-control form-control-sm border-primary" style="font-size:12px;" />
+                                <div id="companyRegNumberError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please enter company registration number.
+                                </div>
+                              </div>
+                              <div class="col-12 col-sm-6">
+                                <label for="companyRegUpload" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  Registration Document
+                                </label>
+                                <input type="file" id="companyRegUpload" name="companyRegUpload"
+                                       accept="image/*,application/pdf"
+                                       aria-describedby="companyRegUploadError companyRegUploadSizeError"
+                                       class="form-control form-control-sm border-primary file-1mb" style="font-size:12px;" />
+                                <div id="companyRegUploadError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please upload company registration document.
+                                </div>
+                                <div id="companyRegUploadSizeError" class="text-danger small d-none" style="font-size:0.95rem;">
+                                  Max file size is 1MB
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+
+
+
+                          <!-- Cancelled Cheque Section -->
+                          <section class="mb-4">
+                            <div class="mb-3 border-bottom pb-2">
+                              <h4 class="fw-semibold text-dark mb-0" style="font-size:1.05rem;">Cancelled Cheque</h4>
+                            </div>
+                            <div class="row g-3 align-items-end">
+                              <div class="col-12 col-sm-6">
+                                <label for="cancelledCheckNumber" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  Cheque Number
+                                </label>
+                                <input type="text" id="cancelledCheckNumber" name="cancelledCheckNumber" placeholder="Cheque Number"
+                                       aria-describedby="cancelledCheckNumberError" class="form-control form-control-sm border-primary" style="font-size:12px;" />
+                                <div id="cancelledCheckNumberError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please enter cancelled cheque number.
+                                </div>
+                              </div>
+                              <div class="col-12 col-sm-6">
+                                <label for="cancelledCheckUpload" class="form-label fw-semibold text-secondary" style="font-size:14px;">
+                                  Cancelled Cheque Document
+                                </label>
+                                <input type="file" id="cancelledCheckUpload" name="cancelledCheckUpload"
+                                       accept="image/*,application/pdf"
+                                       aria-describedby="cancelledCheckUploadError cancelledCheckUploadSizeError"
+                                       class="form-control form-control-sm border-primary file-1mb" style="font-size:12px;" />
+                                <div id="cancelledCheckUploadError" class="invalid-feedback d-none" style="font-size:0.95rem;">
+                                  Please upload cancelled cheque document.
+                                </div>
+                                <div id="cancelledCheckUploadSizeError" class="text-danger small d-none" style="font-size:0.95rem;">
+                                  Max file size is 1MB
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                  
+                          <!-- Privacy Policy Agreement Checkbox -->
+                          <div class="mb-4 p-3 border rounded-3 bg-light">
+                            <div class="form-check d-flex align-items-start">
+                              <input class="form-check-input mt-1" type="checkbox" id="privacyPolicyAgree" required>
+                              <label class="form-check-label ms-2 small" for="privacyPolicyAgree" style="line-height: 1.5;">
+                                <strong>I agree to the Terms & Conditions</strong><br>
+                                <span class="text-muted" style="font-size: 0.85rem;">
+                                  By checking this box, I acknowledge that I have read and agree to the 
+                                  <button type="button" class="btn btn-link p-0 text-decoration-underline" 
+                                          style="font-size: 0.85rem; vertical-align: baseline;" 
+                                          onclick="showPrivacyPolicyPreview()">
+                                    Privacy Policy & Terms of Service
+                                  </button>
+                                  governing this KYC submission.
+                                </span>
+                              </label>
+                            </div>
+                          </div>
+
+                          <div class="d-flex justify-content-end mt-4">
+                             <% if (!(userData.is_kyc_submitted == 1 && userData.is_kyc_verified == 0)) { %>
+                            <button type="submit" id="kycSubmitBtn" class="btn btn-primary" disabled>
+                              <i class="fas fa-shield-alt me-2"></i>Submit KYC Application
+                            </button>
+                          <% } %>
+                          </div>
+                        </div>
+                      </form>
+                  
+                      <!-- KYC Status Section (outside the form) -->
+                      <div id="kycStatusSection" class="mb-5 border border-1 border-light rounded-4 p-4 mx-auto bg-light" style="max-width: 720px;">
+                        <h4 class="fw-semibold mb-3 text-dark" style="font-size:1.05rem;">KYC Status</h4>
+                        <div class="row g-3">
+                          <div class="col-12 col-md-6">
+                            <p class="mb-1 text-secondary" style="font-size:12px;">KYC Status</p>
+                            <span id="kycStatus" class="badge rounded-pill bg-warning text-dark px-3 py-2" style="font-size:12px;">Pending</span>
+                          </div>
+                          <div class="col-12 col-md-6">
+                            <p class="mb-1 text-secondary" style="font-size:12px;">Documents Uploaded</p>
+                            <span id="kycDocs" class="badge rounded-pill bg-secondary-subtle text-secondary px-3 py-2" style="font-size:12px;">No documents</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  
+                    <!-- Subscription Plan Panel -->
+                    <div id="panel-subscription-plan" class="tab-panel tab-pane fade" role="tabpanel"
+                         aria-labelledby="tab-subscription-plan" tabindex="0">
+                      <div class="card shadow-sm border-0 rounded-4 mx-auto" style="max-width: 720px;">
+                        <div class="card-body p-4">
+                          <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-box-seam fs-3 text-primary me-3"></i>
+                            <div>
+                              <h3 class="h5 fw-bold mb-1 text-dark">Subscription Plan</h3>
+                              <p class="mb-0 text-secondary small">View and manage your subscription plan details.</p>
+                            </div>
+                          </div>
+                          <hr class="mb-4">
+                          <div class="row g-4">
+                            <div class="col-12 col-md-4">
+                              <div class="d-flex flex-column align-items-start">
+                                <span class="text-secondary small mb-1">Plan</span>
+                                <span id="planName" class="fw-semibold text-dark mb-2" style="font-size:12px;">Trial</span>
+                                <button id="upgradeBtn" type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none">
+                                  Upgrade
+                                </button>
+                              </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                              <div class="d-flex flex-column align-items-start">
+                                <span class="text-secondary small mb-1">Duration</span>
+                                <span id="planDuration" class="fw-semibold text-dark" style="font-size:12px;">15 Days</span>
+                              </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                              <div class="d-flex flex-column align-items-start">
+                                <span class="text-secondary small mb-1">Status</span>
+                                <span id="planStatus" class="badge rounded-pill px-3 py-2" style="background:#e0f7ef; color:#15803d; font-size:12px; letter-spacing:0.01em;">Active</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  
+                  </section>
+                  
+                </main>
+              </div>
+
+
+
+
+             
+<script>
+  (function() {
+    const isKycLocked = <%= userData.is_kyc_submitted == 1 && userData.is_kyc_verified == 0 ? 'true' : 'false' %>;
+
+    if (isKycLocked) {
+      const form = document.getElementById('clientDetailsForm');
+       const kycform = document.getElementById('kycForm');
+      // disable all inputs, selects, textareas, buttons inside form
+      form.querySelectorAll('input, select, textarea, button').forEach(el => {
+        el.setAttribute('disabled', 'disabled');
+      });
+         kycform.querySelectorAll('input, select, textarea, button').forEach(el => {
+        el.setAttribute('disabled', 'disabled');
+      });
+    }
+  })();
+</script>
+
+              <script>
+                // Custom tab logic to fix: active tab not show on first click
+                document.addEventListener('DOMContentLoaded', function () {
+                  const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+                  const tabPanels = Array.from(document.querySelectorAll('.tab-panel'));
+                  // Remove all show/active/fade classes from panels
+                  tabPanels.forEach(panel => {
+                    panel.classList.remove('show', 'active', 'fade');
+                  });
+                  // Set first panel as active
+                  if (tabPanels[0]) {
+                    tabPanels[0].classList.add('show', 'active');
+                  }
+                  // Set first tab as active
+                  tabs.forEach((tab, idx) => {
+                    if (idx === 0) {
+                      tab.classList.add('active');
+                      tab.setAttribute('aria-selected', 'true');
+                    } else {
+                      tab.classList.remove('active');
+                      tab.setAttribute('aria-selected', 'false');
+                    }
+                  });
+
+                  tabs.forEach(tab => {
+                    tab.addEventListener('click', function (e) {
+                      e.preventDefault();
+                      // Remove active from all tabs
+                      tabs.forEach(t => {
+                        t.classList.remove('active');
+                        t.setAttribute('aria-selected', 'false');
+                      });
+                      // Add active to clicked tab
+                      tab.classList.add('active');
+                      tab.setAttribute('aria-selected', 'true');
+                      // Hide all panels
+                      tabPanels.forEach(panel => {
+                        panel.classList.remove('show', 'active');
+                      });
+                      // Show the selected panel
+                      const panelId = tab.getAttribute('data-bs-target') || tab.getAttribute('aria-controls');
+                      const panel = document.getElementById(panelId.replace('#', ''));
+                      if (panel) {
+                        panel.classList.add('show', 'active');
+                        panel.focus();
+                      }
+                    });
+                  });
+                });
+              </script>
+
+              <!-- SCRIPTS -->
+              <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+              <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+              <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+              <!-- 1) Load Tesseract (if not already loaded) -->
+              <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+              
+              <script>
+                /* =========================================================
+                   KYC: Aadhaar and PAN are MANDATORY with documents
+                   - Aadhaar number, Aadhaar front, Aadhaar back, PAN number, PAN document are all required
+                   - Typed number must MATCH OCR from the uploaded doc (strict)
+                   - Logo and Selfie are REQUIRED
+                   - File-size/type checks preserved (1MB max as in your code)
+                   ========================================================= */
+                
+                // Global variables for form submission
+                let formData = null;
+                let validationPassed = false;
+                let submitBtn = null;
+                let canvas = null;
+                let capturedImage = null;
+                
+                (function () {
+                  'use strict';
+
+                  // ---------- helpers ----------
+                  const $  = (s, r=document) => r.querySelector(s);
+                  const byId = (id) => document.getElementById(id);
+                  const setText = (el, t) => { if (el) el.textContent = t; };
+
+                  // ---------- root guard ----------
+                  const panel = byId('panel-kyc-documents');
+                  if (!panel) return;
+
+                  // ---------- elements ----------
+                  const kycForm   = byId('kycForm');
+                  submitBtn = byId('kycSubmitBtn');
+
+                  const kycDocsBadge = byId('kycDocs');
+
+                  // Aadhaar
+                  const aadhaarNum   = byId('aadhaarNumber');
+                  const aadhaarFront = byId('aadhaarFrontUpload');
+                  const aadhaarBack  = byId('aadhaarBackUpload');
+
+                  // GST (unchanged behavior)
+                  const gstNo    = byId('gstNo');
+                  const gstDoc   = byId('gstdoc');
+                  const gstTick  = byId('gstSuccess');
+
+                  // PAN
+                  const panNo   = byId('company_pan');
+                  const panDoc  = byId('pandoc');
+
+                  // Company Reg / Cheque (left optional as per ask)
+                  const regNo    = byId('companyRegNumber');
+                  const regDoc   = byId('companyRegUpload');
+                  const chqNo    = byId('cancelledCheckNumber');
+                  const chqDoc   = byId('cancelledCheckUpload');
+
+                  // Company type radios (keep GST logic)
+                  const radios = ['#ctInd','#ctProp','#ctComp'].map(s => byId(s.slice(1)));
+
+                  // Logo (REQUIRED)
+                  const clientLogo  = byId('clientLogo');
+                  const previewLogo = byId('previewLogo');
+
+                  // Camera / Selfie (REQUIRED)
+                  const video          = byId('video');
+                  canvas               = byId('canvas'); // Global assignment
+                  const startCameraBtn = byId('startCameraBtn');
+                  const captureBtn     = byId('captureBtn');
+                  const retakeBtn      = byId('retakeBtn');
+                  const cameraStatus   = byId('cameraStatus');
+                  capturedImage        = byId('capturedImage'); // Global assignment
+                  let stream = null;
+
+                  // Hidden fields (PAN/GST API results)
+                  const hiddenPanName      = byId('hidden_pan_holder_name');
+                  const hiddenTradeName    = byId('hidden_trade_name');
+                  const hiddenConstitution = byId('hidden_constitution');
+                  const hiddenNature       = byId('hidden_nature');
+
+                  // ---------- regex ----------
+                  const GST_REGEX     = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][A-Z0-9]Z[A-Z0-9]$/;
+                  const PAN_REGEX     = /^[A-Z]{5}\d{4}[A-Z]$/;
+                  const AADHAAR_REGEX = /^\d{12}$/;
+
+                  // ---------- file validation ----------
+                  const MAX_BYTES = 1024 * 1024; // keep size limit
+                  function checkFileSize(input) {
+                    const f = input.files?.[0];
+                    if (!f) return true;
+                    if (f.size > MAX_BYTES) {
+                      Swal.fire('File too large', 'Max file size is 1MB', 'error');
+                      input.value = '';
+                      return false;
+                    }
+                    return true;
+                  }
+                  function checkAcceptType(input) {
+                    const f = input.files?.[0];
+                    if (!f) return true;
+                    const accept = (input.getAttribute('accept') || '').split(',').map(s => s.trim()).filter(Boolean);
+                    if (!accept.length) return true;
+                    const okByMime = accept.some(a => a && f.type && (f.type === a || f.type.startsWith(a.replace('*',''))));
+                    const okByExt  = accept.some(a => a.startsWith('.') && f.name.toLowerCase().endsWith(a.toLowerCase()));
+                    if (!(okByMime || okByExt)) {
+                      Swal.fire('Invalid file type', 'This file type is not allowed for this field.', 'error');
+                      input.value = '';
+                      return false;
+                    }
+                    return true;
+                  }
+                  function validateFileInput(input) {
+                    return checkFileSize(input) && checkAcceptType(input);
+                  }
+
+                  // ---------- OCR ----------
+                  const OCR = {
+                    AADHAAR : (t) => /\b\d{4}\s?\d{4}\s?\d{4}\b/.test(t) || t.includes('AADHAAR') || t.includes('UIDAI'),
+                    PAN     : (t) => /\b[A-Z]{5}\d{4}[A-Z]\b/.test(t) || t.includes('PERMANENT ACCOUNT NUMBER') || t.includes('INCOME TAX'),
+                    GSTIN   : (t) => /\b\d{2}[A-Z]{5}\d{4}[A-Z][A-Z0-9]Z[A-Z0-9]\b/.test(t) || t.includes('GSTIN'),
+                    PASSPORT: (t) => /\b[A-Z]\d{7}\b/.test(t) || t.includes('PASSPORT'),
+                  };
+                  async function detectDocument(file) {
+                    if (!file) return { type: 'NONE', text: '' };
+                    try {
+                      const { data } = await Tesseract.recognize(file, 'eng');
+                      const t = (data?.text || '').toUpperCase();
+                      if (OCR.AADHAAR(t))  return { type: 'AADHAAR',  text: t };
+                      if (OCR.PAN(t))      return { type: 'PAN',      text: t };
+                      if (OCR.GSTIN(t))    return { type: 'GSTIN',    text: t };
+                      if (OCR.PASSPORT(t)) return { type: 'PASSPORT', text: t };
+                      return { type: 'OTHER', text: t };
+                    } catch (e) {
+                      console.error('OCR error:', e);
+                      return { type: 'ERROR', text: '' };
+                    }
+                  }
+                  // extraction / normalization
+                  function grabAadhaar(text='') {
+                    const m = text.match(/\b(\d{4}\s?\d{4}\s?\d{4})\b/);
+                    return m ? m[1].replace(/\s+/g, '') : null;
+                  }
+                  function grabPAN(text='') {
+                    const m = text.match(/\b([A-Z]{5}\d{4}[A-Z])\b/);
+                    return m ? m[1].toUpperCase() : null;
+                  }
+                  function normalizeAadhaar(s='') { return (s || '').replace(/\D/g, '').slice(0,12); }
+                  function normalizePAN(s='')     { return (s || '').toUpperCase(); }
+
+                  // minor UI cues
+                  function flag(ok, inputEl) {
+                    if (!inputEl) return;
+                    inputEl.classList.remove('error-outline','is-valid');
+                    if (ok === true)  inputEl.classList.add('is-valid');
+                    if (ok === false) inputEl.classList.add('error-outline');
+                  }
+                  async function mismatch(title, typed, docVal) {
+                    await Swal.fire({
+                      icon: 'error',
+                      title,
+                      html: `<div style="text-align:left">
+                               <b>Typed:</b> ${typed || '<i>empty</i>'}<br>
+                               <b>From document (OCR):</b> ${docVal || '<i>not found</i>'}
+                             </div>`
+                    });
+                  }
+                  const toast = (title, icon='info') =>
+                    Swal.fire({ toast:true, position:'top-end', timer:2000, showConfirmButton:false, icon, title });
+
+                  // store OCR readouts for matching
+                  const OCR_VALUES = { aadhaarFront: null, panDoc: null };
+
+                  // aadhaar back: relaxed hints only
+                  function isAadhaarBackLikely(text='') {
+                    const t = text.toUpperCase();
+                    return t.includes('ADDRESS') || t.includes('S/O') || t.includes('D/O') || t.includes('W/O') ||
+                           t.includes('PINCODE') || t.includes('PIN CODE') || /\b\d{6}\b/.test(t);
+                  }
+
+                  // expected targets
+                  const OCR_EXPECT = [
+                    { input: aadhaarFront, expect: ['AADHAAR'], type: 'front' },
+                    { input: aadhaarBack,  expect: ['AADHAAR'], type: 'back'  },
+                    { input: panDoc,       expect: ['PAN'],     type: 'pan'   },
+                    { input: gstDoc,       expect: ['GSTIN'],   type: 'gst'   },
+                  ];
+
+                  // file change: validate + OCR + store result
+                  [aadhaarFront, aadhaarBack, gstDoc, panDoc, regDoc, chqDoc, clientLogo]
+                    .filter(Boolean).forEach(inp => {
+                      inp.addEventListener('change', async (e) => {
+                        const input = e.currentTarget;
+                        if (!validateFileInput(input)) return;
+
+                        const map = OCR_EXPECT.find(m => m.input === input);
+                        if (!map || !input.files?.[0]) { updateDocsBadge(); return; }
+
+                        const result = await detectDocument(input.files[0]);
+
+                        if (result.type === 'ERROR' || result.type === 'NONE') {
+                          await Swal.fire('Low quality document', 'We could not read the document clearly. Please ensure good lighting and clarity.', 'warning');
+                          updateDocsBadge();
+                          return;
+                        }
+
+                        if (map.type === 'front') {
+                          if (result.type !== 'AADHAAR') {
+                            await Swal.fire('Wrong document', `Expected <b>Aadhaar Front</b>, detected <b>${result.type}</b>.`, 'error');
+                            input.value = ''; OCR_VALUES.aadhaarFront = null; flag(null, aadhaarNum); updateDocsBadge(); return;
+                          }
+                          OCR_VALUES.aadhaarFront = grabAadhaar(result.text);
+                          const typed = normalizeAadhaar(aadhaarNum?.value || '');
+                          if (typed && OCR_VALUES.aadhaarFront) {
+                            const ok = typed === OCR_VALUES.aadhaarFront;
+                            flag(ok, aadhaarNum);
+                            if (!ok) await mismatch('Aadhaar mismatch', typed, OCR_VALUES.aadhaarFront);
+                          } else {
+                            flag(null, aadhaarNum);
+                          }
+                          toast('Aadhaar front looks valid','success'); updateDocsBadge(); return;
+                        }
+
+                        if (map.type === 'back') {
+                          if (result.type === 'AADHAAR' || isAadhaarBackLikely(result.text)) {
+                            toast('Aadhaar back accepted','success');
+                          } else {
+                            const choice = await Swal.fire({
+                              title: 'Aadhaar back not recognized',
+                              html: 'We couldn’t detect back-side hints (address/pincode). Do you still want to accept this file?',
+                              icon: 'question', showCancelButton: true,
+                              confirmButtonText: 'Accept anyway', cancelButtonText: 'Choose another'
+                            });
+                            if (!choice.isConfirmed) input.value = '';
+                            else toast('Accepted by user','info');
+                          }
+                          updateDocsBadge(); return;
+                        }
+
+                        if (map.type === 'pan') {
+                          if (result.type !== 'PAN') {
+                            await Swal.fire('Wrong document', `Expected <b>PAN</b>, detected <b>${result.type}</b>.`, 'error');
+                            input.value=''; OCR_VALUES.panDoc=null; flag(null, panNo); updateDocsBadge(); return;
+                          }
+                          OCR_VALUES.panDoc = grabPAN(result.text);
+                          const typed = normalizePAN(panNo?.value || '');
+                          if (typed && OCR_VALUES.panDoc) {
+                            const ok = typed === OCR_VALUES.panDoc;
+                            flag(ok, panNo);
+                            if (!ok) await mismatch('PAN mismatch', typed, OCR_VALUES.panDoc);
+                          } else {
+                            flag(null, panNo);
+                          }
+                          toast('Document looks correct','success'); updateDocsBadge(); return;
+                        }
+
+                        // if (map.type === 'gst') {
+                        //   if (result.type !== 'GSTIN') {
+                        //     await Swal.fire('Wrong document', `Expected <b>GST</b>, detected <b>${result.type}</b>.`, 'error');
+                        //     input.value = '';
+                        //   } else {
+                        //     toast('Document looks correct','success');
+                        //   }
+                        //   updateDocsBadge(); return;
+                        // }
+                      });
+                    });
+
+                  // docs badge
+                  function updateDocsBadge() {
+                    const list = [aadhaarFront, aadhaarBack, gstDoc, panDoc, regDoc, chqDoc, clientLogo].filter(Boolean);
+                    const count = list.reduce((n, el) => n + (el?.files?.length ? 1 : 0), 0);
+                    if (kycDocsBadge) kycDocsBadge.textContent = count ? `${count} document${count === 1 ? '' : 's'} uploaded` : 'No documents';
+                  }
+                  [aadhaarFront, aadhaarBack, gstDoc, panDoc, regDoc, chqDoc, clientLogo].forEach(i => i?.addEventListener('change', updateDocsBadge));
+                  updateDocsBadge();
+
+                  // ---------- Privacy Policy Checkbox ----------
+                  const privacyCheckbox = byId('privacyPolicyAgree');
+                  
+                  // Enable/disable submit button based on checkbox
+                  function updateSubmitButton() {
+                    if (submitBtn && privacyCheckbox) {
+                      submitBtn.disabled = !privacyCheckbox.checked;
+                      if (privacyCheckbox.checked) {
+                        submitBtn.classList.remove('btn-secondary');
+                        submitBtn.classList.add('btn-primary');
+                      } else {
+                        submitBtn.classList.remove('btn-primary');
+                        submitBtn.classList.add('btn-secondary');
+                      }
+                    }
+                  }
+                  
+                  // Listen for checkbox changes
+                  privacyCheckbox?.addEventListener('change', updateSubmitButton);
+
+                  // Save PAN number to localStorage when changed
+                  const companyPanField = document.getElementById('company_pan');
+                  if (companyPanField) {
+                    companyPanField.addEventListener('input', function() {
+                      localStorage.setItem('kycCompanyPan', this.value.toUpperCase());
+                    });
+                  }
+
+                  // Initial update
+                  updateSubmitButton();
+
+                  // ---------- requireds policy ----------
+                  // Aadhaar and PAN are MANDATORY with documents; GST depends on company type; LOGO + SELFIE required.
+                  function applyRequired() {
+                    // Aadhaar and PAN and their docs are always required
+                    [aadhaarNum, aadhaarFront, aadhaarBack, panNo, panDoc].forEach(el => { if (el) el.required = true; });
+
+                    // Optional: clear "required" on cheque/reg
+                    [chqNo, chqDoc, regNo, regDoc].forEach(el => { if (el) el.required = false; });
+
+                    // GST required only if not Individual
+                    const companyType = ($('input[name="companyType"]:checked', panel)?.value) || 'Individual';
+                    const needGST = (companyType !== 'Individual');
+                    if (gstNo)  gstNo.required  = needGST;
+                    if (gstDoc) gstDoc.required = needGST;
+                    if (!needGST && gstDoc) { gstDoc.disabled = true; gstDoc.value = ''; }
+                    if (needGST && gstDoc && GST_REGEX.test((gstNo?.value || '').trim().toUpperCase())) {
+                      gstDoc.disabled = false;
+                    }
+
+                    // Make LOGO required (we'll enforce in submit)
+                    if (clientLogo) clientLogo.required = true;
+                    // Selfie required via capturedImage presence (enforce in submit)
+                  }
+                  radios.forEach(r => r && r.addEventListener('change', applyRequired));
+                  applyRequired();
+
+                  // ---------- GST live enable + verify (unchanged) ----------
+                  gstNo?.addEventListener('input', () => {
+                    const val = (gstNo.value || '').trim().toUpperCase();
+                    gstNo.value = val;
+                    if (val.length === 15 && GST_REGEX.test(val)) {
+                      if (gstDoc) gstDoc.disabled = false;
+                      gstTick?.classList.remove('d-none');
+                      toast('GST format looks valid','success');
+                    } else {
+                      if (gstDoc) { gstDoc.disabled = true; gstDoc.value = ''; }
+                      gstTick?.classList.add('d-none');
+                    }
+                  });
+                  gstNo?.addEventListener('blur', async () => {
+                    const gstNumber = (gstNo.value || '').trim().toUpperCase();
+                    if (!gstNumber) return; // optional when Individual
+                    if (gstNumber.length !== 15 || !GST_REGEX.test(gstNumber)) {
+                      return Swal.fire('Invalid GSTIN', 'Please enter a valid 15-character GSTIN.', 'error');
+                    }
+                    try {
+                      const res = await axios.post('/client-gstin-verification', { gstNumber });
+                      if (res?.data?.success) {
+                        const { gstin, tradeName, constitutionOfBusiness, natureOfBusinessActivities, address } = res.data;
+                        hiddenTradeName    && (hiddenTradeName.value    = tradeName || '');
+                        hiddenConstitution && (hiddenConstitution.value = constitutionOfBusiness || '');
+                        hiddenNature       && (hiddenNature.value       = natureOfBusinessActivities || '');
+
+                        // Save GST address to localStorage for privacy policy
+                        if (address) {
+                          localStorage.setItem('kycGstAddress', address);
+                        }
+                        gstDoc && (gstDoc.disabled = false);
+                        gstTick?.classList.remove('d-none');
+                        Swal.fire({
+                          icon: 'success',
+                          title: 'GST Verified',
+                          html: `✅ <b>GSTIN:</b> ${gstin}<br><b>Trade Name:</b> ${tradeName}<br><b>Constitution:</b> ${constitutionOfBusiness}<br><b>Nature:</b> ${natureOfBusinessActivities}`
+                        });
+                      } else {
+                        gstDoc && (gstDoc.disabled = true);
+                        Swal.fire('GST Invalid', res?.data?.message || 'Invalid GST number.', 'error');
+                      }
+                    } catch (error) {
+                      gstDoc && (gstDoc.disabled = true);
+                      Swal.fire('Verification failed', error?.response?.data?.message || 'Something went wrong!', 'error');
+                    }
+                  });
+
+                  // ---------- PAN verify (API) + blur matching ----------
+                  panNo?.addEventListener('blur', async () => {
+                    const typed = normalizePAN(panNo.value || '');
+                    if (!typed) { flag(false, panNo); return Swal.fire('PAN required', 'PAN number is required.', 'error'); }
+
+                    if (!PAN_REGEX.test(typed)) {
+                      flag(false, panNo);
+                      return Swal.fire('Invalid PAN', '❌ Invalid PAN format', 'error');
+                    }
+
+                    // if doc OCR exists, compare
+                    if (OCR_VALUES.panDoc) {
+                      const ok = typed === OCR_VALUES.panDoc;
+                      flag(ok, panNo);
+                      if (!ok) await mismatch('PAN mismatch', typed, OCR_VALUES.panDoc);
+                    }
+
+                    // API verify (optional extra)
+                    try {
+                      const res = await axios.post('/client-kyc-verification', { docNumber: typed });
+                      const msg = res?.data?.data?.msg;
+                      const status = res?.data?.data?.status;
+                      if (status === 1 && (msg?.STATUS === 'Active' || msg?.Status === 'Active')) {
+                        hiddenPanName && (hiddenPanName.value = msg?.NameOnTheCard || '');
+                        panDoc && (panDoc.disabled = false);
+                        Swal.fire({
+                          icon: 'success',
+                          title: 'PAN Verified',
+                          html: `✅ PAN is <b>Active</b><br>Name on Card: <b>${msg?.NameOnTheCard || ''}</b>`
+                        });
+                      }
+                    } catch { /* silent */ }
+                  });
+
+                  // ---------- Aadhaar blur (mandatory) ----------
+                  aadhaarNum?.addEventListener('blur', async () => {
+                    const typed = normalizeAadhaar(aadhaarNum.value || '');
+                    if (!typed) { flag(false, aadhaarNum); return Swal.fire('Aadhaar required', 'Aadhaar number is required.', 'error'); }
+                    if (!AADHAAR_REGEX.test(typed)) {
+                      flag(false, aadhaarNum);
+                      return Swal.fire('Invalid Aadhaar', 'Enter a valid 12-digit Aadhaar number.', 'error');
+                    }
+                    if (OCR_VALUES.aadhaarFront) {
+                      const ok = typed === OCR_VALUES.aadhaarFront;
+                      flag(ok, aadhaarNum);
+                      if (!ok) await mismatch('Aadhaar mismatch', typed, OCR_VALUES.aadhaarFront);
+                    } else {
+                      flag(null, aadhaarNum);
+                    }
+                  });
+
+                  // ---------- Logo preview ----------
+                  clientLogo?.addEventListener('change', (e) => {
+                    const input = e.currentTarget;
+                    if (!validateFileInput(input)) {
+                      if (previewLogo) { previewLogo.src=''; previewLogo.classList.add('d-none'); }
+                      return;
+                    }
+                    const file = input.files?.[0];
+                    if (!file) { if (previewLogo) { previewLogo.src=''; previewLogo.classList.add('d-none'); } return; }
+                    const reader = new FileReader();
+                    reader.onload = ev => { if (previewLogo) { previewLogo.src = ev.target.result; previewLogo.classList.remove('d-none'); } };
+                    reader.readAsDataURL(file);
+                    toast('Logo ready','success');
+                  });
+
+                  // ---------- Camera / Selfie ----------
+                  startCameraBtn?.addEventListener('click', async () => {
+                    if (!navigator.mediaDevices?.getUserMedia) return Swal.fire('Unsupported','Camera API not supported.','info');
+                    try {
+                      stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                      if (video) video.srcObject = stream;
+                      setText(cameraStatus,'Camera started. Position yourself and click Capture.');
+                      startCameraBtn.classList.add('d-none'); captureBtn?.classList.remove('d-none'); retakeBtn?.classList.add('d-none'); canvas?.classList.add('d-none');
+                      toast('Camera started','success');
+                    } catch {
+                      setText(cameraStatus,''); Swal.fire('Permission needed','Please allow camera access.','warning');
+                    }
+                  });
+                  captureBtn?.addEventListener('click', () => {
+                    if (!stream || !video || !canvas) return;
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = video.videoWidth || 320; canvas.height = video.videoHeight || 200;
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    canvas.classList.remove('d-none'); video.classList.add('d-none');
+                    setText(cameraStatus,'Photo captured.');
+                    captureBtn.classList.add('d-none'); retakeBtn?.classList.remove('d-none');
+                    stream.getTracks().forEach(t=>t.stop()); stream = null;
+                    if (capturedImage) capturedImage.value = canvas.toDataURL('image/png');
+                    toast('Photo captured','success');
+                  });
+                  retakeBtn?.addEventListener('click', async () => {
+                    if (!navigator.mediaDevices?.getUserMedia) return Swal.fire('Unsupported','Camera API not supported.','info');
+                    try {
+                      stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                      if (video) { video.srcObject = stream; video.classList.remove('d-none'); }
+                      setText(cameraStatus,'Camera restarted. Position yourself and click Capture.');
+                      startCameraBtn?.classList.add('d-none'); captureBtn?.classList.remove('d-none'); retakeBtn?.classList.add('d-none'); canvas?.classList.add('d-none');
+                      if (capturedImage) capturedImage.value = '';
+                      toast('Camera ready','info');
+                    } catch {
+                      setText(cameraStatus,''); Swal.fire('Permission needed','Please allow camera access.','warning');
+                    }
+                  });
+
+                  // ---------- submit ----------
+                  kycForm?.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    // Check privacy policy agreement
+                    if (!privacyCheckbox?.checked) {
+                      await Swal.fire('Agreement Required','Please check the box to agree to the Terms & Conditions before submitting.','warning'); 
+                      privacyCheckbox?.focus();
+                      return;
+                    }
+
+                    // Required: LOGO
+                    if (!clientLogo?.files?.length) {
+                      await Swal.fire('Logo required','Please upload your company logo.','error'); return;
+                    }
+                    // Required: SELFIE
+                    if (!capturedImage?.value) {
+                      await Swal.fire('Selfie required','Please capture a profile photo before submitting.','error'); return;
+                    }
+
+                    // Aadhaar and PAN are mandatory with documents
+                    const aadhaarTyped = normalizeAadhaar(aadhaarNum?.value || '');
+                    const aadhaarDocFront = aadhaarFront?.files?.[0] || null;
+                    const aadhaarDocBack  = aadhaarBack?.files?.[0] || null;
+
+                    const panTyped = normalizePAN(panNo?.value || '');
+                    const panDocF  = panDoc?.files?.[0] || null;
+
+                    // Aadhaar checks
+                    if (!aadhaarTyped)  { await Swal.fire('Aadhaar number required','Please enter your 12-digit Aadhaar number.','error'); return; }
+                    if (!AADHAAR_REGEX.test(aadhaarTyped)) { await Swal.fire('Invalid Aadhaar','Enter a valid 12-digit Aadhaar number.','error'); return; }
+                    if (!aadhaarDocFront) { await Swal.fire('Aadhaar front required','Please upload Aadhaar Front document.','error'); return; }
+                    if (!aadhaarDocBack)  { await Swal.fire('Aadhaar back required','Please upload Aadhaar Back document.','error'); return; }
+
+                    // ensure OCR present; if not, OCR now
+                    if (!OCR_VALUES.aadhaarFront) {
+                      const res = await detectDocument(aadhaarDocFront);
+                      if (res.type !== 'AADHAAR') { await Swal.fire('Wrong document','Expected Aadhaar Front.','error'); return; }
+                      OCR_VALUES.aadhaarFront = grabAadhaar(res.text);
+                    }
+                    if (!OCR_VALUES.aadhaarFront || aadhaarTyped !== OCR_VALUES.aadhaarFront) {
+                      await mismatch('Aadhaar mismatch', aadhaarTyped, OCR_VALUES.aadhaarFront); return;
+                    }
+
+                    // PAN checks
+                    if (!panTyped)    { await Swal.fire('PAN number required','Please enter your PAN number.','error'); return; }
+                    if (!PAN_REGEX.test(panTyped)) { await Swal.fire('Invalid PAN','Enter a valid PAN (AAAAA9999A).','error'); return; }
+                    if (!panDocF)     { await Swal.fire('PAN document required','Please upload PAN document.','error'); return; }
+
+                    if (!OCR_VALUES.panDoc) {
+                      const res = await detectDocument(panDocF);
+                      if (res.type !== 'PAN') { await Swal.fire('Wrong document','Expected PAN document.','error'); return; }
+                      OCR_VALUES.panDoc = grabPAN(res.text);
+                    }
+                    if (!OCR_VALUES.panDoc || panTyped !== OCR_VALUES.panDoc) {
+                      await mismatch('PAN mismatch', panTyped, OCR_VALUES.panDoc); return;
+                    }
+
+                    // All validations passed - store form data and show privacy policy
+                    validationPassed = true;
+                    
+                    // Store KYC data for the modal
+                    const clientName = document.getElementById('clientName')?.value || '';
+                    const companyName = document.getElementById('registeredCompanyName')?.value || '';
+                    localStorage.setItem("kycClientName", clientName);
+                    localStorage.setItem("kycCompanyName", companyName);
+
+                    // Prepare form data for later submission
+                    formData = new FormData();
+
+                    // client basics
+                    formData.append('clientName', document.getElementById('clientName')?.value || '');
+                    formData.append('clientEmail', document.getElementById('clientEmail')?.value || '');
+                    formData.append('clientPhone', document.getElementById('clientPhone')?.value || '');
+
+                    // selfie
+                    if (canvas && !canvas.classList.contains('d-none')) {
+                      const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+                      if (blob) formData.append('selfie', blob, 'selfie.png');
+                    } else if (capturedImage?.value) {
+                      // fallback: convert dataURL to blob
+                      const bin = atob(capturedImage.value.split(',')[1] || '');
+                      const arr = new Uint8Array(bin.length); for (let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
+                      formData.append('selfie', new Blob([arr], {type:'image/png'}), 'selfie.png');
+                    }
+
+                    // company branding
+                    formData.append('registeredCompanyName', document.getElementById('registeredCompanyName')?.value || '');
+                    formData.append('brandName', document.getElementById('brandName')?.value || '');
+                    formData.append('companyEmail', document.getElementById('companyEmail')?.value || '');
+                    formData.append('website', document.getElementById('website')?.value || '');
+
+                    // type
+                    const companyType = ($('input[name="companyType"]:checked', panel)?.value) || 'Individual';
+                    formData.append('companyType', companyType);
+
+                    // Aadhaar (MANDATORY)
+                    formData.append('aadhaarNumber', aadhaarTyped);
+                    if (aadhaarFront?.files?.[0]) formData.append('aadhaarFrontUpload', aadhaarFront.files[0]);
+                    if (aadhaarBack?.files?.[0])  formData.append('aadhaarBackUpload',  aadhaarBack.files[0]);
+
+                    // PAN (MANDATORY)
+                    formData.append('company_pan', panTyped);
+                    formData.append('pan_holder_name', hiddenPanName?.value || '');
+                    if (panDoc?.files?.[0]) formData.append('pandoc', panDoc.files[0]);
+
+                    // GST (as per your earlier logic)
+                    if (companyType !== 'Individual') {
+                      const gst = (gstNo?.value || '').trim().toUpperCase();
+                      formData.append('gstNo', gst);
+                      formData.append('trade_name', hiddenTradeName?.value || '');
+                      formData.append('constitution_of_business', hiddenConstitution?.value || '');
+                      formData.append('nature_of_business', hiddenNature?.value || '');
+                      if (gstDoc?.files?.[0]) formData.append('gstdoc', gstDoc.files[0]);
+                    }
+
+                    // optional docs
+                    if (regNo?.value) formData.append('companyRegNumber', regNo.value);
+                    if (regDoc?.files?.[0]) formData.append('companyRegUpload', regDoc.files[0]);
+                    if (chqNo?.value) formData.append('cancelledCheckNumber', chqNo.value);
+                    if (chqDoc?.files?.[0]) formData.append('cancelledCheckUpload', chqDoc.files[0]);
+
+                    // logo (REQUIRED)
+                    if (clientLogo?.files?.[0]) formData.append('clientLogo', clientLogo.files[0]);
+
+                    // Show privacy policy modal immediately after validation
+                    showKycPrivacyPolicyModal();
+                  });
+
+                  // backward compat
+                  window.handleFileUpload = function (e) {
+                    const input = e?.target || e?.currentTarget;
+                    if (!input) return;
+                    if (!checkFileSize(input)) return;
+                    if (!checkAcceptType(input)) return;
+                    toast('File looks good','success');
+                  };
+                })();
+
+                // KYC Privacy Policy Functions
+                
+                // Function to format date as DD-MM-YYYY
+                function formatDate(date) {
+                  const day = String(date.getDate()).padStart(2, '0');
+                  const month = String(date.getMonth() + 1).padStart(2, '0');
+                  const year = date.getFullYear();
+                  return `${day}-${month}-${year}`;
+                }
+
+                // Function to format date in words
+                function formatDateInWords(date) {
+                  const months = [
+                    'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                  ];
+                  
+                  const day = date.getDate();
+                  const month = months[date.getMonth()];
+                  const year = date.getFullYear();
+                  
+                  // Add ordinal suffix to day
+                  const getOrdinalSuffix = (n) => {
+                    const s = ["th", "st", "nd", "rd"];
+                    const v = n % 100;
+                    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+                  };
+                  
+                  return `${getOrdinalSuffix(day)} day of ${month}, ${year}`;
+                }
+
+                // Function to show privacy policy preview (read-only)
+                function showPrivacyPolicyPreview() {
+                  const currentDate = new Date();
+                  const formattedDate = formatDate(currentDate);
+                  const dateInWords = formatDateInWords(currentDate);
+                  
+                  // Get user data from server-side data or localStorage/form fields
+                  const userData = {
+                    id: '<%= userData.id || "" %>',
+                    first_name: '<%= userData.first_name || "" %>',
+                    last_name: '<%= userData.last_name || "" %>',
+                    organization: '<%= userData.organization || "" %>'
+                  };
+
+                  // Build full name (first + last if available)
+                  const userName = userData.first_name + (userData.last_name ? ' ' + userData.last_name : '');
+                  const organizationName = userData.organization ||
+                    localStorage.getItem("kycCompanyName") ||
+                    document.getElementById('registeredCompanyName')?.value ||
+                    'ORGANIZATION NAME';
+
+                  // Get PAN number from form field
+                  const panNumber = document.getElementById('company_pan')?.value ||
+                    localStorage.getItem("kycCompanyPan") ||
+                    'PAN NUMBER';
+
+                  // Generate reference number from user ID
+                  const userId = userData.id || '000000';
+                  const refNumber = `DS${userId.padStart(6, '0')}`;
+
+                  // Get address from GST verification - validate it's not MOU text
+                  const gstAddress = localStorage.getItem('kycGstAddress');
+                  let fullAddress = gstAddress || '20 Bholenath colony near Mother Anniment School Kalani Nagar, Airport Road Indore 452005';
+
+                  // Check if address contains MOU text and use fallback if it does
+                  if (fullAddress && (fullAddress.includes('FIRST PARTY') || fullAddress.includes('SECOND PARTY'))) {
+                    console.warn('GST address contains MOU text, using fallback address');
+                    fullAddress = '20 Bholenath colony near Mother Anniment School Kalani Nagar, Airport Road Indore 452005';
+                  }
+
+                  // Update all dynamic elements
+                  document.getElementById('kycCurrentDate').textContent = formattedDate;
+                  document.getElementById('kycMouDate').textContent = dateInWords;
+                  document.getElementById('kycAgreementDate').textContent = formattedDate;
+                  document.getElementById('kycRefNumber').textContent = refNumber;
+                  document.getElementById('kycUserAddress').textContent = fullAddress;
+
+                  // Update organization and name in multiple places
+                  document.getElementById('kycDynamicName').textContent = userName.toUpperCase();
+                  document.getElementById('kycDynamicOrganization').textContent = organizationName.toUpperCase();
+                  document.getElementById('kycPanNumber').textContent = panNumber.toUpperCase();
+                  document.getElementById('kycSignatureName').textContent = userName.toUpperCase();
+                  document.getElementById('kycSignatureOrganization').textContent = organizationName.toUpperCase();
+                  document.getElementById('kycSignatureName2').textContent = userName.toUpperCase();
+                  document.getElementById('kycSignatureOrganization2').textContent = organizationName.toUpperCase();
+                  
+                  // Hide the action buttons for preview mode
+                  const modalFooter = document.querySelector('#kycPrivacyPolicyModal .modal-footer');
+                  const closeBtn = document.getElementById('privacyPolicyCloseBtn');
+                  if (modalFooter) modalFooter.style.display = 'none';
+                  
+                  // Enable close button for preview mode
+                  if (closeBtn) {
+                    closeBtn.style.display = 'block';
+                    closeBtn.disabled = false;
+                  }
+                  
+                  // Change modal title for preview
+                  const modalTitle = document.getElementById('kycPrivacyPolicyModalLabel');
+                  if (modalTitle) modalTitle.textContent = 'Terms & Conditions - Preview';
+                  
+                  // Show the modal
+                  const modal = new bootstrap.Modal(document.getElementById('kycPrivacyPolicyModal'));
+                  modal.show();
+                  
+                  // Reset modal when closed
+                  modal._element.addEventListener('hidden.bs.modal', function() {
+                    if (modalFooter) modalFooter.style.display = 'block';
+                    if (modalTitle) modalTitle.textContent = 'Terms & Conditions - Agreement Required';
+                    // Hide close button for agreement mode
+                    if (closeBtn) {
+                      closeBtn.style.display = 'none';
+                      closeBtn.disabled = true;
+                    }
+                  }, { once: true });
+                }
+
+                // Show privacy policy modal with dynamic content
+                function showKycPrivacyPolicyModal() {
+                  const currentDate = new Date();
+                  const formattedDate = formatDate(currentDate);
+                  const dateInWords = formatDateInWords(currentDate);
+                  
+                  // Get user data from server-side data or localStorage/form fields
+                  const userData = {
+                    id: '<%= userData.id || "" %>',
+                    first_name: '<%= userData.first_name || "" %>',
+                    last_name: '<%= userData.last_name || "" %>',
+                    organization: '<%= userData.organization || "" %>'
+                  };
+
+                  // Build full name (first + last if available)
+                  const userName = userData.first_name + (userData.last_name ? ' ' + userData.last_name : '');
+                  const organizationName = userData.organization ||
+                    localStorage.getItem("kycCompanyName") ||
+                    document.getElementById('registeredCompanyName')?.value ||
+                    '[ORGANIZATION NAME]';
+
+                  // Get PAN number from form field
+                  const panNumber = document.getElementById('company_pan')?.value ||
+                    localStorage.getItem("kycCompanyPan") ||
+                    'PAN NUMBER';
+
+                  // Generate reference number from user ID
+                  const userId = userData.id || '000000';
+                  const refNumber = `DS${userId.padStart(6, '0')}`;
+
+                  // Get address from GST verification - validate it's not MOU text
+                  const gstAddress = localStorage.getItem('kycGstAddress');
+                  let fullAddress = gstAddress || '20 Bholenath colony near Mother Anniment School Kalani Nagar, Airport Road Indore 452005';
+
+                  // Check if address contains MOU text and use fallback if it does
+                  if (fullAddress && (fullAddress.includes('FIRST PARTY') || fullAddress.includes('SECOND PARTY'))) {
+                    console.warn('GST address contains MOU text, using fallback address');
+                    fullAddress = '20 Bholenath colony near Mother Anniment School Kalani Nagar, Airport Road Indore 452005';
+                  }
+
+                  // Update all dynamic elements
+                  document.getElementById('kycCurrentDate').textContent = formattedDate;
+                  document.getElementById('kycMouDate').textContent = dateInWords;
+                  document.getElementById('kycAgreementDate').textContent = formattedDate;
+                  document.getElementById('kycRefNumber').textContent = refNumber;
+                  document.getElementById('kycUserAddress').textContent = fullAddress;
+
+                  // Update organization and name in multiple places
+                  document.getElementById('kycDynamicName').textContent = userName.toUpperCase();
+                  document.getElementById('kycDynamicOrganization').textContent = organizationName.toUpperCase();
+                  document.getElementById('kycPanNumber').textContent = panNumber.toUpperCase();
+                  document.getElementById('kycSignatureName').textContent = userName.toUpperCase();
+                  document.getElementById('kycSignatureOrganization').textContent = organizationName.toUpperCase();
+                  document.getElementById('kycSignatureName2').textContent = userName.toUpperCase();
+                  document.getElementById('kycSignatureOrganization2').textContent = organizationName.toUpperCase();
+                  
+                  // Hide close button for agreement mode (mandatory acceptance)
+                  const closeBtn = document.getElementById('privacyPolicyCloseBtn');
+                  if (closeBtn) {
+                    closeBtn.style.display = 'none';
+                    closeBtn.disabled = true;
+                  }
+                  
+                  // Ensure footer is visible for agreement mode
+                  const modalFooter = document.querySelector('#kycPrivacyPolicyModal .modal-footer');
+                  if (modalFooter) modalFooter.style.display = 'block';
+                  
+                  // Ensure title is correct
+                  const modalTitle = document.getElementById('kycPrivacyPolicyModalLabel');
+                  if (modalTitle) modalTitle.textContent = 'Terms & Conditions - Agreement Required';
+                  
+                  // Show the modal
+                  const modal = new bootstrap.Modal(document.getElementById('kycPrivacyPolicyModal'));
+                  modal.show();
+                }
+
+                // Handle accept terms button
+                document.addEventListener('DOMContentLoaded', function() {
+                  document.getElementById('kycAcceptTerms')?.addEventListener('click', function() {
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('kycPrivacyPolicyModal'));
+                    modal.hide();
+                    
+                    // Continue with normal KYC completion flow
+                    continueAfterKycTermsAccepted();
+                  });
+                });
+
+                // Continue after terms accepted
+                async function continueAfterKycTermsAccepted() {
+                  console.log('continueAfterKycTermsAccepted called', { formData: !!formData, validationPassed });
+                  
+                  if (!formData || !validationPassed) {
+                    await Swal.fire('Error', 'No form data available. Please try submitting again.', 'error');
+                    return;
+                  }
+
+                  // Make sure we have the submit button reference
+                  if (!submitBtn) {
+                    submitBtn = document.getElementById('kycSubmitBtn');
+                  }
+
+                  const originalText = submitBtn?.innerHTML || 'Submit';
+                  if (submitBtn) { 
+                    submitBtn.disabled = true; 
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...'; 
+                  }
+                  
+                  Swal.fire({ 
+                    title:'Submitting...', 
+                    allowOutsideClick:false, 
+                    allowEscapeKey:false, 
+                    showConfirmButton:false, 
+                    didOpen:()=>Swal.showLoading() 
+                  });
+
+                  try {
+                    console.log('Submitting form data to /submit-kyc');
+                    const resp = await axios.post('/submit-kyc', formData, { 
+                      headers: { 'Content-Type': 'multipart/form-data' } 
+                    });
+                    
+                    console.log('KYC submission response:', resp?.data);
+                    Swal.close();
+
+                    if (resp?.data?.success) {
+                      await Swal.fire({
+                        icon: 'success',
+                        title: 'Terms Accepted! 🎉',
+                        text: 'Your KYC application has been submitted successfully!',
+                        timer: 2000,
+                        showConfirmButton: false
+                      });
+
+                      // Show logging out
+                      await Swal.fire({
+                        icon: 'info',
+                        title: 'Logging out...',
+                        text: 'Please wait while we end your session.',
+                        timer: 1500,
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                      });
+
+                      // Clean up stored data
+                      localStorage.removeItem("kycClientName");
+                      localStorage.removeItem("kycCompanyName");
+
+                      // Redirect to logout
+                      window.location.href = "/logout"; 
+                    } else {
+                      await Swal.fire({
+                        icon: 'error',
+                        title: 'Submission Failed',
+                        text: resp?.data?.message || 'An error occurred while submitting your application.'
+                      });
+                    }
+
+                  } catch (err) {
+                    Swal.close();
+                    console.error('Submit error:', err);
+                    await Swal.fire({ 
+                      icon:'error', 
+                      title:'Connection Error', 
+                      text:err?.response?.data?.message || err?.message || 'Something went wrong'
+                    });
+                  } finally {
+                    if (submitBtn) { 
+                      submitBtn.disabled = false; 
+                      submitBtn.innerHTML = '<i class="fas fa-shield-alt me-2"></i>Submit KYC Application'; 
+                    }
+                    // Reset form data
+                    formData = null;
+                    validationPassed = false;
+                  }
+                }
+              </script>
+
+              <!-- KYC Privacy Policy Modal -->
+               <!-- KYC Privacy Policy Modal -->
+               <div class="modal fade" id="kycPrivacyPolicyModal" tabindex="-1" aria-labelledby="kycPrivacyPolicyModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="kycPrivacyPolicyModalLabel">Terms & Conditions - Agreement Required</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="privacyPolicyCloseBtn" style="display: none;"></button>
+                    </div>
+                    <div class="modal-body" style="font-size: 12px; font-family: 'Arial', sans-serif;">
+                      <div class="privacy-policy-content">
+                        <h3 style="text-align: center; color: #2563eb; margin-bottom: 25px; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">MEMORANDUM OF UNDERSTANDING</h3>
+                       
+                        <div style="text-align: right; margin-bottom: 25px; padding: 15px; background: #f8fafc; border-left: 4px solid #2563eb; border-radius: 6px;">
+                          <strong style="color: #1e40af;">Date:</strong> <span id="kycCurrentDate"></span><br>
+                          <strong style="color: #1e40af;">Ref:</strong> <span id="kycRefNumber">DS000000</span>
+                        </div>
+                       
+                        <p style="text-align: justify; line-height: 1.8; margin-bottom: 20px; padding: 20px; background: #f1f5f9; border-radius: 8px; border: 1px solid #e2e8f0;">
+                          This Memorandum of Understanding (MOU) is entered into on <span id="kycMouDate"></span> at Noida, between <strong style="color: #2563eb;">"ASHREY LOGISTICS SOLUTION LLP (DISPATCH SOLUTIONS)"</strong> referred as <strong style="color: #059669;">FIRST PARTY</strong>, having its Registered Office at B-34, 3rd Floor, Sector 67, Noida, Gautam Buddha Nagar 201301 and <strong style="color: #dc2626;"><span id="kycDynamicOrganization">TRADING STORE PROP. [ORGANIZATION NAME]</span> (PAN No-<span id="kycPanNumber">PAN NUMBER</span>)</strong> referred as <strong style="color: #059669;">SECOND PARTY</strong> represented by <strong style="color: #dc2626;"><span id="kycDynamicName">[USER NAME]</span></strong> having its Registered Office at <span id="kycUserAddress">20 Bholenath colony near Mother Anniment School Kalani Nagar, Airport Road Indore 452005</span>. Both the parties hereby agree to abide by the terms & conditions as given in this MOU and put in their signature and seal to authenticate the same.
+                        </p>
+                       
+                        <div style="margin-top: 30px;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">SCOPE OF SERVICE</h4>
+                          <ol style="line-height: 1.8; padding-left: 20px; margin-bottom: 20px;">
+                            <li style="margin-bottom: 8px;">The scope of service would cover forward, outbound, downstream distribution of goods in customer's supply chain from the pick-up location/(s) designated by the customer to any destination within India and Cross-Border (International) through the "Ashrey Logistics Solution LLP's (Dispatch Solutions) Forwarders" network.</li>
+                            <li style="margin-bottom: 8px;">Any consignment not delivered at the destination (RTO), if requested to be re-booked, will be booked on the same rates (outbound rates as per the quote).</li>
+                          </ol>
+                        </div>
+                       
+                        <div style="margin-top: 25px;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">STATUTORY LEVIES</h4>
+                          <ol style="line-height: 1.8; padding-left: 20px; margin-bottom: 20px;">
+                            <li style="margin-bottom: 8px;">The consignments booked and carried by "Ashrey Logistics Solution LLP's (Dispatch Solutions) Forwarders" stand cleared by the Custom/ Excise/ GST authorities and any confiscation on account of lapses or noncompliance of the statutory requirements would be the responsibility/ liability of "Ashrey Logistics Solution LLP's (Dispatch Solutions) Forwarders".</li>
+                            <li style="margin-bottom: 8px;">FIRST PARTY holds no responsibility related to above Point 1 of this segment.</li>
+                            <li style="margin-bottom: 8px;">Either Party hereby agrees that it shall comply with all applicable local laws, ordinances and codes including but not limited to State Goods & Services tax, Central Goods & services Tax Value Added Tax laws, Central Sales Taxes, Entry tax laws, Municipal and such other laws in performing its obligations hereunder. If at any time during the Term of this Agreement, a Party is informed or information comes to its attention that it is or may be in violation of any law, ordinance, regulation, or code (or if it is so decreed or adjudged by any court, tribunal or other authority having competent jurisdiction), that Party shall immediately take all appropriate steps to remedy such violation and comply with such law, regulation, ordinance or code in all respects. Further, each Party shall establish and maintain all proper records (particularly, but without limitation, accounting records) required by any law, code of practice or corporate policy applicable to it from time to time.</li>
+                          </ol>
+                        </div>
+                       
+                        <div style="margin-top: 25px;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">LIMITATION OF INDEMNITY</h4>
+                          <p style="line-height: 1.8; margin-bottom: 20px; padding: 15px; background: #fafafa; border-radius: 6px; border: 1px solid #e5e7eb;">
+                            The SECOND PARTY shall keep FIRST PARTY indemnified in whole against all and any non-compliances relating to non-payment of all duties, taxes, cess, clearance charges and any other charges/ levy by whatsoever name called, levied on the Consignments. The SECOND PARTY shall keep FIRST PARTY indemnified against any direct or indirect loss, damage, costs, expenses arising out of any action or any Criminal/ Civil proceedings initiated by any statutory authority on account of any act/omissions on its part.
+                          </p>
+                        </div>
+                       
+                        <div style="margin-top: 25px;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">LIMITATION OF LIABILITY</h4>
+                          <ol style="line-height: 1.8; padding-left: 20px; margin-bottom: 20px;">
+                            <li style="margin-bottom: 8px;">In no event or under any circumstance shall FIRST PARTY be liable to The SECOND PARTY or to any person claiming under or through it in contract, tort or otherwise for indirect, special, incidental, exemplary, punitive, or consequential damages, loss and theft of any kind whatsoever. Notwithstanding anything contrary contained elsewhere in the Agreement, the total cumulative liability of FIRST PARTY to The Second Party or to any person claiming under or through it shall not exceed <strong style="color: #dc2626;">INR 1000/- (Rupees One Thousand only)</strong> or the Invoice value of the Product whichever is less.</li>
+                            <li style="margin-bottom: 8px;">All transit related insurance claims are to be settled in line with the contractual understanding only. SECOND PARTY shall not make any deductions or do any adjustment in payments or withhold any of FIRST PARTY payments on account of pending insurance claims or dispute between SECOND PARTY and its customer/s.
+                              <ol type="a" style="margin-top: 10px; padding-left: 20px;">
+                                <li style="margin-bottom: 5px;">The transit insurance of the consignments to be done by SECOND PARTY.</li>
+                                <li style="margin-bottom: 5px;">Liability of FIRST PARTY shall be restricted to issue e-COF (Electronically generated Certificate of Facts) from the forwarder, subject to remarks on POD.</li>
+                                <li style="margin-bottom: 5px;">The copy of the Police F.I.R. shall be provided only in the cases of accident, fire, hijack of vehicle, theft & burglary (forceful entry in warehouse or vehicle).</li>
+                              </ol>
+                            </li>
+                          </ol>
+                        </div>
+                       
+                        <div style="margin-top: 25px;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">TRANSIT SCHEDULE</h4>
+                          <ol style="line-height: 1.8; padding-left: 20px; margin-bottom: 20px;">
+                            <li style="margin-bottom: 8px;">Transit time will be as per the "Ashrey Logistics Solution LLP's (Dispatch Solutions) Forwarders" which will be subject to change due to the prevailing conditions in the geography impacted.</li>
+                            <li style="margin-bottom: 8px;">FIRST PARTY will make every possible effort to adhere to the transit time mentioned in the MOU Transit Schedule but will not accept responsibility/ liability for any delay due to unforeseen circumstances beyond our control, consignee induced delays and for the consequential losses suffered due to delay in delivery.</li>
+                          </ol>
+                        </div>
+                       
+                        <div style="margin-top: 25px;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">PROOF OF DELIVERY (POD)</h4>
+                          <ol style="line-height: 1.8; padding-left: 20px; margin-bottom: 20px;">
+                            <li style="margin-bottom: 8px;">POD's do not form a pre-requisite for submission & pay-out of FIRST PARTY Freight Invoice.</li>
+                            <li style="margin-bottom: 8px;">In case of any requirement of specific PODs by the customer, same will be provided in digital format.</li>
+                          </ol>
+                        </div>
+                       
+                        <div style="margin-top: 25px;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">WALLET USAGE & TERMS</h4>
+                          <ol style="line-height: 1.8; padding-left: 20px; margin-bottom: 20px;">
+                            <li style="margin-bottom: 8px;">"Ashrey Logistics Solution LLP (Dispatch Solutions)" reserves the right to deduct amount on picked up basis from the recharge amount.</li>
+                            <li style="margin-bottom: 8px;">"Ashrey Logistics Solution LLP (Dispatch Solutions)" reserves the right to deduct discrepancy amount from the wallet w.r.t charges of overweight, RTO and other charges.</li>
+                            <li style="margin-bottom: 8px;">Complete disclosure will be given by "Ashrey Logistics Solution LLP (Dispatch Solutions)" to SECOND PARTY regarding the recharges, expense on per shipment along with the available balance.</li>
+                            <li style="margin-bottom: 8px;">Any outstanding other than initial freight deduction will be auto adjusted from wallet amount within 7 days of sharing monthly invoice by "Ashrey Logistics Solution LLP (Dispatch Solutions)".</li>
+                            <li style="margin-bottom: 8px;">Customer is allowed to take refund on request through written (email) from wallet. Refund will be initiated within 14 working days from request date.</li>
+                          </ol>
+                        </div>
+                       
+                        <div style="margin-top: 25px;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">PAYMENT OF CREDIT BILLS</h4>
+                          <ol style="line-height: 1.8; padding-left: 20px; margin-bottom: 20px;">
+                            <li style="margin-bottom: 8px;">Invoice cycle will be <strong style="color: #059669;">fortnightly (Every 15 Days)</strong>. Invoice will be raised after the end of the invoice cycle for all the bookings done in the given period:
+                              <ol type="a" style="margin-top: 10px; padding-left: 20px;">
+                                <li style="margin-bottom: 5px;">For bookings made from the 1st to the 15th of the month, the invoice will be generated on the 16th of that same month.</li>
+                                <li style="margin-bottom: 5px;">For bookings made from the 16th to the last day of the month, the invoice will be generated on the 1st of the subsequent month.</li>
+                              </ol>
+                            </li>
+                            <li style="margin-bottom: 8px;">Invoice will be sent in electronic format on your registered email ID registered with "Ashrey Logistics Solution LLP (Dispatch Solutions)" and has to be acknowledged by the SECOND PARTY within 3 Days, if not shall be considered accepted.</li>
+                            <li style="margin-bottom: 8px;">SECOND PARTY will make payment in full within 15 days from the date of invoice through Cheque / NEFT / RTGS modes in favour of "Ashrey Logistics Solution LLP (Dispatch Solutions)"; Failing to which credit facility will be withdrawn.</li>
+                            <li style="margin-bottom: 8px;">The SECOND PARTY shall not withhold the payment of FIRST PARTY for any reason whatsoever including dispute with regard to the Delivery Services. The Parties agree that, in the event of any delay in the payment, FIRST PARTY shall levy interest at the rate of <strong style="color: #dc2626;">18% per annum</strong> or part thereof. Discrepancy can be raised within 3 days of receiving the invoice copy (Soft or hard whichever is received Earlier).</li>
+                            <li style="margin-bottom: 8px;">SECOND PARTY will ensure no payments will be made to any employee/company representative other than the company account itself which is "Ashrey Logistics Solution LLP (Dispatch Solutions)". If any such things happen it will be SECOND PARTY's responsibility itself and FIRST PARTY holds no responsibility for the same.</li>
+                            <li style="margin-bottom: 8px;">While FIRST PARTY undertakes to address all issues to the entire satisfaction of customers, there will be no deductions or holding of payment under any circumstances, whatsoever.</li>
+                            <li style="margin-bottom: 8px;">FIRST PARTY payments are in no way linked with the payment's terms between SECOND PARTY and its customer/s. SECOND PARTY shall have to release the payments every fortnight for previous fortnight's bill without any deductions or adjustments regardless to any reason.</li>
+                          </ol>
+                        </div>
+                       
+                        <div style="margin-top: 25px;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">VALIDITY FOR CLAIMING DIFFERENCE IN WEIGHT MEASUREMENT</h4>
+                          <ol style="line-height: 1.8; padding-left: 20px; margin-bottom: 20px;">
+                            <li style="margin-bottom: 8px;">The consignments are weighed and measured at the time of booking and their weight and volumes are recorded on the waybills/LR/AWB either manually or through online platform and it is mandatory.</li>
+                            <li style="margin-bottom: 8px;">Weight and Volumetric measurements may vary even after consignment booking (manually/online platform) on the basis of updated weight and volumetric measurements provided by "Ashrey Logistics Solution LLP's (Dispatch Solutions) Forwarders".</li>
+                            <li style="margin-bottom: 8px;">Second Party can ask for reconciliation of such differences in weight and volumetric measurements. FIRST PARTY will provide the details to SECOND PARTY on basis of "Ashrey Logistics Solution LLP's (Dispatch Solutions) Forwarders" facts.</li>
+                          </ol>
+                        </div>
+                       
+                        <div style="margin-top: 25px;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">LIABILITY FOR THE NATURE OF CONSIGNMENTS CARRIED</h4>
+                          <p style="line-height: 1.8; margin-bottom: 20px; padding: 15px; background: #fafafa; border-radius: 6px; border: 1px solid #e5e7eb;">
+                            Consignments permitted by law only, are accepted for booking and carriage by "Ashrey Logistics Solution LLP's (Dispatch Solutions) Forwarders" and any item hazardous in nature, harmful chemical, inflammables, currency notes or any articles/commodities not permissible for carriage as per the Carrier's Act are not accepted. The responsibility for any wrong declaration and the consequences arising out of the same would be the responsibility of SECOND PARTY (As per attached Annexure-1).
+                          </p>
+                        </div>
+                       
+                        <div style="margin-top: 25px;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">TERMINATION OF THE CONTRACT</h4>
+                          <p style="line-height: 1.8; margin-bottom: 20px; padding: 15px; background: #fafafa; border-radius: 6px; border: 1px solid #e5e7eb;">
+                            Either party, subject to one month's notice, can terminate the agreement. Upon SECOND PARTY termination will clear all the dues and FIRST PARTY will undertake to deliver all stocks as required by SECOND PARTY.
+                          </p>
+                        </div>
+                       
+                        <div style="margin-top: 25px;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">EXPIRY OF CONTRACT</h4>
+                          <p style="line-height: 1.8; margin-bottom: 20px; padding: 15px; background: #fafafa; border-radius: 6px; border: 1px solid #e5e7eb;">
+                            This MOU is between FIRST PARTY and SECOND PARTY and not any other subsidiaries; other Group Companies or the Branch Offices located elsewhere and will remain valid till 11 months from date of signing, subject to renewal on mutually agreed terms.
+                          </p>
+                        </div>
+                       
+                        <div style="margin-top: 25px;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">JURISDICTION</h4>
+                          <p style="line-height: 1.8; margin-bottom: 20px; padding: 15px; background: #fafafa; border-radius: 6px; border: 1px solid #e5e7eb;">
+                            The Courts in <strong style="color: #2563eb;">Noida, Uttar Pradesh</strong> only will have jurisdiction in case of any disputes related to this MOU.
+                          </p>
+                        </div>
+                       
+                        <div style="margin-top: 40px; padding: 25px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 10px; border: 2px solid #cbd5e1;">
+                          <h4 style="color: #2563eb; text-align: center; margin-bottom: 25px; font-size: 14px; font-weight: 600;">AUTHORIZED SIGNATURES</h4>
+                          <div style="display: flex; justify-content: space-between; gap: 30px;">
+                            <div style="flex: 1; text-align: center; padding: 20px; background: white; border-radius: 8px; border: 1px solid #d1d5db; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                              <strong style="color: #2563eb; font-size: 13px;">ASHREY LOGISTICS SOLUTION LLP</strong><br>
+                              <strong style="color: #2563eb; font-size: 13px;">(DISPATCH SOLUTIONS)</strong><br>
+                              <div style="height: 40px; margin: 15px 0; border-bottom: 1px solid #9ca3af;"></div>
+                              <div style="font-size: 11px; color: #6b7280;">
+                                <strong>Authorised Signatory</strong><br>
+                                <span style="margin-top: 5px; display: inline-block;">Designation: Managing Partner</span>
+                              </div>
+                            </div>
+                            <div style="flex: 1; text-align: center; padding: 20px; background: white; border-radius: 8px; border: 1px solid #d1d5db; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                              <strong style="color: #dc2626; font-size: 13px;"><span id="kycSignatureName">[USER NAME]</span></strong><br>
+                              <strong style="color: #dc2626; font-size: 13px;"><span id="kycSignatureOrganization">[ORGANIZATION NAME]</span></strong><br>
+                              <div style="height: 40px; margin: 15px 0; border-bottom: 1px solid #9ca3af;"></div>
+                              <div style="font-size: 11px; color: #6b7280;">
+                                <strong>Authorised Signatory</strong><br>
+                                <span style="margin-top: 5px; display: inline-block;">Designation: Proprietor</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div style="text-align: center; margin-top: 20px; font-size: 11px; color: #6b7280;">
+                            Date of Agreement: <span id="kycAgreementDate" style="font-weight: 600; color: #2563eb;"></span>
+                          </div>
+                        </div>
+                       
+                        <div style="margin-top: 40px; padding: 25px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 10px; border: 2px solid #cbd5e1;">
+                          <h4 style="color: #2563eb; margin-bottom: 15px; font-size: 14px; font-weight: 600; padding: 10px; background: linear-gradient(90deg, #f0f7ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 4px solid #2563eb;">ANNEXURE-1</h4>
+                          <h4 style="color: #dc2626; text-align: center; margin-bottom: 20px; font-size: 14px; font-weight: 600;">RESTRICTED/ILLICIT ITEMS</h4>
+                         
+                          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <ul style="line-height: 1.6; padding-left: 20px; margin: 0;">
+                              <li style="margin-bottom: 5px;">Live or dead animals</li>
+                              <li style="margin-bottom: 5px;">Illegal narcotic substances</li>
+                              <li style="margin-bottom: 5px;">Fake/dummy/game/toy weapons, paint ball (Including Archery and Shooting Games)</li>
+                              <li style="margin-bottom: 5px;">Items that could be used as weapons, decorative swords, kitchen knives etc.</li>
+                              <li style="margin-bottom: 5px;">Furs and skins (untreated)</li>
+                              <li style="margin-bottom: 5px;">Any noxious substance</li>
+                              <li style="margin-bottom: 5px;">Bullion</li>
+                              <li style="margin-bottom: 5px;">Payment cards, traveller cheques, etc. (Cards having magnetic strips or chips)</li>
+                              <li style="margin-bottom: 5px;">Precious metals & stones</li>
+                              <li style="margin-bottom: 5px;">Antiques</li>
+                              <li style="margin-bottom: 5px;">Packages that are wet, leaking or emit any liquid which can damage other shipments</li>
+                              <li style="margin-bottom: 5px;">Any inadequately packaged item</li>
+                              <li style="margin-bottom: 5px;">Glue & Adhesive products (containing flammable liquid or quick drying)</li>
+                              <li style="margin-bottom: 5px;">Alarm devices (gas or battery powered)</li>
+                              <li style="margin-bottom: 5px;">Asbestos</li>
+                              <li style="margin-bottom: 5px;">Batteries (contained in any appliance, made of lithium or Dry/Wet cell & battery fluids)</li>
+                              <li style="margin-bottom: 5px;">Blasting caps</li>
+                              <li style="margin-bottom: 5px;">Bleach</li>
+                              <li style="margin-bottom: 5px;">Vehicular Fluids (Brake fluid, Engine Oil, Fuel, Lubricants, etc.)</li>
+                              <li style="margin-bottom: 5px;">Fire lighter & Flint Lighters & Cigarette lighters</li>
+                              <li style="margin-bottom: 5px;">Firearms</li>
+                              <li style="margin-bottom: 5px;">Fireworks (e.g. Skyrockets, sparklers, crackers)</li>
+                              <li style="margin-bottom: 5px;">Flammable liquids and flammable solids (e.g. Perfume, etc.)</li>
+                              <li style="margin-bottom: 5px;">Gas (e.g. Propane, butane, hydrogen, helium, camping gas, cylinder full or empty)</li>
+                              <li style="margin-bottom: 5px;">Camphor</li>
+                              <li style="margin-bottom: 5px;">Disinfectants</li>
+                              <li style="margin-bottom: 5px;">Dyes</li>
+                              <li style="margin-bottom: 5px;">Essential oils (e.g. Eucalyptus, tea tree)</li>
+                              <li style="margin-bottom: 5px;">Varnish (e.g. Removers, thinners, paints)</li>
+                              <li style="margin-bottom: 5px;">Fertilizers</li>
+                              <li style="margin-bottom: 5px;">Fire extinguishers</li>
+                              <li style="margin-bottom: 5px;">Opium Derivative Drugs (Codeine, Morphine, Heroin, Oxycodone, Etc.)</li>
+                              <li style="margin-bottom: 5px;">Any item whose carriage is prohibited by any law, statute or regulations of the state/country of origin or destination, or of any state/country through which the shipment may transit.</li>
+                              <li style="margin-bottom: 5px;">Radioactive Material</li>
+                              <li style="margin-bottom: 5px;">Counterfeit goods or fake items</li>
+                              <li style="margin-bottom: 5px;">Marble items, Ceramic items</li>
+                              <li style="margin-bottom: 5px;">Sedative medicine</li>
+                            </ul>
+                           
+                            <ul style="line-height: 1.6; padding-left: 20px; margin: 0;">
+                              <li style="margin-bottom: 5px;">Drugs/Tobacco/Alcohol/Betel Nut Products</li>
+                              <li style="margin-bottom: 5px;">Firearms (including parts) and Ammunition</li>
+                              <li style="margin-bottom: 5px;">Guns, BB guns, antique weapons, swords, knives etc.</li>
+                              <li style="margin-bottom: 5px;">Human remains (including ashes)</li>
+                              <li style="margin-bottom: 5px;">Indecent goods & pornography</li>
+                              <li style="margin-bottom: 5px;">Plants/Seeds</li>
+                              <li style="margin-bottom: 5px;">Cash or Currency</li>
+                              <li style="margin-bottom: 5px;">Jewellery</li>
+                              <li style="margin-bottom: 5px;">Works of Art</li>
+                              <li style="margin-bottom: 5px;">Items of a fragile nature</li>
+                              <li style="margin-bottom: 5px;">Foodstuff & Perishable goods</li>
+                              <li style="margin-bottom: 5px;">Corrosive Materials (Acid, Bases & Chemicals in Any Form)</li>
+                              <li style="margin-bottom: 5px;">Aerosol cans (e.g. Hair spray, Deodorants, Insecticides, Pesticides- Domestic or industrial)</li>
+                              <li style="margin-bottom: 5px;">Appliances & Electronic Items (containing batteries)</li>
+                            </ul>
+                          </div>
+                         
+                          <div style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 10px; border: 2px solid #cbd5e1;">
+                            <h4 style="color: #2563eb; text-align: center; margin-bottom: 25px; font-size: 14px; font-weight: 600;">AUTHORIZED SIGNATURES</h4>
+                            <div style="display: flex; justify-content: space-between; gap: 30px;">
+                              <div style="flex: 1; text-align: center; padding: 20px; background: white; border-radius: 8px; border: 1px solid #d1d5db; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <strong style="color: #2563eb; font-size: 13px;">ASHREY LOGISTICS SOLUTION LLP</strong><br>
+                                <strong style="color: #2563eb; font-size: 13px;">(DISPATCH SOLUTIONS)</strong><br>
+                                <div style="height: 40px; margin: 15px 0; border-bottom: 1px solid #9ca3af;"></div>
+                                <div style="font-size: 11px; color: #6b7280;">
+                                  <strong>Authorised Signatory</strong><br>
+                                  <span style="margin-top: 5px; display: inline-block;">Designation: Managing Partner</span>
+                                </div>
+                              </div>
+                              <div style="flex: 1; text-align: center; padding: 20px; background: white; border-radius: 8px; border: 1px solid #d1d5db; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <strong style="color: #dc2626; font-size: 13px;"><span id="kycSignatureName2">[USER NAME]</span></strong><br>
+                                <strong style="color: #dc2626; font-size: 13px;"><span id="kycSignatureOrganization2">[ORGANIZATION NAME]</span></strong><br>
+                                <div style="height: 40px; margin: 15px 0; border-bottom: 1px solid #9ca3af;"></div>
+                                <div style="font-size: 11px; color: #6b7280;">
+                                  <strong>Authorised Signatory</strong><br>
+                                  <span style="margin-top: 5px; display: inline-block;">Designation: Proprietor</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer" style="background: #f8fafc; border-top: 2px solid #e2e8f0;">
+                      <div style="width: 100%; text-align: center;">
+                        <p style="margin-bottom: 15px; color: #dc2626; font-weight: 600; font-size: 14px;">
+                          ⚠️ You must agree to these terms to complete your KYC submission
+                        </p>
+                        <div style="display: flex; gap: 15px; justify-content: center;">
+                         
+                          <button type="button" class="btn btn-success" id="kycAcceptTerms" style="min-width: 120px; background: #059669;">
+                            ✅ I Agree & Accept
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FOOTER -->
+              <%- include('../partials/footer') %>
+            </div>
+          </div>
+  </div>
+
+  <!-- Tab functionality is handled by Bootstrap 5, no custom script needed -->
+
+ 
+
+
+</body>
+
+</html>

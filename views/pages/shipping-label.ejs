@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head') %>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <style>
+    :root{ --brand:#5c3c91; --muted:#6b7280; --line:#e5e7eb; --page-bg:#fafafa; --radius:12px; }
+    html,body{height:100%}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji",sans-serif;color:#111827;font-size:12px;line-height:1.35;background:#fff}
+    h1{font-size:16px;margin:0;font-weight:700}
+    h4{font-size:13px;margin:0;font-weight:700}
+    h5{font-size:13px;margin:0 0 6px;font-weight:700;color:#344054}
+
+    .label-settings{padding:1.5rem;background:#fff;border-radius:var(--radius);box-shadow:0 1px 3px rgba(16,24,40,.06);border:1px solid var(--line)}
+    .customization-section{background:#fff;border-radius:var(--radius);border:1px solid var(--line);box-shadow:0 1px 2px rgba(16,24,40,.04);margin:14px 0;overflow:hidden}
+    .section-header{background:#f8f9fa;padding:10px 14px;border-bottom:1px solid #e9ecef;display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .section-content{padding:12px 14px}
+    .sub-note{font-size:11px;color:var(--muted);margin:0 0 10px}
+
+    .checkbox-group{display:grid;grid-template-columns:repeat(2,minmax(220px,1fr));gap:10px 24px;margin:10px 0 12px}
+    @media (max-width:768px){.checkbox-group{grid-template-columns:1fr}}
+    .checkbox-item{display:flex;align-items:center;gap:8px}
+    .checkbox-item input[type="checkbox"]{width:16px;height:16px;accent-color:var(--brand)}
+    .checkbox-item label{font-size:12px;color:#374151;cursor:pointer}
+
+    .row-inline{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .select{padding:6px 8px;border:1px solid #d1d5db;border-radius:8px;background:#fff;font-size:12px}
+    .btn{padding:7px 12px;border:none;border-radius:8px;font-size:12px;cursor:pointer;transition:.15s}
+    .btn-primary{background:var(--brand);color:#fff}.btn-primary:hover{background:#4b2f76;transform:translateY(-1px)}
+    .btn-secondary{background:#6b7280;color:#fff}.btn-secondary:hover{background:#4b5563}
+
+    /* Label cards */
+    .label-type-options{display:flex;gap:14px;margin:8px 0 0;flex-wrap:wrap}
+    .label-type-option{padding:12px;border:2px solid var(--line);border-radius:10px;width:200px;cursor:pointer;transition:.2s;background:#fff;text-align:center}
+    .label-type-option:hover{border-color:var(--brand);transform:translateY(-1px)}
+    .label-type-option.selected{border-color:var(--brand);background:#f8f5ff}
+    .label-preview-box{width:120px;height:120px;margin:8px auto 6px;border:2px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;background:#f8f9fa;font-weight:700;color:var(--brand)}
+    .a4-preview{width:120px;height:170px}.size-4x6-preview{width:120px;height:90px}.size-4x4-preview{width:120px;height:120px}.size-4x2-preview{width:120px;height:60px}
+
+    .divider{border-top:1px solid var(--line);margin:10px 0}
+    .privacy-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .privacy-text{font-size:11px;color:var(--muted)}
+    .toggle-switch{position:relative;width:46px;height:22px;background:#d1d5db;border-radius:999px;cursor:pointer;transition:background .2s}
+    .toggle-switch.active{background:var(--brand)}
+    .toggle-switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .2s}
+    .toggle-switch.active::after{transform:translateX(24px)}
+
+    /* Preview */
+    .preview-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 2px rgba(16,24,40,.05);margin:14px 0}
+    .label-canvas-wrap {
+    /* justify-content: center; */
+    align-items: flex-start;
+    padding: 7px;
+    background: var(--page-bg);
+    /* height: 80vh; */
+    min-height: 600px;
+}
+
+    .label-sheet{--target-w:210mm;--target-h:297mm;width:var(--target-w);height:var(--target-h);border:2px solid var(--line);border-radius:14px;background:#fff;position:relative;transform-origin:top left;box-shadow:0 4px 12px rgba(0,0,0,.1);margin:20px auto}
+    /* A4 logical canvas: we'll scale this into any page size */
+    .sheet-content{width:210mm;height:297mm;padding:10mm;transform-origin:top left}
+
+    .hr{border-top:1px solid var(--line);margin:10px 0}
+    .row-flex{display:flex;gap:10px}
+    .col-7{width:70%}.col-3{width:30%;text-align:center}
+    .align-right{text-align:right}
+    .brand-logo-box{background:#f3f4f6;padding:8px;border-radius:8px;display:flex;align-items:center;justify-content:center;height:150px}
+    .big-left{font-size:26px;font-weight:800;letter-spacing:.3px}
+    .big-right{font-size:18px;font-weight:800;text-align:right}
+    .kv-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px}
+    .kv-grid p{margin:0}
+    .items-table{width:100%;border-collapse:collapse;margin:8px 0}
+    .items-table th,.items-table td{border:1px solid #d1d5db;padding:6px;font-size:12px}
+    .items-table thead th{background:#e5e7eb;font-weight:700}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .powered{text-align:center}.powered img{max-width:120px;height:auto}
+    .hidden{display:none !important}
+    .p-4{padding:1.5rem !important}
+
+    @media print{.label-canvas-wrap{overflow:visible;background:#fff;padding:0;height:auto}.label-sheet{border:none;transform:none !important}}
+
+    /* (No size-specific hiding now; everything scales to fit) */
+  </style>
+
+  <!-- dynamic @page -->
+  <style id="pageStyle">
+    @media print { @page { size: 210mm 297mm; margin: 12mm; } }
+  </style>
+</head>
+
+<body data-theme="light" class="font-nunito">
+  <div id="wrapper" class="theme-cyan">
+    <%- include('../partials/header') %>
+    <%- include('../partials/left-sidebar') %>
+    <%- include('../partials/right-iconbar') %>
+
+    <div id="main-content">
+      <div class="container-fluid">
+        <div class="block-header">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <h2>Shipping Label</h2>
+              <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/"><i class="fa fa-dashboard"></i></a></li>
+                <li class="breadcrumb-item active">Shipping Label</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="label-settings p-4">
+          <div class="row-inline" style="justify-content:space-between;">
+            <h1>Label Settings</h1>
+            <div class="row-inline">
+              <select id="orderSelector" class="select" style="margin-right: 10px;">
+                <option value="">Select an Order</option>
+                <option value="SAMPLE-001">Sample Order (SAMPLE-001)</option>
+                <!-- More orders will be loaded dynamically -->
+              </select>
+              <button class="btn btn-secondary" type="button" onclick="downloadSampleLabel()">Download Label</button>
+              <!-- <button class="btn btn-secondary" type="button" onclick="window.print()">Print</button> -->
+            </div>
+          </div>
+
+          <!-- Label Type & Size -->
+          <div class="customization-section">
+            <div class="section-header"><h4>Label Type & Size</h4></div>
+            <div class="section-content">
+              <p class="sub-note">Size choose karein; preview & print auto-fit hoga.</p>
+              <div class="label-type-options" id="labelTypeOptions">
+                <div class="label-type-option <%= preferences.default_label_size === 'A4' ? 'selected' : '' %>" data-size="A4" onclick="selectLabelType(event,'A4')">
+                  <div class="label-preview-box a4-preview">A4</div>
+                  <div class="label-type-title">A4</div><div class="label-type-sub">210 × 297 mm</div>
+                </div>
+                <div class="label-type-option <%= preferences.default_label_size === '4X6' ? 'selected' : '' %>" data-size="4X6" onclick="selectLabelType(event,'4X6')">
+                  <div class="label-preview-box size-4x6-preview">4×6</div>
+                  <div class="label-type-title">4×6 in</div><div class="label-type-sub">100 × 150 mm</div>
+                </div>
+                <div class="label-type-option <%= preferences.default_label_size === '4X4' ? 'selected' : '' %>" data-size="4X4" onclick="selectLabelType(event,'4X4')">
+                  <div class="label-preview-box size-4x4-preview">4×4</div>
+                  <div class="label-type-title">4×4 in</div><div class="label-type-sub">100 × 100 mm</div>
+                </div>
+                <div class="label-type-option <%= preferences.default_label_size === '4X2' ? 'selected' : '' %>" data-size="4X2" onclick="selectLabelType(event,'4X2')">
+                  <div class="label-preview-box size-4x2-preview">4×2</div>
+                  <div class="label-type-title">4×2 in</div><div class="label-type-sub">100 × 50 mm</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-5">
+            <!-- LEFT: Settings -->
+            <div class="col-md-6">
+              <div class="customization-section">
+                <div class="section-header"><h4>Label Field Customization</h4></div>
+                <div class="section-content">
+                  <form id="settingsForm">
+                    <h5>Order Info</h5>
+                    <p class="sub-note">Toggle fields to show/hide on label.</p>
+                    <div class="checkbox-group">
+                      <div class="checkbox-item"><input type="checkbox" id="orderId" <%= preferences.show_order_id ? 'checked' : '' %>><label for="orderId">Order ID</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="invoiceNumber" <%= preferences.show_invoice_number ? 'checked' : '' %>><label for="invoiceNumber">Invoice Number</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="orderDate" <%= preferences.show_order_date ? 'checked' : '' %>><label for="orderDate">Order Date</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="invoiceDate" <%= preferences.show_invoice_date ? 'checked' : '' %>><label for="invoiceDate">Invoice Date</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="orderBarcode" <%= preferences.show_order_barcode ? 'checked' : '' %>><label for="orderBarcode">Order Barcode</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="invoiceBarcode" <%= preferences.show_invoice_barcode ? 'checked' : '' %>><label for="invoiceBarcode">AWB Barcode</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="rtoRouting" <%= preferences.show_rto_routing ? 'checked' : '' %>><label for="rtoRouting">RTO Routing Code</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="declaredValue" <%= preferences.show_declared_value ? 'checked' : '' %>><label for="declaredValue">Declared Value</label></div>
+                    </div>
+
+                    <div class="divider"></div>
+                    <h5>Shipper Info</h5>
+                    <div class="checkbox-group">
+                      <div class="checkbox-item"><input type="checkbox" id="shipperPhone" <%= preferences.show_shipper_phone ? 'checked' : '' %>><label for="shipperPhone">Shipper Phone</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="gstin" <%= preferences.show_gstin ? 'checked' : '' %>><label for="gstin">GSTIN</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="shipperAddress" <%= preferences.show_shipper_address ? 'checked' : '' %>><label for="shipperAddress">Shipper Address</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="brandName" <%= preferences.show_brand_name ? 'checked' : '' %>><label for="brandName">Seller Brand Name</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="brandLogo" <%= preferences.show_brand_logo ? 'checked' : '' %>><label for="brandLogo">Brand Logo</label></div>
+                    </div>
+
+                    <div class="divider"></div>
+                    <h5>Products & Package</h5>
+                    <div class="checkbox-group">
+                      <div class="checkbox-item"><input type="checkbox" id="itemName" <%= preferences.show_item_name ? 'checked' : '' %>><label for="itemName">Item Name</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="productCost" <%= preferences.show_product_cost ? 'checked' : '' %>><label for="productCost">Product Cost</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="productQuantity" <%= preferences.show_product_quantity ? 'checked' : '' %>><label for="productQuantity">Qty</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="skuCode" <%= preferences.show_sku_code ? 'checked' : '' %>><label for="skuCode">SKU Code</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="dimension" <%= preferences.show_dimension ? 'checked' : '' %>><label for="dimension">Dimension</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="deadWeight" <%= preferences.show_dead_weight ? 'checked' : '' %>><label for="deadWeight">Dead Weight</label></div>
+                      <div class="checkbox-item"><input type="checkbox" id="otherCharges" <%= preferences.show_other_charges ? 'checked' : '' %>><label for="otherCharges">Other Charges row</label></div>
+                    </div>
+
+                    <div class="checkbox-item" style="margin-top:6px;">
+                      <input type="checkbox" id="limitItemName" <%= preferences.limit_item_name_length ? 'checked' : '' %>>
+                      <label for="limitItemName">Limit item name length</label>
+                    </div>
+
+                    <div class="divider"></div>
+                    <div class="privacy-row">
+                      <div class="privacy-text">Hide buyer’s sensitive details (recommended)</div>
+                      <div class="row-inline">
+                        <span class="recommend-label">Recommended</span>
+                        <div class="toggle-switch <%= preferences.hide_buyer_sensitive_details ? 'active' : '' %>" id="privacyToggle"></div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="row-inline" style="justify-content:flex-end;">
+                <button type="button" class="btn btn-secondary" id="btnDefaults">Set Default</button>
+                <button type="button" class="btn btn-primary" id="btnApply">Apply Settings</button>
+                <button type="button" class="btn btn-primary" id="btnSave" onclick="savePreferences()">Save Preferences</button>
+              </div>
+            </div>
+
+            <!-- RIGHT: Preview -->
+            <div class="col-md-6">
+              <div class="preview-card">
+                <div class="section-header">
+                  <h4>Label Preview</h4>
+                  <div class="row-inline">
+                    <label for="labelSize"><strong>Label Size</strong></label>
+                    <select id="labelSize" class="select">
+                      <option value="A4" <%= preferences.default_label_size === 'A4' ? 'selected' : '' %>>A4 (210×297 mm)</option>
+                      <option value="4X6" <%= preferences.default_label_size === '4X6' ? 'selected' : '' %>>4×6 in (100×150 mm)</option>
+                      <option value="4X4" <%= preferences.default_label_size === '4X4' ? 'selected' : '' %>>4×4 in (100×100 mm)</option>
+                      <option value="4X2" <%= preferences.default_label_size === '4X2' ? 'selected' : '' %>>4×2 in (100×50 mm)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div id="previewViewport" class="label-canvas-wrap">
+                  <div id="labelSheet" class="label-sheet" data-target="A4">
+                    <!-- A4 logical canvas (always same layout) -->
+                    <div id="sheetContent" class="p-4 sheet-content">
+                      <!-- Deliver To + Brand -->
+                      <div class="row-flex">
+                        <div class="col-7">
+                          <p style="margin:0 0 6px;"><strong>Deliver To:</strong></p>
+                          <p style="margin:0 0 2px;"><strong>Venkatesh Puri</strong></p>
+                          <p style="margin:0 0 2px;">111/222, XYZ, Ram Nagar, Paharganj,</p>
+                          <p style="margin:0 0 2px;">South Delhi, Delhi, India. 110093.</p>
+                          <p id="buyerPhone" style="margin:0;">Phone No. +91 9560188888</p>
+                        </div>
+                        <div class="col-3">
+                          <div id="brandLogoBox" class="brand-logo-box" data-field="brandLogo">
+                            <span style="font-size:20px;font-weight:700;">Brand Logo</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="hr"></div>
+
+                      <!-- COD + Carrier -->
+                      <div class="row-flex" style="align-items:flex-start;">
+                        <div class="col-7">
+                          <div class="big-left">COD</div>
+                          <div style="margin-top:6px;">
+                            <div style="font-size:14px;">Collectable Value:</div>
+                            <div style="font-size:22px;font-weight:800;margin-top:2px;">₹1350</div>
+                          </div>
+                        </div>
+                        <div class="col-3 align-right">
+                          <div class="big-right">Bluedart</div>
+                          <div class="barcode-wrap" style="margin-top:6px;">
+                            <div id="awbBarcodeBox" data-field="invoiceBarcode"><svg id="awbBarcode"></svg></div>
+                            <p class="barcode-line" style="margin:4px 0 0;"><strong>AWB:</strong> <span id="awbText">143263813003739</span></p>
+                            <p class="barcode-line" data-field="rtoRouting" style="margin:2px 0 0;"><strong>Routing Code:</strong> ABC/GATEWAY</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="hr"></div>
+
+                      <!-- Order block -->
+                      <div class="row-flex" style="align-items:flex-start;">
+                        <div class="col-7">
+                          <div data-field="orderId">
+                            <p style="margin:0 0 6px;"><strong>Order ID#:</strong> <span id="orderIdText">8052081712989</span></p>
+                          </div>
+                          <div data-field="invoiceNumber" style="margin-bottom:6px;">
+                            <p style="margin:0;"><strong>Invoice #:</strong> <span id="invoiceNumberText">INV-2024-001</span></p>
+                          </div>
+                          <div id="orderBarcodeBox" data-field="orderBarcode"><svg id="orderBarcode" style="max-width:240px;"></svg></div>
+                        </div>
+                        <div class="col-3" style="text-align:left;">
+                          <div class="kv-grid">
+                            <p data-field="orderDate"><strong>Order Date:</strong> 23 Mar, 2024</p>
+                            <p data-field="invoiceDate"><strong>Invoice Date:</strong> <span id="invoiceDateText">23 Mar, 2024</span></p>
+                            <p data-field="dimension"><strong>Dimension:</strong> 35x34x11</p>
+                            <p data-field="deadWeight"><strong>Dead Weight:</strong> 0.73 KG</p>
+                            <p data-field="declaredValue"><strong>Declared Value:</strong> ₹1350</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Items -->
+                      <table class="items-table" id="itemsTable">
+                        <thead>
+                          <tr>
+                            <th data-col="itemName">Item Name</th>
+                            <th data-col="skuCode">SKU Code</th>
+                            <th data-col="productQuantity">Qty</th>
+                            <th data-col="productCost" class="align-right">Total Amount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td data-col="itemName" class="itemText">Navy Blue T-shirt</td>
+                            <td data-col="skuCode">695095207050</td>
+                            <td data-col="productQuantity">2</td>
+                            <td data-col="productCost" class="align-right">₹450</td>
+                          </tr>
+                          <tr id="otherChargesRow" data-field="otherCharges">
+                            <td data-col="itemName">Other Charges (incl. GST/Taxes)</td>
+                            <td data-col="skuCode"></td>
+                            <td data-col="productQuantity"></td>
+                            <td data-col="productCost" class="align-right">₹550</td>
+                          </tr>
+                        </tbody>
+                        <tfoot>
+                          <tr>
+                            <th>Total Amount</th>
+                            <th data-col="skuCode"></th>
+                            <th data-col="productQuantity"></th>
+                            <th data-col="productCost" class="align-right">₹1900</th>
+                          </tr>
+                        </tfoot>
+                      </table>
+
+                      <!-- Addresses -->
+                      <div class="two-col" style="margin-top:8px;">
+                        <div>
+                          <p style="margin:0 0 4px;"><strong>Shipped By</strong></p>
+                          <div data-field="brandName"><p style="margin:0 0 2px;"><strong>Seller Brand Name</strong></p></div>
+                          <div data-field="shipperAddress">
+                            <p style="margin:0 0 2px;">XX/YY, ABC Apartments, Pitampura, Opp. Metro Pillar 36</p>
+                            <p style="margin:0 0 2px;">New Delhi, Delhi, India. 110034</p>
+                          </div>
+                          <div data-field="shipperPhone"><p style="margin:0 0 2px;">Phone No. 011 4715 2407</p></div>
+                          <div data-field="gstin"><p style="margin:0;">GST No: 9764713698798013</p></div>
+                        </div>
+                        <div>
+                          <p style="margin:0 0 4px;"><strong>RTO Details (If undelivered, return to):</strong></p>
+                          <p style="margin:0 0 2px;"><strong>XX/YY, ABC Apartments, Pitampura, Opp. Metro Pillar 36</strong></p>
+                          <p style="margin:0 0 2px;">New Delhi, Delhi, India. 110034.</p>
+                          <p style="margin:0 0 2px;">Phone No. 011 4715 2407</p>
+                          <p style="margin:0;" data-field="rtoRouting"><strong>RTO Routing Code:</strong> ABC/GATEWAY</p>
+                        </div>
+                      </div>
+
+                      <div class="hr"></div>
+
+                      <div class="two-col">
+                        <div>
+                          <p style="margin:0 0 4px;"><strong>*Terms & Conditions</strong></p>
+                          <ol class="small-muted" style="margin:0;padding-left:16px;line-height:1.45;">
+                            <li>Visit parent courier website for T&C.</li>
+                            <li>Do not accept if package is tampered.</li>
+                            <li>For post-delivery disputes, contact seller.</li>
+                            <li>All shipping disputes under Delhi jurisdiction.</li>
+                          </ol>
+                        </div>
+                        <div class="powered">
+                          <p style="margin:0 0 4px;"><strong>Powered By</strong></p>
+                          <img src="/public/images/brand-logo.png" alt="Powered by">
+                        </div>
+                      </div>
+                    </div><!-- /sheetContent -->
+                  </div><!-- /labelSheet -->
+                </div>
+              </div>
+            </div>
+            <!-- /RIGHT -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- libs -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+
+  <script>
+    // Global variables for client preferences and order data
+    let userPreferences = JSON.parse('<%- JSON.stringify(preferences).replace(/'/g, "\\'") %>');
+    let currentOrderData = null;
+    
+    // Load client preferences on page load
+    document.addEventListener('DOMContentLoaded', async function() {
+      try {
+        // Preferences are now loaded server-side, no need to load them via API
+        await loadSampleOrderData();
+        
+        // applyPreferencesToUI(); // Not needed since preferences are set server-side
+        applyVisibility();
+
+        // Wait a bit for DOM to be fully ready before updating preview
+        setTimeout(() => {
+          updateLabelPreview();
+        }, 100);
+      } catch (error) {
+        console.error('Error initializing shipping label page:', error);
+      }
+    });
+
+    // Load user-specific shipping label preferences
+    async function loadUserPreferences() {
+      try {
+        const response = await axios.get('/api/shipping-label/preferences');
+        const result = response.data;
+        
+        if (result.success) {
+          userPreferences = result.data;
+          console.log('Loaded user preferences:', userPreferences);
+        } else {
+          console.warn('Failed to load preferences, using defaults');
+          userPreferences = null;
+        }
+      } catch (error) {
+        console.error('Error loading preferences:', error);
+        userPreferences = null;
+      }
+    }
+
+    // Load sample order data (this would be replaced with actual order data in production)
+    async function loadSampleOrderData() {
+      // Sample data structure - in production this would come from an API
+      currentOrderData = {
+        orderId: '8052081712989',
+        awbNumber: '143263813003739',
+        orderDate: '23 Mar, 2024',
+        invoiceDate: '23 Mar, 2024',
+        invoiceNumber: 'INV-2024-001',
+        buyerName: 'Venkatesh Puri',
+        buyerAddress: '111/222, XYZ, Ram Nagar, Paharganj, South Delhi, Delhi, India. 110093.',
+        buyerPhone: '+91 9560188888',
+        collectableValue: '₹1350',
+        courier: 'Bluedart',
+        rtoRouting: 'ABC/GATEWAY',
+        declaredValue: '₹1350',
+        dimension: '35x34x11',
+        deadWeight: '0.73 KG',
+        shipperPhone: '011 4715 2407',
+        gstin: '9764713698798013',
+        shipperAddress: 'XX/YY, ABC Apartments, Pitampura, Opp. Metro Pillar 36, New Delhi, Delhi, India. 110034',
+        brandName: 'Seller Brand Name',
+        items: [
+          {
+            name: 'Navy Blue T-shirt',
+            sku: '695095207050',
+            quantity: '2',
+            cost: '₹450'
+          }
+        ],
+        otherCharges: '₹550',
+        totalAmount: '₹1900'
+      };
+    }
+
+    // Load real orders from database
+   
+    // Apply preferences to UI checkboxes
+    function applyPreferencesToUI() {
+      if (!userPreferences) return;
+      
+      // Apply checkbox states
+      const checkboxIds = [
+        'orderId', 'invoiceNumber', 'orderDate', 'invoiceDate', 'orderBarcode', 'invoiceBarcode',
+        'rtoRouting', 'declaredValue', 'shipperPhone', 'gstin', 'shipperAddress', 'brandName',
+        'brandLogo', 'itemName', 'productCost', 'productQuantity', 'skuCode', 'dimension',
+        'deadWeight', 'otherCharges', 'limitItemName'
+      ];
+      
+      checkboxIds.forEach(id => {
+        const checkbox = document.getElementById(id);
+        if (checkbox && userPreferences[`show_${id}`] !== undefined) {
+          checkbox.checked = userPreferences[`show_${id}`] === 1;
+        }
+      });
+      
+      // Apply privacy toggle
+      const privacyToggle = document.getElementById('privacyToggle');
+      if (privacyToggle) {
+        privacyToggle.classList.toggle('active', userPreferences.hide_buyer_sensitive_details === 1);
+      }
+      
+      // Apply default label size
+      if (userPreferences.default_label_size) {
+        selectLabelType(null, userPreferences.default_label_size);
+        const sizeSelect = document.getElementById('labelSize');
+        if (sizeSelect) {
+          sizeSelect.value = userPreferences.default_label_size;
+        }
+      }
+    }
+
+    // Save preferences to database
+    async function savePreferences() {
+      try {
+        const formData = {
+          show_order_id: document.getElementById('orderId').checked ? 1 : 0,
+          show_invoice_number: document.getElementById('invoiceNumber').checked ? 1 : 0,
+          show_order_date: document.getElementById('orderDate').checked ? 1 : 0,
+          show_invoice_date: document.getElementById('invoiceDate').checked ? 1 : 0,
+          show_order_barcode: document.getElementById('orderBarcode').checked ? 1 : 0,
+          show_invoice_barcode: document.getElementById('invoiceBarcode').checked ? 1 : 0,
+          show_rto_routing: document.getElementById('rtoRouting').checked ? 1 : 0,
+          show_declared_value: document.getElementById('declaredValue').checked ? 1 : 0,
+          show_shipper_phone: document.getElementById('shipperPhone').checked ? 1 : 0,
+          show_gstin: document.getElementById('gstin').checked ? 1 : 0,
+          show_shipper_address: document.getElementById('shipperAddress').checked ? 1 : 0,
+          show_brand_name: document.getElementById('brandName').checked ? 1 : 0,
+          show_brand_logo: document.getElementById('brandLogo').checked ? 1 : 0,
+          show_item_name: document.getElementById('itemName').checked ? 1 : 0,
+          show_product_cost: document.getElementById('productCost').checked ? 1 : 0,
+          show_product_quantity: document.getElementById('productQuantity').checked ? 1 : 0,
+          show_sku_code: document.getElementById('skuCode').checked ? 1 : 0,
+          show_dimension: document.getElementById('dimension').checked ? 1 : 0,
+          show_dead_weight: document.getElementById('deadWeight').checked ? 1 : 0,
+          show_other_charges: document.getElementById('otherCharges').checked ? 1 : 0,
+          limit_item_name_length: document.getElementById('limitItemName').checked ? 1 : 0,
+          hide_buyer_sensitive_details: document.getElementById('privacyToggle').classList.contains('active') ? 1 : 0,
+          default_label_size: document.getElementById('labelSize').value
+        };
+
+        const response = await axios.post('/api/shipping-label/preferences', formData);
+
+        const result = response.data;
+        
+        if (result.success) {
+          Swal.fire({
+            title: 'Success',
+            text: 'Preferences saved successfully!',
+            icon: 'success',
+            timer: 1500,
+            showConfirmButton: false
+          });
+          
+          // Update global preferences
+          userPreferences = formData;
+        } else {
+          throw new Error(result.message || 'Failed to save preferences');
+        }
+      } catch (error) {
+        console.error('Error saving preferences:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to save preferences: ' + error.message,
+          icon: 'error'
+        });
+      }
+    }
+
+    // Update label preview with dynamic data
+    function updateLabelPreview() {
+      if (!currentOrderData) return;
+      
+      // Update order details
+      document.getElementById('orderIdText').textContent = currentOrderData.orderId;
+      document.getElementById('awbText').textContent = currentOrderData.awbNumber;
+      
+      // Update invoice details
+      const invoiceNumberElement = document.getElementById('invoiceNumberText');
+      if (invoiceNumberElement) invoiceNumberElement.textContent = currentOrderData.invoiceNumber;
+      
+      const invoiceDateElement = document.getElementById('invoiceDateText');
+      if (invoiceDateElement) invoiceDateElement.textContent = currentOrderData.invoiceDate;
+      
+      // Update buyer details
+      const buyerNameElement = document.querySelector('.col-7 p:nth-child(2)');
+      if (buyerNameElement) buyerNameElement.innerHTML = `<strong>${currentOrderData.buyerName}</strong>`;
+      
+      const buyerAddressElement = document.querySelector('.col-7 p:nth-child(3)');
+      if (buyerAddressElement) buyerAddressElement.textContent = currentOrderData.buyerAddress.split(', ').slice(0, 3).join(', ');
+      
+      const buyerAddressElement2 = document.querySelector('.col-7 p:nth-child(4)');
+      if (buyerAddressElement2) buyerAddressElement2.textContent = currentOrderData.buyerAddress.split(', ').slice(3).join(', ');
+      
+      const buyerPhoneElement = document.getElementById('buyerPhone');
+      if (buyerPhoneElement) buyerPhoneElement.textContent = `Phone No. ${currentOrderData.buyerPhone}`;
+      
+      // Update COD details
+      const codValueElement = document.querySelector('.col-7 .big-left + div div:nth-child(2)');
+      if (codValueElement) codValueElement.textContent = currentOrderData.collectableValue;
+      
+      // Update courier details
+      const courierElement = document.querySelector('.col-3 .big-right');
+      if (courierElement) courierElement.textContent = currentOrderData.courier;
+      
+      // Update routing code
+      const routingElement = document.querySelector('[data-field="rtoRouting"]');
+      if (routingElement) routingElement.innerHTML = `<strong>Routing Code:</strong> ${currentOrderData.rtoRouting}`;
+      
+      // Update order date
+      const orderDateElement = document.querySelector('[data-field="orderDate"]');
+      if (orderDateElement) orderDateElement.innerHTML = `<strong>Order Date:</strong> ${currentOrderData.orderDate}`;
+      
+      // Update dimensions and weight
+      const dimensionElement = document.querySelector('[data-field="dimension"]');
+      if (dimensionElement) dimensionElement.innerHTML = `<strong>Dimension:</strong> ${currentOrderData.dimension}`;
+      
+      const weightElement = document.querySelector('[data-field="deadWeight"]');
+      if (weightElement) weightElement.innerHTML = `<strong>Dead Weight:</strong> ${currentOrderData.deadWeight}`;
+      
+      const declaredValueElement = document.querySelector('[data-field="declaredValue"]');
+      if (declaredValueElement) declaredValueElement.innerHTML = `<strong>Declared Value:</strong> ${currentOrderData.declaredValue}`;
+      
+      // Update items table
+      const itemNameElement = document.querySelector('#itemsTable tbody tr:first-child td[data-col="itemName"]');
+      if (itemNameElement) itemNameElement.textContent = currentOrderData.items[0].name;
+      
+      const skuElement = document.querySelector('#itemsTable tbody tr:first-child td[data-col="skuCode"]');
+      if (skuElement) skuElement.textContent = currentOrderData.items[0].sku;
+      
+      const qtyElement = document.querySelector('#itemsTable tbody tr:first-child td[data-col="productQuantity"]');
+      if (qtyElement) qtyElement.textContent = currentOrderData.items[0].quantity;
+      
+      const costElement = document.querySelector('#itemsTable tbody tr:first-child td[data-col="productCost"]');
+      if (costElement) costElement.textContent = currentOrderData.items[0].cost;
+      
+      // Update other charges
+      const otherChargesElement = document.querySelector('#otherChargesRow td[data-col="productCost"]');
+      if (otherChargesElement) otherChargesElement.textContent = currentOrderData.otherCharges;
+      
+      // Update total
+      const totalElement = document.querySelector('#itemsTable tfoot th:last-child');
+      if (totalElement) totalElement.textContent = currentOrderData.totalAmount;
+      
+      // Update shipper details
+      const brandNameElement = document.querySelector('[data-field="brandName"] p');
+      if (brandNameElement) brandNameElement.innerHTML = `<strong>${currentOrderData.brandName}</strong>`;
+      
+      const shipperAddressElement = document.querySelector('[data-field="shipperAddress"] p:nth-child(1)');
+      if (shipperAddressElement) shipperAddressElement.textContent = currentOrderData.shipperAddress.split(', ').slice(0, 2).join(', ');
+      
+      const shipperAddressElement2 = document.querySelector('[data-field="shipperAddress"] p:nth-child(2)');
+      if (shipperAddressElement2) shipperAddressElement2.textContent = currentOrderData.shipperAddress.split(', ').slice(2).join(', ');
+      
+      const shipperPhoneElement = document.querySelector('[data-field="shipperPhone"] p');
+      if (shipperPhoneElement) shipperPhoneElement.textContent = `Phone No. ${currentOrderData.shipperPhone}`;
+      
+      const gstinElement = document.querySelector('[data-field="gstin"] p');
+      if (gstinElement) gstinElement.textContent = `GST No: ${currentOrderData.gstin}`;
+      
+      // Update RTO details
+      const rtoAddressElement = document.querySelector('.two-col div:nth-child(2) p:nth-child(2)');
+      if (rtoAddressElement) rtoAddressElement.innerHTML = `<strong>${currentOrderData.shipperAddress.split(', ').slice(0, 2).join(', ')}</strong>`;
+      
+      const rtoAddressElement2 = document.querySelector('.two-col div:nth-child(2) p:nth-child(3)');
+      if (rtoAddressElement2) rtoAddressElement2.textContent = currentOrderData.shipperAddress.split(', ').slice(2).join(', ');
+      
+      const rtoPhoneElement = document.querySelector('.two-col div:nth-child(2) p:nth-child(4)');
+      if (rtoPhoneElement) rtoPhoneElement.textContent = `Phone No. ${currentOrderData.shipperPhone}`;
+      
+      // Re-render barcodes with new data (with safety check)
+      if (document.getElementById('awbBarcode') && document.getElementById('orderBarcode')) {
+        renderBarcodes();
+      }
+    }
+
+    /* Click cards -> change size */
+    function selectLabelType(e, type){
+      document.querySelectorAll('.label-type-option').forEach(o=>o.classList.remove('selected'));
+      const card=document.querySelector('.label-type-option[data-size="'+type+'"]'); if(card) card.classList.add('selected');
+      const sizeSelect=document.getElementById('labelSize');
+      if(sizeSelect){ sizeSelect.value=type; setPhysicalPage(type); }
+    }
+
+    /* Barcodes - with safety checks to prevent errors when DOM elements don't exist yet */
+    function renderBarcodes(scale=1){
+      try{
+        const awbNumber = currentOrderData?.awbNumber || '143263813003739';
+        const orderId = currentOrderData?.orderId || '8052081712989';
+        
+        // Check if SVG elements exist before rendering
+        const awbBarcodeElement = document.getElementById('awbBarcode');
+        const orderBarcodeElement = document.getElementById('orderBarcode');
+        
+        if (awbBarcodeElement) {
+          JsBarcode("#awbBarcode", awbNumber, {format:"CODE128",height:Math.max(20,40*scale),width:Math.max(1,1.7*scale),displayValue:false,margin:0});
+        }
+        
+        if (orderBarcodeElement) {
+          JsBarcode("#orderBarcode", orderId, {format:"CODE128",height:Math.max(16,32*scale),width:Math.max(0.8,1.6*scale),displayValue:false,margin:0});
+        }
+        
+        // Update text elements if they exist
+        const awbTextElement = document.getElementById('awbText');
+        const orderIdTextElement = document.getElementById('orderIdText');
+        
+        if (awbTextElement) awbTextElement.textContent = awbNumber;
+        if (orderIdTextElement) orderIdTextElement.textContent = orderId;
+      }catch(e){console.warn('Barcode render error:',e);}
+    }
+
+    /* Visibility */
+    const fieldMap={
+      orderId:['[data-field="orderId"]'], 
+      invoiceNumber:['[data-field="invoiceNumber"]'], 
+      invoiceDate:['[data-field="invoiceDate"]'],
+      orderDate:['[data-field="orderDate"]'], 
+      orderBarcode:['#orderBarcodeBox'], 
+      invoiceBarcode:['#awbBarcodeBox'],
+      rtoRouting:['[data-field="rtoRouting"]'], 
+      declaredValue:['[data-field="declaredValue"]'],
+      shipperPhone:['[data-field="shipperPhone"]'], 
+      gstin:['[data-field="gstin"]'], 
+      shipperAddress:['[data-field="shipperAddress"]'],
+      brandName:['[data-field="brandName"]'], 
+      brandLogo:['#brandLogoBox'],
+      itemName:['[data-col="itemName"]'], 
+      productCost:['[data-col="productCost"]'], 
+      productQuantity:['[data-col="productQuantity"]'], 
+      skuCode:['[data-col="skuCode"]'],
+      dimension:['[data-field="dimension"]'], 
+      deadWeight:['[data-field="deadWeight"]'], 
+      otherCharges:['[data-field="otherCharges"]']
+    };
+    function applyVisibility(){
+      Object.keys(fieldMap).forEach(id=>{
+        const checked=document.getElementById(id)?.checked;
+        fieldMap[id].forEach(sel=>{ document.querySelectorAll(sel).forEach(n=>n.classList.toggle('hidden',!checked)); });
+      });
+      const limit=document.getElementById('limitItemName').checked;
+      document.querySelectorAll('.itemText').forEach(td=>{
+        const full=td.getAttribute('data-full')||td.textContent; td.setAttribute('data-full',full);
+        td.textContent = limit ? (full.length>24? full.slice(0,24)+'…': full) : full;
+      });
+      const privacyOn=document.getElementById('privacyToggle').classList.contains('active');
+      const phoneNode=document.getElementById('buyerPhone');
+      if(phoneNode){ const raw=phoneNode.getAttribute('data-raw')||phoneNode.textContent; phoneNode.setAttribute('data-raw',raw);
+        phoneNode.textContent = privacyOn ? raw.replace(/(\d{6})(\d{4})/,(_,a,b)=>a+'****') : raw; }
+    }
+    document.getElementById('settingsForm').addEventListener('change', function() {
+      applyVisibility();
+      updateLabelPreview();
+    });
+    
+    document.getElementById('privacyToggle').addEventListener('click', function(){ 
+      this.classList.toggle('active'); 
+      applyVisibility(); 
+      updateLabelPreview();
+    });
+    
+    document.getElementById('btnApply').addEventListener('click', function(){ 
+      applyVisibility(); 
+      updateLabelPreview();
+      Swal.fire({title:'Success',text:'Label settings applied to preview',icon:'success',timer:1200,showConfirmButton:false}); 
+    });
+    
+    document.getElementById('btnDefaults').addEventListener('click', function(){
+      const d={orderId:true,orderDate:true,orderBarcode:true,rtoRouting:true,declaredValue:true,invoiceNumber:true,invoiceDate:true,invoiceBarcode:true,shipperPhone:true,gstin:true,shipperAddress:true,brandName:true,brandLogo:true,itemName:true,productCost:true,productQuantity:true,skuCode:true,dimension:true,deadWeight:true,otherCharges:true,limitItemName:true};
+      Object.keys(d).forEach(id=>{ const el=document.getElementById(id); if(el) el.checked=d[id]; });
+      document.getElementById('privacyToggle').classList.add('active'); 
+      applyVisibility(); 
+      updateLabelPreview();
+      Swal.fire({title:'Defaults Set',text:'Reset to defaults',icon:'info',timer:1200,showConfirmButton:false});
+    });
+
+    /* SIZE ENGINE (auto scale A4 canvas into target page) */
+    const BASE={wMM:210,hMM:297}; // logical canvas size
+    const PRESETS={
+      A4:{wMM:210,hMM:297,marginMM:12,innerPadMM:10},
+      '4X6':{wMM:100,hMM:150,marginMM:3, innerPadMM:5},
+      '4X4':{wMM:100,hMM:100,marginMM:3, innerPadMM:5},
+      '4X2':{wMM:100,hMM:50, marginMM:2, innerPadMM:3}
+    };
+    const pageStyle=document.getElementById('pageStyle');
+    const labelSheet=document.getElementById('labelSheet');
+    const sheetContent=document.getElementById('sheetContent');
+    const sizeSelect=document.getElementById('labelSize');
+    const previewViewport=document.getElementById('previewViewport');
+
+    function setPhysicalPage(sizeKey){
+      const p=PRESETS[sizeKey]||PRESETS.A4;
+
+      // 1) Physical print page
+      labelSheet.style.setProperty('--target-w', p.wMM+'mm');
+      labelSheet.style.setProperty('--target-h', p.hMM+'mm');
+      pageStyle.innerHTML = `@media print { @page { size: ${p.wMM}mm ${p.hMM}mm; margin: ${p.marginMM}mm; } }`;
+
+      // 2) Canvas stays A4 logical size; only padding changes a bit
+      sheetContent.style.padding = p.innerPadMM+'mm';
+
+      // 3) Compute scale to fit A4 canvas into target usable area (page - innerPad*2)
+      const usableW = p.wMM - p.innerPadMM*2;
+      const usableH = p.hMM - p.innerPadMM*2;
+      const scale = Math.min( usableW/BASE.wMM, usableH/BASE.hMM );
+
+      sheetContent.style.transform = `scale(${scale})`;
+
+      // 4) Center the scaled canvas inside page box
+      const leftPad = (p.wMM - BASE.wMM*scale)/2;
+      const topPad  = (p.hMM - BASE.hMM*scale)/2;
+      // convert mm to px for CSS translate? We can keep margin via CSS variables:
+      sheetContent.style.position='absolute';
+      sheetContent.style.left = leftPad+'mm';
+      sheetContent.style.top  = topPad+'mm';
+
+      // 5) Update label card highlight
+      document.querySelectorAll('.label-type-option').forEach(c=>c.classList.toggle('selected', c.getAttribute('data-size')===sizeKey));
+
+      // 6) Re-render barcodes sized to scale
+      renderBarcodes(scale);
+
+      // 7) Update label preview with current data (with delay to ensure DOM is ready)
+      setTimeout(() => {
+        updateLabelPreview();
+      }, 50);
+
+      // 8) Fit the whole page into viewport
+      fitToViewport();
+    }
+
+    function mmToPx(mm){ return mm * 96 / 25.4; }
+    function fitToViewport(){
+      const cs=getComputedStyle(labelSheet);
+      const wmm=parseFloat(cs.getPropertyValue('--target-w'));
+      const hmm=parseFloat(cs.getPropertyValue('--target-h'));
+      const pagePxW=mmToPx(wmm), pagePxH=mmToPx(hmm);
+      const vw=previewViewport.clientWidth-16;
+      const vh=previewViewport.clientHeight-16;
+      const pageScale=Math.min(vw/pagePxW, vh/pagePxH, 1);
+      labelSheet.style.transformOrigin='top left';
+      labelSheet.style.transform=`scale(${pageScale})`;
+    }
+
+    // Sync dropdown
+    sizeSelect.addEventListener('change', e=> setPhysicalPage(e.target.value));
+    window.addEventListener('resize', fitToViewport);
+    new ResizeObserver(fitToViewport).observe(previewViewport);
+
+    // Init - wait for DOM to be fully ready
+    setTimeout(() => {
+      applyVisibility();
+      updateLabelPreview();
+      setPhysicalPage(sizeSelect.value);
+    }, 200);
+
+    // Function to download sample shipping label
+    async function downloadSampleLabel() {
+      try {
+        // Show loading
+        Swal.fire({
+          title: 'Generating Label...',
+          text: 'Please wait while we generate your shipping label',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        // Get current label size and selected order
+        const labelSize = document.getElementById('labelSize').value;
+        const selectedOrderId = document.getElementById('orderSelector').value;
+        
+        if (!selectedOrderId) {
+          Swal.fire({
+            title: 'No Order Selected',
+            text: 'Please select an order first',
+            icon: 'warning'
+          });
+          return;
+        }
+        
+        // Call the new API
+        const response = await axios.get(`/api/shipping-label/generate?orderId=${selectedOrderId}&labelSize=${labelSize}`, {
+          responseType: 'blob' // Important for PDF download
+        });
+
+        // Create download link
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `shipping-label-${selectedOrderId}-${labelSize}.pdf`;
+        
+        // Trigger download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // Clean up
+        window.URL.revokeObjectURL(url);
+        
+        // Close loading
+        Swal.close();
+        
+        // Show success message
+        Swal.fire({
+          title: 'Success!',
+          text: 'Shipping label downloaded successfully',
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false
+        });
+
+      } catch (error) {
+        console.error('Error downloading label:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to download shipping label: ' + (error.response?.data?.message || error.message),
+          icon: 'error'
+        });
+      }
+    }
+  </script>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,2143 @@
+<%- include('../partials/header') %>
+  <%- include('../partials/left-sidebar') %>
+
+
+    <main>
+      <div class="container-fluid">
+        <!-- header breadcrumb part start here  -->
+        <div class="row">
+          <div class="col-12">
+            <h1>COD Summary</h1>
+            <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
+              <ol class="breadcrumb pt-0">
+                <li class="breadcrumb-item">
+                  <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                  <a href="#">Library</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Data</li>
+              </ol>
+            </nav>
+            <div class="separator mb-5"></div>
+          </div>
+        </div>
+        <!-- header breadcrumb part end here  -->
+        <!-- body part start here  -->
+
+
+
+        <!-- Add your page-specific content here -->
+
+        <!-- Hidden data for JavaScript -->
+        <div id="server-data" style="display: none;">[]</div>
+
+        <!-- Summary Cards -->
+        <div class="row mb-4 icon-cards-row mb-4 sortable">
+          <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+            <div class="card">
+              <div class="card-body text-center">
+                <div>
+                  <div
+                    style="display: flex; flex-direction: column;flex-wrap: nowrap;justify-content:space-evenly;align-items: center;gap:25px;">
+                    <i class="glyph-icon iconsminds-checkout-bag fa-2x opacity-75"></i>
+                    <h4 class="mb-0" id="total-orders" style="font-size:35px;">-</h4>
+                    <p class="mb-0" style="font-size:12px;font: weight 700px;">Total Orders</p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+            <div class="card">
+              <div class="card-body text-center">
+                <div class="">
+                  <div
+                    style="display: flex; flex-direction: column;flex-wrap: nowrap;justify-content:space-evenly;align-items: center;gap:25px;">
+                    <i class="glyph-icon iconsminds-mail-inbox fa-2x opacity-75"></i>
+                    <h4 class="mb-0" id="delivered-orders" style="font-size:35px;">-</h4>
+                    <p class="mb-0" style="font-size:12px;font: weight 700px;">Delivered</p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+            <div class="card">
+              <div class="card-body text-center">
+                <div class="">
+                  <div
+                    style="display: flex; flex-direction: column;flex-wrap: nowrap;justify-content:space-evenly;align-items: center;gap:25px;">
+                    <i class="glyph-icon iconsminds-post-mail fa-2x opacity-75"></i>
+                    <h4 class="mb-0" id="rto-orders" style="font-size:35px;">-</h4>
+                    <p class="mb-0" style="font-size:12px;font: weight 700px;">RTO</p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+            <div class="card">
+              <div class="card-body text-center">
+                <div class="">
+                  <div
+                    style="display: flex; flex-direction: column;flex-wrap: nowrap;justify-content:space-evenly;align-items: center;gap:25px;">
+                    <i class="glyph-icon iconsminds-financial fa-2x opacity-75"></i>
+                    <h4 class="mb-0" id="total-cod-amount" style="font-size:35px;">₹-</h4>
+                    <p class="mb-0" style="font-size:12px;font: weight 700px;">Total COD Value</p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Statistics Row -->
+        <div class="row mb-4 icon-cards-row mb-4 sortable">
+          <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+            <div class="card">
+              <div class="card-body text-center">
+                <div class="">
+                  <div
+                    style="display: flex; flex-direction: column;flex-wrap: nowrap;justify-content:space-evenly;align-items: center;gap:25px;">
+                    <i class="glyph-icon iconsminds-mail-send fa-2x opacity-75"></i>
+                    <h4 class="mb-0" id="in-transit-orders" style="font-size:35px;">-</h4>
+                    <p class="mb-0" style="font-size:12px;font: weight 700px;">In Transit</p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+            <div class="card">
+              <div class="card-body text-center">
+                <div class="">
+                  <div
+                    style="display: flex; flex-direction: column;flex-wrap: nowrap;justify-content:space-evenly;align-items: center;gap:25px;">
+                    <i class="glyph-icon iconsminds-mail-block fa-2x opacity-75"></i>
+                    <h4 class="mb-0" id="ndr-orders" style="font-size:35px;">-</h4>
+                    <p class="mb-0" style="font-size:12px;font: weight 700px;">NDR</p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+            <div class="card">
+              <div class="card-body text-center">
+                <div class="">
+                  <div
+                    style="display: flex; flex-direction: column;flex-wrap: nowrap;justify-content:space-evenly;align-items: center;gap:25px;">
+                    <i class="glyph-icon iconsminds-dumbbell fa-2x opacity-75"></i>
+                    <h4 class="mb-0" id="total-weight" style="font-size:35px;">-</h4>
+                    <p class="mb-0" style="font-size:12px;font: weight 700px;">Total Weight</p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-lg-3 col-sm-4 col-6 mb-2">
+            <div class="card">
+              <div class="card-body text-center">
+                <div class="">
+                  <div
+                    style="display: flex; flex-direction: column;flex-wrap: nowrap;justify-content:space-evenly;align-items: center;gap:25px;">
+                    <i class="glyph-icon iconsminds-coins fa-2x opacity-75"></i>
+                    <h4 class="mb-0" id="avg-order-value" style="font-size:35px;">₹-</h4>
+                    <p class="mb-0" style="font-size:12px;font: weight 700px;">Avg Order Value</p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary Loading Indicator -->
+        <div id="summary-loading" class="text-center mb-3" style="display: none;">
+          <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading summary data...</span>
+          </div>
+          <p class="mt-2 text-muted">Loading summary data from all pages...</p>
+        </div>
+
+        <!-- Search and Controls Row -->
+        <div class="row mb-3 align-items-center">
+          <div class="col-md-6">
+            <form class="d-flex">
+              <div class="input-group" style="max-width: 200px;">
+                <input type="text" class="form-control" id="search-input" placeholder="Search across all columns..."
+                  aria-label="Search">
+
+              </div>
+            </form>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex justify-content-end align-items-center" style="gap: 2px; flex-wrap: nowrap;">
+
+
+              <!-- Advanced Filters Button -->
+              <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-backdrop="static"
+                data-target="#filtersModal" style="white-space: nowrap;">
+                <i class="iconsminds-vimeo me-1"></i>Advanced Filters
+              </button>&nbsp;
+
+              <!-- Refresh Button -->
+              <button type="button" class="btn btn-outline-primary btn-sm" id="refresh-data"
+                style="white-space: nowrap;">
+                <i class="iconsminds-refresh me-1"></i>Refresh
+              </button>&nbsp;
+
+              <!-- Download CSV Button -->
+              <button type="button" class="btn btn-outline-success btn-sm" id="download-csv" style="white-space: nowrap;">
+                <i class="iconsminds-download me-1"></i>Download CSV
+              </button>&nbsp;
+
+              <!-- Show entries dropdown -->
+              <div class="d-flex align-items-center" style="gap: 0px;">
+                <label for="page-size-select" class="form-label mb-0 fw-semibold" style="white-space: nowrap;">&nbsp;
+                  Show: &nbsp;</label>
+                <select id="page-size-select" class="form-control btn-sm" style="width: auto; white-space: nowrap;">
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                  <option value="250">250</option>
+                  <option value="500">500</option>
+                  <option value="1000">1000</option>
+                  <option value="999999">All</option>
+                </select>
+                <span class="text-muted small" style="white-space: nowrap;">&nbsp; entries</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="modal fade modal-right" id="filtersModal" tabindex="-1" role="dialog"
+          aria-labelledby="filtersModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="filtersModalLabel">
+                  <i class="fas fa-filter me-2"></i>Advanced Filters
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="custom-filters">
+                  <!-- First Row -->
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <label for="company-name-filter" class="form-label fw-semibold">Company Name</label>
+                      <input type="text" id="company-name-filter" class="form-control form-control-sm"
+                        placeholder="Company name" autocomplete="off">
+                      <small class="text-muted">Search by company name</small>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="channel-filter" class="form-label fw-semibold">Channel</label>
+                      <select id="channel-filter" class="form-select form-control form-select-sm">
+                        <option value="">All Channels</option>
+                        <option value="SHOPIFY">SHOPIFY</option>
+                        <option value="WOOCOMMERCE">WOOCOMMERCE</option>
+                        <option value="MAGENTO">MAGENTO</option>
+                        <option value="BIGCOMMERCE">BIGCOMMERCE</option>
+                        <option value="CUSTOM">CUSTOM</option>
+                        <option value="OTHERS">OTHERS</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Second Row -->
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <label for="shipment-carrier-filter" class="form-label fw-semibold">Shipment Carrier</label>
+                      <select id="shipment-carrier-filter" class="form-select form-control form-select-sm">
+                        <option value="">All Carriers</option>
+                        <option value="XPRESSBEES">XPRESSBEES</option>
+                        <option value="DELHIVERY">DELHIVERY</option>
+                        <option value="BLUEDART">BLUEDART</option>
+                        <option value="FEDEX">FEDEX</option>
+                        <option value="DHL">DHL</option>
+                        <option value="ECOMEXPRESS">ECOMEXPRESS</option>
+                        <option value="OTHERS">OTHERS</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="status-filter" class="form-label fw-semibold">Status</label>
+                      <select id="status-filter" class="form-select form-control form-select-sm">
+                        <option value="">All Status</option>
+                        <option value="0">Cancelled</option>
+                        <option value="1,2">Ready to Dispatch</option>
+                        <option value="3">In Transit</option>
+                        <option value="4">Delivered</option>
+                        <option value="5">RTO Delivered</option>
+                        <option value="7">RTO Out for Delivery</option>
+                        <option value="8">Out for Delivery</option>
+                        <option value="9">NDR</option>
+                        <option value="10">RTO Booked</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Third Row - Date Filters -->
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <label class="form-label fw-semibold">Order Date From</label>
+                      <input type="text" id="order-date-start" class="form-control form-control-sm datepicker"
+                        placeholder="Start date" autocomplete="off">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label fw-semibold">Order Date To</label>
+                      <input type="text" id="order-date-end" class="form-control form-control-sm datepicker"
+                        placeholder="End date" autocomplete="off">
+                    </div>
+                  </div>
+
+                  <!-- Fourth Row - LR/AWB Date Filters -->
+                  <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                      <label class="form-label fw-semibold">LR/AWB Date From</label>
+                      <input type="text" id="lr-date-start" class="form-control form-control-sm datepicker"
+                        placeholder="Start date" autocomplete="off">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label fw-semibold">LR/AWB Date To</label>
+                      <input type="text" id="lr-date-end" class="form-control form-control-sm datepicker"
+                        placeholder="End date" autocomplete="off">
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" id="clear-filters" class="btn btn-outline-warning">
+                  <i class="fas fa-times me-1"></i>Clear All
+                </button>
+                <button type="button" id="apply-filters" class="btn btn-primary">
+                  <i class="fas fa-search me-1"></i>Apply Filters
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Page Body -->
+        <div class="card">
+          <div class="card-body" style="overflow-x:auto;">
+            <!-- Loading Spinner -->
+            <div id="table-loading" class="text-center py-4" style="display: none;">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p class="mt-2 text-muted">Loading data...</p>
+            </div>
+
+            <div class="table-responsive">
+              <table id="datatable_2" class="table table-striped">
+                <thead>
+                  <tr style="font-size: 12px;">
+                    <th>Company Name</th>
+                    <th>Order ID</th>
+                    <!-- <th>Ref Number</th>
+                    <th>Invoice No</th> -->
+                    <th>Order Date</th>
+                    <th>Qty</th>
+                    <th>LR/AWB</th>
+                    <th>LR/AWB Date</th>
+                    <th>Status</th>
+                    <th>Shipment Carrier</th>
+                    <!-- <th>Channel</th> -->
+                    <th>COD Amount</th>
+                    <th>Grand Total</th>
+                    <th>Payment Mode</th>
+                    <th>Weight</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody style="font-size:12px">
+                  <!-- Data will be loaded dynamically via API -->
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
+
+
+    </main>
+    <div class="modal fade modal-right" id="exampleModalRight" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalRight" aria-modal="true" style="padding-right: 15px;">
+    <div class="modal-dialog" role="document" style="margin: 0; margin-right: 0; max-width: 100%;">
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between align-items-center">
+          <h5 class="modal-title mb-0">Shipment Overview & Tracking</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <!-- Left panel - Shipment Overview -->
+            <div class="col-sm-4">
+              <aside class="left-panel p-4 d-flex flex-column border-end h-100">
+                <header class="d-flex justify-content-between align-items-center mb-4">
+                  <h2 class="fw-semibold fs-6 text-dark mb-0">Shipment Overview & Tracking</h2>
+                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </header>
+
+                <!-- Delivery Date Card -->
+                <div class="d-flex justify-content-between align-items-start mb-4">
+                  <div>
+                    <p class="text-muted small mb-1" id="orderDateDisplay">Order Date: Dec 15, 2024</p>
+                    <p class="text-muted small mb-1">Estimated Delivery Date</p>
+                    <p class="fw-bold fs-5 mb-0" id="deliveryDay">Monday</p>
+                    <p class="text-muted small mb-2" id="deliveryMonth">February</p>
+                    <p class="delivery-date mb-2" id="deliveryDate">25</p>
+                    <p class=" mb-0" id="lrNumberDisplay" style="color: #333;">AWB NUMBER</p>
+                    <p class=" fw-semibold fs-5 mb-0" id="lrNumberData"
+                      style="color:  #4caf50;font-weight: 800;">12345
+                    </p>
+                    <p class="text-muted " id="orderIdDisplay">Order ID #18498-98018</p>
+                  </div>
+                  <div class="align-self-start">
+                    <div class=" small mb-1">Invoice Amount</div>
+                    <div class=" small mb-1" id="grandTotal" style="font-size:1rem; color:#333;">₹0</div>
+                    <div class="text-muted small mb-1">Payment Type</div>
+                    <div class=" small mb-1" style="font-size:3rem; color:#333;text-transform: uppercase;"
+                      id="paymentType">COD</div>
+
+                    <div class="text-muted small mb-1" id="codtitle">COD Amount</div>
+                    <div class=" small mb-1" id="collectableAmount" style="font-size:3rem; color:#333;">₹ 0
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Shipment Route -->
+                <section class="mb-4">
+                  <div class="mb-1">
+                    <strong class="text-muted small">ZONE <br>FROM &rarr; TO</strong>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="small fw-semibold" id="shipmentRoute">Florence → Stockholm</span>
+                    <img id="courierLogo" src="assets/images/logos/default.png" alt="Courier Logo"
+                      style="width: 120px; height: 60px; object-fit: contain;">
+                  </div>
+                </section>
+
+                <!-- Current Shipment Card -->
+                <section class="border rounded-3 p-3 mb-4 d-flex flex-column hover-effect">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="small fw-semibold">
+                      <span class="text-muted">From:</span>
+                    <span id="fromLocation">Norra Nynäshamn</span>
+                      <span class="fw-bold ms-2 text-muted">To:</span>
+                      <span class="fw-bold" id="toLocation">Stockholm</span>
+                    </span>
+                  </div>
+                  <span class="status-badge status-in-transit" style="width: fit-content;" id="currentStatus">IN
+                    TRANSIT</span>
+                  <div class="text-muted small mb-2" id="lrNumber">Order ID #29698-98971</div>
+
+                  <!-- Progress Bar -->
+                  <div class="progress tracking-progress mb-3">
+                    <div class="progress-bar tracking-progress-bar" style="width: 70%"></div>
+                  </div>
+
+                  <!-- Shipment Details -->
+                  <div class="row gx-2 small text-muted mb-3">
+                    <div class="col-6 col-sm-3 mb-2 mb-sm-0">
+                      <div class="fw-semibold text-dark">Sender</div>
+                      <span id="senderName">Amazon</span>
+                    </div>
+                    <div class="col-6 col-sm-3 mb-2 mb-sm-0">
+                      <div class="fw-semibold text-dark">Order Date</div>
+                      <span id="departureDate">15 Dec<br>03:27 PM</span>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                      <div class="fw-semibold text-dark">Service Type</div>
+                      <span id="serviceType">Express</span>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                      <div class="fw-semibold text-dark">Weight</div>
+                      <span id="packageWeight">5.2 kg</span>
+                    </div>
+                  </div>
+
+                  <!-- Courier Information -->
+                  <div class="d-flex align-items-center gap-3">
+                    <img src="assets/images/logos/default.png"
+                      class="courier-img rounded-circle" alt="Courier Harris Whitaker" id="roundlogo" />
+                    <div class="flex-grow-1 small">
+                      <div class="fw-semibold">Courier Partner</div>
+                      <span id="courierPartner">Harris Whitaker</span>
+                    </div>
+                    <button class="btn btn-sm p-2 rounded-circle border" type="button"
+                      aria-label="Chat with courier">
+                      <i class="fas fa-comment-alt text-muted"></i>
+                    </button>
+                    <button class="btn btn-sm p-2 rounded-circle border" type="button"
+                      aria-label="Call courier">
+                      <i class="fas fa-phone-alt text-muted"></i>
+                    </button>
+                  </div>
+                </section>
+              </aside>
+            </div>
+            <!-- Middle panel - Map and Tracking Details -->
+            <div class="col-sm-5">
+              <div class="right-panel">
+                <div class="d-flex flex-column flex-md-row gap-4 flex-grow-1">
+                  <!-- Map Section -->
+                  <section class="flex-grow-1 d-flex flex-column">
+                    <!-- Tracking Summary Card -->
+                    <div
+                      class="card rounded-3 p-4 mb-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 hover-effect">
+                      <div class="d-flex flex-column flex-md-row align-items-center gap-3">
+                        <div class="small fw-semibold" id="trackingOrderId">Order ID #29698-98971</div>
+                        <span class="status-badge status-in-transit" id="trackingStatus">IN TRANSIT</span>
+                      </div>
+                      <div class="position-relative d-inline-block" style="z-index: 10;">
+                        <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" type="button"
+                          id="contactCourierBtn" onmouseenter="showCourierBalloon(this)"
+                          onmouseleave="hideCourierBalloon(this)">
+                          Contact courier
+                        </button>
+                        <div class="courier-balloon shadow-lg animate__animated animate__fadeIn"
+                          style="display:none; position:absolute; top:110%; left:50%; transform:translateX(-50%); min-width:220px; background:#fff; border-radius:12px; border:1px solid #e0e0e0; padding:1rem; box-shadow:0 4px 16px rgba(0,0,0,0.10); font-size:0.95rem;">
+                          <div class="fw-semibold mb-1" style="color:#2d3a4a;">Dispatch Solutions</div>
+                          <div>
+                            <a href="mailto:customercare@dispatch.co.in" class="text-decoration-none"
+                              style="color:#007bff;">
+                              customercare@dispatch.co.in
+                            </a>
+                          </div>
+                          <div>
+                            <a href="tel:+919313388388" class="text-decoration-none" style="color:#007bff;">
+                              +91 9313 388 388
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <script>
+                        function showCourierBalloon(btn) {
+                          const balloon = btn.parentElement.querySelector('.courier-balloon');
+                          if (balloon) {
+                            balloon.style.display = 'block';
+                            balloon.classList.add('animate__fadeIn');
+                          }
+                        }
+                        function hideCourierBalloon(btn) {
+                          const balloon = btn.parentElement.querySelector('.courier-balloon');
+                          if (balloon) {
+                            balloon.style.display = 'none';
+                            balloon.classList.remove('animate__fadeIn');
+                          }
+                        }
+                      </script>
+                    </div>
+  
+                    <!-- Tracking Details Grid -->
+                    <div class="card p-4 mb-4">
+                      <div class="row g-3">
+                        <!-- From Section -->
+                        <div class="col-lg-2 col-md-4 col-6">
+                          <div class="text-center">
+                            <div class="fw-semibold mb-2">From</div>
+                            <div class="fw-bold mb-1" id="trackingFromCity">Norra Nynäshamn</div>
+                            <div class="small" id="trackingFromwarehouse">Warehouse</div>
+                          </div>
+                        </div>
+
+                        <!-- To Section -->
+                        <div class="col-lg-2 col-md-4 col-6">
+                          <div class="text-center">
+                            <div class="fw-semibold mb-2">To</div>
+                            <div class="fw-bold mb-1" id="trackingToCity">Stockholm</div>
+                            <div class="small mb-1" id="trackingToAddress">Sweden</div>
+                            <div class="small" id="trackingpincode">123456</div>
+                          </div>
+                        </div>
+
+                        <!-- Consignee Section -->
+                        <div class="col-lg-2 col-md-4 col-6">
+                          <div class="text-center">
+                            <div class="fw-semibold mb-2">Consignee</div>
+                            <div class="fw-bold mb-1" id="trackingConsignee">Farsta</div>
+                            <div class="small" id="trackingConsigneeCity">Sweden</div>
+                          </div>
+                        </div>
+
+                        <!-- Shipment Charges Section -->
+                        <div class="col-lg-3 col-md-6 col-6">
+                          <div class="text-center">
+                            <div class="fw-semibold mb-2">Shipment Charges</div>
+                            <div class="fw-bold" id="trackingCharges">₹246</div>
+                          </div>
+                        </div>
+
+                        <!-- LR Number Section -->
+                        <div class="col-lg-3 col-md-6 col-6">
+                          <div class="text-center">
+                            <div class="fw-semibold mb-2">LR Number</div>
+                            <div class="fw-bold" id="trackingLrNumber">LR123456</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <!-- Map Container -->
+                    <!-- <div class="map-container flex-grow-1 mb-4">
+                      <img src="https://storage.googleapis.com/a1aa/image/b69f93a4-d7b9-42b7-8f75-1d7571c97426.jpg"
+                        class="img-fluid w-100 h-100 object-fit-cover" alt="Package delivery route map" />
+                      <div class="map-controls">
+                        <button class="map-control-btn" type="button" aria-label="Search" style="border: none;">
+                          <i class="fas fa-search text-muted"></i>
+                        </button>
+                        <button class="map-control-btn" type="button" aria-label="Map settings" style="border: none;">
+                          <i class="fas fa-cog text-muted"></i>
+                        </button>
+                      </div>
+                    </div> -->
+                  </section>
+                </div>
+              </div>
+            </div>
+            <!-- Right panel - Shipment Status Timeline -->
+            <div class="col-sm-3">
+              <section class="card rounded-3 p-4 hover-effect h-100" style="min-width: 300px;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                  <h3 class="h5 fw-semibold mb-0">Shipment Status</h3>
+                </div>
+                <div class="card border-0" id="deliveryTimeline">
+                  <!-- Dynamic timeline will be populated here -->
+                  <div class="card-body p-4">
+                    <div class="text-center text-muted py-4">
+                      <i class="fas fa-shipping-fast fa-3x mb-3 text-muted"></i>
+                      <h5 class="text-dark mb-2">Click on any order to view tracking details</h5>
+                      <p class="text-muted mb-0">Status timeline will appear here</p>
+
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+    <script>
+      // Global variables for API data management
+      let currentPage = 1;
+      let pageSize = 10; // Default page size
+      let totalRecords = 0;
+      let totalPages = 0;
+      let currentFilters = {};
+      let table;
+
+      // Wait for jQuery to be available
+      function waitForJQuery() {
+        if (typeof $ !== 'undefined' && $.fn && $.fn.jquery) {
+          initializePage();
+        } else {
+          setTimeout(waitForJQuery, 100);
+        }
+      }
+
+      // Initialize the page when jQuery is ready
+      function initializePage() {
+        try {
+
+          $(document).ready(function () {
+
+            // Load and initialize jQuery UI datepicker for date fields
+            $('head').append('<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">');
+            $.getScript("https://code.jquery.com/ui/1.13.2/jquery-ui.js", function () {
+              $(".datepicker").datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "2020:2030"
+              });
+            });
+
+            // API Functions
+            function formatIndianDateTime(dt) {
+              if (!dt) return '';
+              let dateObj;
+              if (typeof dt === 'string' && dt.length > 0) {
+                dateObj = new Date(dt);
+              } else if (dt instanceof Date) {
+                dateObj = dt;
+              } else {
+                return dt;
+              }
+              if (isNaN(dateObj.getTime())) return dt;
+
+              const day = String(dateObj.getDate()).padStart(2, '0');
+              const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+              const year = dateObj.getFullYear();
+              const dateStr = `${day}/${month}/${year}`;
+
+              let hours = dateObj.getHours();
+              const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+              const ampm = hours >= 12 ? 'PM' : 'AM';
+              hours = hours % 12;
+              hours = hours ? hours : 12;
+              const timeStr = `${hours}:${minutes} ${ampm}`;
+
+              return `<div style="line-height:1.2;"><span>${dateStr}</span><br><small>${timeStr}</small></div>`;
+            }
+
+            function getStatusBadge(status) {
+              if (status == 0) return '<span class="badge bg-danger">Cancelled</span>';
+              if (status == 1) return '<span class="badge bg-info">Ready to Dispatch</span>';
+              if (status == 2) return '<span class="badge bg-info">Ready to Dispatch</span>';
+              if (status == 3) return '<span class="badge bg-primary">In Transit</span>';
+              if (status == 4) return '<span class="badge bg-success">Delivered</span>';
+              if (status == 5) return '<span class="badge bg-warning">RTO Delivered</span>';
+              if (status == 7) return '<span class="badge bg-warning">RTO Out for Delivery</span>';
+              if (status == 8) return '<span class="badge bg-warning">Out for Delivery</span>';
+              if (status == 9) return '<span class="badge bg-danger">NDR</span>';
+              if (status == 10) return '<span class="badge bg-warning">RTO Booked</span>';
+              // For any other status numbers, show "Other"
+              return '<span class="badge bg-secondary">Other</span>';
+            }
+
+            function getStatusText(status) {
+              if (status == 0) return 'CANCELLED';
+              if (status == 1) return 'READY TO DISPATCH';
+              if (status == 2) return 'READY TO DISPATCH';
+              if (status == 3) return 'IN TRANSIT';
+              if (status == 4) return 'DELIVERED';
+              if (status == 5) return 'RTO DELIVERED';
+              if (status == 7) return 'RTO OUT FOR DELIVERY';
+              if (status == 8) return 'OUT FOR DELIVERY';
+              if (status == 9) return 'NDR';
+              if (status == 10) return 'RTO BOOKED';
+              return 'UNKNOWN';
+            }
+
+            function formatWeight(weight, unit) {
+              const weightValue = parseFloat(weight) || 0;
+              
+              // If weight is in grams and greater than 999, convert to kg
+              if (unit === 'gm' && weightValue > 999) {
+                const kgValue = (weightValue / 1000).toFixed(2);
+                return `${kgValue} kg`;
+              }
+              
+              // Otherwise, display as is
+              return `${weightValue} ${unit}`;
+            }
+
+            function buildApiPayload() {
+              const payload = {
+                page: currentPage,
+                limit: pageSize
+              };
+
+              // Add filters with correct parameter names
+              if (currentFilters.client_id) payload.client_id = currentFilters.client_id;
+              if (currentFilters.company_name) {
+                payload.company_name = currentFilters.company_name;
+              }
+              if (currentFilters.channel) payload.channel = currentFilters.channel;
+              if (currentFilters.shipment_carrier) {
+                payload.shipment_carrier = currentFilters.shipment_carrier;
+              }
+              if (currentFilters.orderid) payload.orderid = currentFilters.orderid;
+              if (currentFilters.search) payload.search = currentFilters.search;
+              if ('status' in currentFilters) {
+                payload.status = currentFilters.status;
+              }
+              if (currentFilters.from_date) payload.from_date = currentFilters.from_date;
+              if (currentFilters.to_date) payload.to_date = currentFilters.to_date;
+              if (currentFilters.lr_from_date) payload.lr_from_date = currentFilters.lr_from_date;
+              if (currentFilters.lr_to_date) payload.lr_to_date = currentFilters.lr_to_date;
+
+              return payload;
+            }
+
+             // Function to go to a specific page (backend pagination)
+             function goToPage(page) {
+               if (page < 1 || page > totalPages) return;
+
+               console.log('Going to page:', page, 'from page:', currentPage);
+               currentPage = page;
+               fetchData();
+             }
+
+            // Process the fetched data (same logic as original success handler)
+            function processFetchedData(data, originalResponse) {
+
+              // Update pagination info (already set in fetchDataWithWorkaround)
+
+              // Prepare data for DataTable
+              const tableData = [];
+              
+              if (data && data.length > 0) {
+                data.forEach((row, index) => {
+                  
+                  // Get company name from orderClient if available
+                  const companyName = row.orderClient ?
+                    row.orderClient.company_name ||
+                    `${row.orderClient.first_name} ${row.orderClient.last_name || ''}`.trim() :
+                    'Unknown Company';
+
+                  // Get the first LR/AWB number from ecom_lrs array
+                  const lrNo = row.ecom_lrs && row.ecom_lrs.length > 0 ? row.ecom_lrs[0].lr_no : '';
+
+                  // Get the first carrier from ecom_lrs array
+                  const carrier = row.ecom_lrs && row.ecom_lrs.length > 0 ? row.ecom_lrs[0].tagged_api : '';
+
+                  // Get the first LR creation date
+                  const lrDate = row.ecom_lrs && row.ecom_lrs.length > 0 ? row.ecom_lrs[0].created_at : row.created_at;
+
+                  // Determine status from ecom_lrs array (use the first one or most recent)
+                  let status = 0; // Default to Cancel
+                  if (row.ecom_lrs && row.ecom_lrs.length > 0) {
+                    // Use the status from the first LR, or find the most recent one
+                    const latestLr = row.ecom_lrs.reduce((latest, current) =>
+                      new Date(current.created_at) > new Date(latest.created_at) ? current : latest
+                    );
+                    status = latestLr.status;
+                  }
+
+                 
+
+                  const rowData = [
+                    companyName,
+                    row.orderid || '', // Order ID
+                    // row.ref_number || '', // Reference Number
+                    // row.invoice_no || '', // Invoice Number
+                    formatIndianDateTime(row.created_at), // Order Date
+                    row.total_qty || row.box_qty || 0, // Quantity
+                    lrNo, // LR/AWB Number
+                    formatIndianDateTime(lrDate), // LR/AWB Date
+                    getStatusBadge(status), // Status
+                    carrier || '', // Shipment Carrier
+                    // row.channel || '', // Channel
+                    `₹${row.collectable_amount || 0}`, // COD Amount
+                    `₹${row.grand_total || 0}`, // Grand Total
+                    row.payment_mode || '', // Payment Mode
+                    formatWeight(row.total_weight || 0, row.weight_unit || 'gm'), // Weight
+                    `<button class="btn btn-primary btn-sm view-tracking-btn" data-lr-no="${lrNo}" data-order-id="${row.orderid || row.ref_number}" title="View Tracking Details" data-toggle="modal" data-backdrop="static" data-target="#exampleModalRight">
+        <i class="fas fa-eye me-1"></i>View
+      </button>`
+                  ];
+                  
+                  tableData.push(rowData);
+                });
+              } else {
+                // Show no data message
+                tableData.push(['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '<div class="text-center text-muted">No data found</div>']);
+              }
+
+              // Update table with new data
+              if (table) {
+                table.clear();
+                table.rows.add(tableData);
+                // Use our custom populate function
+                populateTableManually(tableData);
+              } else {
+                // Fallback: populate table manually
+                populateTableManually(tableData);
+              }
+
+              // Hide loading indicator
+              $('#table-loading').hide();
+
+              // Ensure table is visible
+              $('#datatable_2').show();
+              $('.table-responsive').show();
+
+              // Add a small delay to ensure table is rendered before adding pagination
+              setTimeout(() => {
+                addPaginationControls();
+              }, 100);
+            }
+
+            function fetchData() {
+              $('#table-loading').show();
+
+              // Add a fallback timeout to hide loading if it takes too long
+              const loadingTimeout = setTimeout(() => {
+                $('#table-loading').hide();
+                showError('Loading timed out. Please check if the server is running.');
+              }, 30000);
+
+              // Build payload for current page
+              const payload = buildApiPayload();
+              payload.page = currentPage;
+              payload.limit = pageSize;
+
+
+              // Fetch data for current page
+              $.ajax({
+                url: '/api/ecom-cod-summary',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(payload),
+                timeout: 30000,
+                success: function (response) {
+
+                  if (response.success && response.data) {
+                    // Clear the loading timeout since we got data
+                    clearTimeout(loadingTimeout);
+
+                    // Store pagination info
+                    totalRecords = response.pagination ? response.pagination.totalRecords : response.data.length;
+                    totalPages = response.pagination ? response.pagination.totalPages : Math.ceil(totalRecords / pageSize);
+
+
+                    // Initialize DataTable if not already initialized
+                    if (!table) {
+                      if (!initializeDataTable()) {
+                        $('#table-loading').hide();
+                        return;
+                      }
+                    }
+
+                    // Process and display the data
+                    processFetchedData(response.data, response);
+
+                     // Fetch ALL data for summary cards calculation (only on first load or when filters change)
+                     if (currentPage === 1 && !window.allDataFetched) {
+                       fetchAllDataForSummary();
+                     }
+                     // Note: Don't recalculate summary cards on pagination - keep the all-data values
+
+                  } else {
+                    $('#table-loading').hide();
+                    showError('No data received from server');
+                  }
+                },
+                error: function (xhr, status, error) {
+                  clearTimeout(loadingTimeout);
+                  $('#table-loading').hide();
+                  showError('Failed to load data: ' + error);
+                }
+              });
+            }
+
+            // Function to fetch ALL data for summary cards calculation
+            function fetchAllDataForSummary() {
+              
+              // Show loading indicator for summary cards
+              $('#summary-loading').show();
+              
+              // Fetch all data with a large limit
+              const payload = buildApiPayload();
+              payload.page = 1;
+              payload.limit = totalRecords; // Fetch all records
+              
+              
+              $.ajax({
+                url: '/api/ecom-cod-summary',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(payload),
+                timeout: 60000, // 60 seconds timeout for large data
+                success: function (response) {
+                  
+                  if (response.success && response.data) {
+                    
+                    // Calculate summary from ALL data
+                    updateSummaryCardsFromCurrentPage(response.data);
+                    
+                    // Mark as fetched to avoid refetching
+                    window.allDataFetched = true;
+                    
+                    // Hide summary loading indicator
+                    $('#summary-loading').hide();
+                    
+                  } else {
+                    $('#summary-loading').hide();
+                    // Fallback to current page data
+                    updateSummaryCardsFromCurrentPage(response.data || []);
+                  }
+                },
+                error: function (xhr, status, error) {
+                  $('#summary-loading').hide();
+                  // Fallback to current page data
+                  updateSummaryCardsFromCurrentPage([]);
+                }
+              });
+            }
+
+            // Function to update summary cards from API response
+            function updateSummaryCardsFromAPI(summary) {
+
+              // Extract values with multiple fallback options
+              const totalOrders = summary.totalOrders || summary.total_orders || summary.totalOrdersCount || 0;
+              const deliveredOrders = summary.deliveredOrders || summary.delivered_orders || summary.deliveredCount || 0;
+              const rtoOrders = summary.rtoOrders || summary.rto_orders || summary.rtoCount || 0;
+              const inTransitOrders = summary.inTransitOrders || summary.in_transit_orders || summary.inTransitCount || 0;
+              const ndrOrders = summary.ndrOrders || summary.ndr_orders || summary.ndrCount || 0;
+              const totalCodAmount = summary.totalCodAmount || summary.total_cod_amount || summary.totalCodValue || 0;
+              const totalWeight = summary.totalWeight || summary.total_weight || summary.totalWeightValue || 0;
+              const avgOrderValue = summary.avgOrderValue || summary.avg_order_value || summary.averageOrderValue || 0;
+
+             
+              // Update cards with proper formatting
+              $('#total-orders').text(totalOrders);
+              $('#delivered-orders').text(deliveredOrders);
+              $('#rto-orders').text(rtoOrders);
+              $('#in-transit-orders').text(inTransitOrders);
+              $('#ndr-orders').text(ndrOrders);
+              $('#total-cod-amount').text('₹' + totalCodAmount.toLocaleString('en-IN'));
+              $('#total-weight').text(formatWeight(totalWeight, 'gm'));
+              $('#avg-order-value').text('₹' + Math.round(avgOrderValue).toLocaleString('en-IN'));
+            }
+
+            // Function to fetch complete summary statistics from all data
+            function fetchCompleteSummary() {
+
+              // Build payload to get ALL data for summary calculation
+              const summaryPayload = buildApiPayload();
+              summaryPayload.page = 1;
+              summaryPayload.limit = 999999; // Get all records for summary
+
+
+              $.ajax({
+                url: '/api/ecom-cod-summary',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(summaryPayload),
+                timeout: 30000,
+                success: function (response) {
+
+                  if (response.success && response.data) {
+                    // Calculate summary from all data
+                    updateSummaryCardsFromAllData(response.data);
+                  } else {
+                    // Fallback to current page data
+                    updateSummaryCardsFromCurrentPage([]);
+                  }
+                },
+                error: function (xhr, status, error) {
+                  // Fallback to current page data
+                  updateSummaryCardsFromCurrentPage([]);
+                }
+              });
+            }
+
+            // Function to update summary cards from current page data (fallback)
+            function updateSummaryCardsFromCurrentPage(data) {
+
+              if (!data || data.length === 0) {
+                setDefaultSummaryCards();
+                return;
+              }
+
+              // Initialize counters
+              let totalOrders = 0;
+              let deliveredOrders = 0;
+              let rtoOrders = 0;
+              let inTransitOrders = 0;
+              let ndrOrders = 0;
+              let totalCodAmount = 0;
+              let totalWeight = 0;
+              let totalOrderValue = 0;
+
+              // Process each row
+              data.forEach((row, index) => {
+                
+                // Count total orders (every row is an order)
+                totalOrders++;
+
+                // Determine status from ecom_lrs array
+                let status = 0; // Default to Cancel
+                if (row.ecom_lrs && row.ecom_lrs.length > 0) {
+                  const latestLr = row.ecom_lrs.reduce((latest, current) =>
+                    new Date(current.created_at) > new Date(latest.created_at) ? current : latest
+                  );
+                  status = latestLr.status;
+                } else {
+                }
+
+                // Get amounts and weights
+                const codAmount = parseFloat(row.collectable_amount || row.grand_total || 0) || 0;
+                const orderValue = parseFloat(row.grand_total || 0) || 0;
+                const weight = parseFloat(row.total_weight || 0) || 0;
+
+
+                // Count by status
+                if (status == 4) {
+                  deliveredOrders++;
+                }
+                if (status == 5 || status == 7 || status == 10) {
+                  rtoOrders++;
+                }
+                if (status == 3) {
+                  inTransitOrders++;
+                }
+                if (status == 9) {
+                  ndrOrders++;
+                }
+
+                // Add to totals
+                totalCodAmount += codAmount;
+                totalOrderValue += orderValue;
+                totalWeight += weight;
+              });
+
+              const avgOrderValue = totalOrders > 0 ? totalOrderValue / totalOrders : 0;
+
+           
+
+              // Update cards with proper formatting
+              $('#total-orders').text(totalOrders);
+              $('#delivered-orders').text(deliveredOrders);
+              $('#rto-orders').text(rtoOrders);
+              $('#in-transit-orders').text(inTransitOrders);
+              $('#ndr-orders').text(ndrOrders);
+              $('#total-cod-amount').text('₹' + totalCodAmount.toLocaleString('en-IN'));
+              $('#total-weight').text(formatWeight(totalWeight, 'gm'));
+              $('#avg-order-value').text('₹' + Math.round(avgOrderValue).toLocaleString('en-IN'));
+            }
+
+            function showError(message) {
+              // Clear table and show error
+              if (table && table.clear) {
+                table.clear();
+              }
+              const errorRow = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', `<div class="text-center text-danger">${message}</div>`];
+              if (table && table.row && table.row.add) {
+                table.row.add(errorRow);
+              }
+              if (table && table.draw) {
+                table.draw();
+              }
+            }
+
+
+
+            // Emergency fallback to set default values
+            function setDefaultSummaryCards() {
+              $('#total-orders').text('0');
+              $('#delivered-orders').text('0');
+              $('#rto-orders').text('0');
+              $('#in-transit-orders').text('0');
+              $('#ndr-orders').text('0');
+              $('#total-cod-amount').text('₹0');
+              $('#total-weight').text(formatWeight(0, 'gm'));
+              $('#avg-order-value').text('₹0');
+            }
+
+            function animateNumber(selector, value, prefix = '') {
+              const element = $(selector);
+              if (!element.length) {
+                return;
+              }
+              
+              const startValue = 0;
+              const duration = 1000;
+              const increment = value / (duration / 16);
+              let currentValue = startValue;
+
+              const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= value) {
+                  currentValue = value;
+                  clearInterval(timer);
+                }
+
+                if (prefix === '₹') {
+                  element.text(prefix + Math.floor(currentValue).toLocaleString('en-IN'));
+                } else {
+                  element.text(Math.floor(currentValue).toLocaleString('en-IN'));
+                }
+              }, 16);
+            }
+
+            // CSV Generation Functions
+            function generateCSV(data) {
+              // CSV headers
+              const headers = [
+                'Company Name',
+                'Order ID',
+                'Ref Number',
+                'Invoice No',
+                'Order Date',
+                'Quantity',
+                'LR/AWB',
+                'LR/AWB Date',
+                'Status',
+                'Shipment Carrier',
+                'Channel',
+                'COD Amount',
+                'Grand Total',
+                'Payment Mode',
+                'Weight'
+              ];
+
+              // Convert data to CSV format
+              const csvRows = [headers.join(',')];
+
+              data.forEach(row => {
+                const csvRow = [
+                  escapeCSV(getTextContent(row[0])), // Company Name
+                  escapeCSV(getTextContent(row[1])), // Order ID
+                  escapeCSV(getTextContent(row[2])), // Ref Number
+                  escapeCSV(getTextContent(row[3])), // Invoice No
+                  escapeCSV(formatDateForCSV(getTextContent(row[4]))), // Order Date
+                  escapeCSV(getTextContent(row[5])), // Quantity
+                  escapeCSV(getTextContent(row[6])), // LR/AWB
+                  escapeCSV(formatDateForCSV(getTextContent(row[7]))), // LR/AWB Date
+                  escapeCSV(getStatusText(getTextContent(row[8]))), // Status
+                  escapeCSV(getTextContent(row[9])), // Shipment Carrier
+                  escapeCSV(getTextContent(row[10])), // Channel
+                  escapeCSV(getTextContent(row[11])), // COD Amount
+                  escapeCSV(getTextContent(row[12])), // Grand Total
+                  escapeCSV(getTextContent(row[13])), // Payment Mode
+                  escapeCSV(getTextContent(row[14]))  // Weight
+                ];
+                csvRows.push(csvRow.join(','));
+              });
+
+              return csvRows.join('\n');
+            }
+
+            function getTextContent(element) {
+              if (typeof element === 'string') return element;
+              if (element && element.textContent) return element.textContent.trim();
+              if (element && element.innerText) return element.innerText.trim();
+              return '';
+            }
+
+            function escapeCSV(text) {
+              if (!text) return '';
+              // Escape quotes and wrap in quotes if contains comma, quote, or newline
+              const escaped = text.toString().replace(/"/g, '""');
+              if (escaped.includes(',') || escaped.includes('"') || escaped.includes('\n')) {
+                return '"' + escaped + '"';
+              }
+              return escaped;
+            }
+
+            function formatDateForCSV(dateText) {
+              if (!dateText) return '';
+              // Extract date from HTML format like "17/06/2025<br><small>6:00 PM</small>"
+              const cleanDate = dateText.replace(/<[^>]*>/g, ' ').trim();
+              return cleanDate;
+            }
+
+            function getStatusText(statusHtml) {
+              if (!statusHtml) return '';
+              // Extract status from badge HTML
+              const statusText = statusHtml.replace(/<[^>]*>/g, '').trim();
+              return statusText;
+            }
+
+            function downloadCSV(csvContent, filename) {
+              const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+              const link = document.createElement('a');
+
+              if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+              } else {
+                // Fallback for older browsers
+                alert('CSV download not supported in this browser. Please use a modern browser.');
+              }
+            }
+
+            // Initialize simple table function - no DataTable needed
+            function initializeDataTable() {
+              try {
+                
+                // Just mark table as initialized
+                table = {
+                  initialized: true,
+                  data: [],
+                  clear: function() {
+                    this.data = [];
+                    $('#datatable_2 tbody').empty();
+                  },
+                  rows: {
+                    add: function(rowData) {
+                      table.data.push(rowData);
+                    },
+                    data: function() {
+                      return {
+                        toArray: function() {
+                          return table.data;
+                        }
+                      };
+                    }
+                  },
+                  draw: function() {
+                    // This will be handled by our custom populateTableManually function
+                  }
+                };
+                
+                return true;
+              } catch (error) {
+                return false;
+              }
+            }
+
+            // Handle click on Search button to apply combined filters
+            if ($('#apply-filters').length) {
+              $('#apply-filters').on('click', function () {
+                
+                 // Reset allDataFetched flag so summary cards get recalculated with new filters
+                 window.allDataFetched = false;
+                 console.log('🔍 Filters applied - will recalculate summary cards with all data');
+
+                // Collect filter values
+                currentFilters = {};
+
+                const companyNameFilter = $('#company-name-filter').val();
+                if (companyNameFilter) {
+                  currentFilters.company_name = companyNameFilter;
+                } else {
+                }
+
+                const channelFilter = $('#channel-filter').val();
+                if (channelFilter) currentFilters.channel = channelFilter;
+
+                const shipmentCarrierFilter = $('#shipment-carrier-filter').val();
+                if (shipmentCarrierFilter) {
+                  currentFilters.shipment_carrier = shipmentCarrierFilter;
+                } else {
+                }
+
+                const statusFilter = $('#status-filter').val();
+                if (statusFilter) {
+                  if (statusFilter === 'others') {
+                    // For Others, we'll handle this in the backend to exclude 0, 1, 2, 3, 4, 5, 7, 8, 9, 10
+                    currentFilters.status = 'others';
+                  } else {
+                    // For specific status codes (0, 1, 2, 3, 4, 5, 7, 8, 9, 10), pass directly
+                    currentFilters.status = parseInt(statusFilter);
+                    const statusNames = {
+                      0: 'Cancelled',
+                      1: 'Ready to Dispatch',
+                      2: 'Ready to Dispatch',
+                      3: 'In Transit',
+                      4: 'Delivered',
+                      5: 'RTO Delivered',
+                      7: 'RTO Out for Delivery',
+                      8: 'Out for Delivery',
+                      9: 'NDR',
+                      10: 'RTO Booked'
+                    };
+                  }
+                } else {
+                  console.log('🔍 Status Filter: All Status (no filter)');
+                }
+
+                const orderDateStart = $('#order-date-start').val();
+                if (orderDateStart) {
+                  // Convert DD/MM/YYYY to YYYY-MM-DD
+                  const parts = orderDateStart.split('/');
+                  if (parts.length === 3) {
+                    currentFilters.from_date = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                  }
+                }
+
+                const orderDateEnd = $('#order-date-end').val();
+                if (orderDateEnd) {
+                  // Convert DD/MM/YYYY to YYYY-MM-DD
+                  const parts = orderDateEnd.split('/');
+                  if (parts.length === 3) {
+                    currentFilters.to_date = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                  }
+                }
+
+                // Process LR/AWB date filters
+                const lrDateStart = $('#lr-date-start').val();
+                if (lrDateStart) {
+                  // Convert DD/MM/YYYY to YYYY-MM-DD
+                  const parts = lrDateStart.split('/');
+                  if (parts.length === 3) {
+                    currentFilters.lr_from_date = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                  }
+                }
+
+                const lrDateEnd = $('#lr-date-end').val();
+                if (lrDateEnd) {
+                  // Convert DD/MM/YYYY to YYYY-MM-DD
+                  const parts = lrDateEnd.split('/');
+                  if (parts.length === 3) {
+                    currentFilters.lr_to_date = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                  }
+                }
+
+                // Reset to first page and fetch data
+                currentPage = 1;
+
+
+                fetchData();
+              });
+            }
+
+            // Clear filters functionality
+            if ($('#clear-filters').length) {
+              $('#clear-filters').on('click', function () {
+                $('#company-name-filter').val('');
+                $('#channel-filter').val('');
+                $('#shipment-carrier-filter').val('');
+                $('#status-filter').val('');
+                $('#order-date-start').val('');
+                $('#order-date-end').val('');
+                $('#lr-date-start').val('');
+                $('#lr-date-end').val('');
+                $('#search-input').val('');
+
+                // Clear DataTable search if available
+                if (table && table.search) {
+                  table.search('').draw();
+                }
+
+                 // Clear filters and reset to first page
+                 currentFilters = {};
+                 currentPage = 1;
+                 
+                 // Reset allDataFetched flag so summary cards get recalculated
+                 window.allDataFetched = false;
+                 console.log('🔍 Filters cleared - will recalculate summary cards with all data');
+                 
+                 fetchData();
+              });
+            }
+
+            // General search functionality
+            if ($('#search-input').length) {
+              $('#search-input').on('keyup', function () {
+                const searchValue = $(this).val().trim();
+
+                // Reset allDataFetched flag for search
+                window.allDataFetched = false;
+
+                // Use simple table search
+                if (table && table.data) {
+                  // Debounce search for simple table
+                  clearTimeout(window.searchTimeout);
+                  window.searchTimeout = setTimeout(() => {
+                    filterTableData(searchValue);
+                  }, 300);
+                } else {
+                  // Fallback to API search
+                  if (searchValue) {
+                    currentFilters.search = searchValue;
+                  } else {
+                    delete currentFilters.search;
+                  }
+
+                  // Debounce search
+                  clearTimeout(window.searchTimeout);
+                  window.searchTimeout = setTimeout(() => {
+                    currentPage = 1;
+                    fetchData();
+                  }, 500);
+                }
+              });
+            }
+
+            if ($('#button-addon2').length) {
+              $('#button-addon2').on('click', function (e) {
+                e.preventDefault();
+                const searchValue = $('#search-input').val().trim();
+
+                // Use simple table search
+                if (table && table.data) {
+                  filterTableData(searchValue);
+                } else {
+                  // Fallback to API search
+                  if (searchValue) {
+                    currentFilters.search = searchValue;
+                  } else {
+                    delete currentFilters.search;
+                  }
+                  currentPage = 1;
+                  fetchData();
+                }
+              });
+            }
+
+            if ($('form.d-flex').length) {
+              $('form.d-flex').on('submit', function (e) {
+                e.preventDefault();
+                const searchValue = $('#search-input').val().trim();
+
+                // Use simple table search
+                if (table && table.data) {
+                  filterTableData(searchValue);
+                } else {
+                  // Fallback to API search
+                  if (searchValue) {
+                    currentFilters.search = searchValue;
+                  } else {
+                    delete currentFilters.search;
+                  }
+                  currentPage = 1;
+                  fetchData();
+                }
+              });
+            }
+
+            // Clear search button functionality
+            if ($('#clear-search').length) {
+              $('#clear-search').on('click', function (e) {
+                e.preventDefault();
+                $('#search-input').val('');
+
+                // Clear table search if available
+                if (table && table.data) {
+                  filterTableData('');
+                } else {
+                  // Fallback to API search
+                  delete currentFilters.search;
+                  currentPage = 1;
+                  fetchData();
+                }
+              });
+            }
+
+            // Add pagination controls
+            function addPaginationControls() {
+
+              // Show pagination if there are multiple pages OR if we have records (for testing)
+              if (totalPages <= 1 && totalRecords <= pageSize) {
+                $('#custom-pagination').remove();
+                return;
+              }
+
+
+              // Generate page numbers: show first 3, then ..., then last 3
+              let pageNumbersHtml = '';
+
+              if (totalPages <= 7) {
+                // If total pages is 7 or less, show all pages
+                for (let i = 1; i <= totalPages; i++) {
+                  const isActive = i === currentPage;
+                  pageNumbersHtml += `
+        <button class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-outline-primary'} me-1 page-number" data-page="${i}">
+          ${i}
+        </button>
+      `;
+                }
+              } else {
+                // Show first 3 pages
+                for (let i = 1; i <= 3; i++) {
+                  const isActive = i === currentPage;
+                  pageNumbersHtml += `
+        <button class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-outline-primary'} me-1 page-number" data-page="${i}">
+          ${i}
+        </button>
+      `;
+                }
+
+                // Add ellipsis if current page is not in the first 3 or last 3
+                if (currentPage > 4 && currentPage < totalPages - 2) {
+                  pageNumbersHtml += `
+        <span class="btn btn-sm btn-outline-secondary me-1 disabled" style="cursor: default;">
+          ...
+        </span>
+      `;
+                } else if (totalPages > 6) {
+                  pageNumbersHtml += `
+        <span class="btn btn-sm btn-outline-secondary me-1 disabled" style="cursor: default;">
+          ...
+        </span>
+      `;
+                }
+
+                // Show last 3 pages
+                for (let i = Math.max(4, totalPages - 2); i <= totalPages; i++) {
+                  // Skip if this page was already shown in first 3
+                  if (i <= 3) continue;
+
+                  const isActive = i === currentPage;
+                  pageNumbersHtml += `
+        <button class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-outline-primary'} me-1 page-number" data-page="${i}">
+          ${i}
+        </button>
+      `;
+                }
+              }
+
+              const paginationHtml = `
+  <div class="d-flex justify-content-between align-items-center mt-3" id="custom-pagination">
+    <div class="pagination-info">
+      Showing ${((currentPage - 1) * pageSize) + 1} to ${Math.min(currentPage * pageSize, totalRecords)} of ${totalRecords} entries
+      <span class="text-muted ms-2">(Page ${currentPage} of ${totalPages})</span>
+    </div>
+    <div class="pagination-controls d-flex align-items-center">
+      <button class="btn btn-sm btn-outline-primary me-1" id="prev-page" ${currentPage === 1 ? '' : ''}>
+        <i class="fas fa-chevron-left"></i> Previous
+      </button>
+      <div class="page-numbers mx-2">
+        ${pageNumbersHtml}
+      </div>
+      <button class="btn btn-sm btn-outline-primary ms-1" id="next-page" ${currentPage === totalPages ? '' : ''}>
+        Next <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+  `;
+
+              // Remove existing pagination
+              $('#custom-pagination').remove();
+
+              // Try multiple insertion points
+              let inserted = false;
+
+              // Try to insert after DataTable wrapper
+              if ($('.dataTables_wrapper').length) {
+                $('.dataTables_wrapper').after(paginationHtml);
+                inserted = true;
+              } else {
+              }
+
+              // Fallback: insert after the table
+              if (!inserted && $('#datatable_2').length) {
+                $('#datatable_2').closest('.table-responsive').after(paginationHtml);
+                inserted = true;
+              } else if (!inserted) {
+                console.log('❌ Table not found for pagination insertion');
+              }
+
+              // Fallback: insert at the end of the card body
+              if (!inserted && $('.card-body').length) {
+                $('.card-body').append(paginationHtml);
+                inserted = true;
+              } else if (!inserted) {
+                console.log('❌ Card body not found for pagination insertion');
+              }
+
+              // if (!inserted) {
+              //   console.error('Could not find suitable location for pagination');
+              //   return;
+              // }
+
+              // Bind events
+              $('#prev-page').off('click').on('click', function () {
+                if (currentPage > 1) {
+                  const newPage = currentPage - 1;
+                  goToPage(newPage);
+                } else {
+                  console.log('Already on first page, cannot go back');
+                }
+              });
+
+              $('#next-page').off('click').on('click', function () {
+                if (currentPage < totalPages) {
+                  const newPage = currentPage + 1;
+                  goToPage(newPage);
+                } else {
+                  console.log('Already on last page, cannot go forward');
+                }
+              });
+
+              // Bind page number click events
+              $('.page-number').off('click').on('click', function () {
+                const pageNumber = parseInt($(this).data('page'));
+
+                if (pageNumber !== currentPage && pageNumber >= 1 && pageNumber <= totalPages) {
+                  goToPage(pageNumber);
+                } else {
+                  console.log('Invalid page number or already on this page');
+                }
+              });
+
+            }
+
+            // Error handling
+            if (table && table.on) {
+              table.on('error.dt', function (e, settings, techNote, message) {
+              });
+            }
+
+            // Handle refresh button
+            if ($('#refresh-data').length) {
+              $('#refresh-data').on('click', function () {
+                const btn = $(this);
+                const originalHtml = btn.html();
+
+                // Add loading state
+                btn.html('<i class="fas fa-spinner fa-spin me-1"></i>Refreshing...');
+                btn.prop('disabled', true);
+
+                // Reset to first page and fetch data
+                currentPage = 1;
+                fetchData();
+
+                // Reset button after a delay
+                setTimeout(() => {
+                  btn.html(originalHtml);
+                  btn.prop('disabled', false);
+                }, 1000);
+              });
+            }
+
+            // Handle CSV download
+            if ($('#download-csv').length) {
+              $('#download-csv').on('click', function () {
+                const btn = $(this);
+                const originalHtml = btn.html();
+
+                // Add loading state
+                btn.html('<i class="fas fa-spinner fa-spin me-1"></i>Preparing...');
+                btn.prop('disabled', true);
+
+                try {
+                  // Get current data from DataTable
+                  const data = table && table.rows ? table.rows().data().toArray() : [];
+
+                  if (data.length === 0) {
+                    alert('No data to export. Please check your filters.');
+                    btn.html(originalHtml);
+                    btn.prop('disabled', false);
+                    return;
+                  }
+
+                  // Prepare CSV content
+                  const csvContent = generateCSV(data);
+
+                  // Create and download file
+                  downloadCSV(csvContent, 'cod-summary-' + new Date().toISOString().split('T')[0] + '.csv');
+
+                  // Reset button
+                  btn.html(originalHtml);
+                  btn.prop('disabled', false);
+
+                } catch (error) {
+                  alert('Error generating CSV file. Please try again.');
+                  btn.html(originalHtml);
+                  btn.prop('disabled', false);
+                }
+              });
+            }
+
+            // Handle view tracking button clicks
+            $(document).on('click', '.view-tracking-btn', function (e) {
+              e.preventDefault();
+              const lrNo = $(this).data('lr-no');
+              const orderId = $(this).data('order-id');
+
+              if (!lrNo) {
+                alert('No tracking number available for this shipment');
+                return;
+              }
+
+              // Show modal and load tracking data
+              showTrackingModal(lrNo, orderId);
+            });
+
+            // Tracking Modal Functions
+            function showTrackingModal(lrNo, orderId) {
+              // Show the modal first
+              $('#exampleModalRight').modal('show');
+              
+              // Load tracking data
+              loadTrackingData(lrNo, orderId);
+            }
+
+            function loadTrackingData(lrNo, orderId) {
+              // Show loading state
+              $('#deliveryTimeline').html(`
+                <div class="card-body p-4">
+                  <div class="text-center text-muted py-4">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                      <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <h5 class="text-dark mb-2">Loading tracking details...</h5>
+                    <p class="text-muted mb-0">Please wait while we fetch the latest status</p>
+                  </div>
+                </div>
+              `);
+
+              $.ajax({
+                url: `https://dispatchsolutions.in/api/ecom/shipments/tracking/${encodeURIComponent(lrNo)}`,
+                method: 'GET',
+                timeout: 30000,
+                success: function (response) {
+                  if (response.success && response.data) {
+                    displayTrackingData(response.data, lrNo, orderId);
+                  } else {
+                    showTrackingError(response.message || 'Failed to load tracking data');
+                  }
+                },
+                error: function (xhr, status, error) {
+                  let errorMessage = 'Failed to load tracking data. ';
+                  if (xhr.status === 404) {
+                    errorMessage += 'Tracking information not found.';
+                  } else if (xhr.status === 500) {
+                    errorMessage += 'Server error. Please try again later.';
+                  } else {
+                    errorMessage += 'Please try again.';
+                  }
+                  showTrackingError(errorMessage);
+                }
+              });
+            }
+
+            function displayTrackingData(data, lrNo, orderId) {
+              // Update modal with real data
+              $('#lrNumberDisplay').text('AWB NUMBER');
+              $('#lrNumberData').text(lrNo);
+              $('#orderIdDisplay').text(`Order ID #${orderId}`);
+              
+              // Update courier information
+              $('#courierLogo').attr('src', `assets/images/logos/${(data.courier || 'default').toLowerCase()}.png`);
+              $('#courierPartner').text(data.courier || 'Unknown');
+              
+              // Update status
+              const statusText = getStatusText(data.status || 0);
+              $('#currentStatus').text(statusText);
+              $('#trackingStatus').text(statusText);
+              
+              // Update tracking details
+              $('#trackingLrNumber').text(lrNo);
+              $('#trackingOrderId').text(`Order ID #${orderId}`);
+              
+              // Build timeline
+              buildTrackingTimeline(data.trackingData || []);
+            }
+
+            function buildTrackingTimeline(trackingData) {
+              const timelineContainer = $('#deliveryTimeline');
+              timelineContainer.empty();
+
+              if (!trackingData || trackingData.length === 0) {
+                timelineContainer.html(`
+                  <div class="card-body p-4">
+                    <div class="text-center text-muted py-4">
+                      <i class="fas fa-info-circle fa-3x mb-3 text-muted"></i>
+                      <h5 class="text-dark mb-2">No tracking information available</h5>
+                      <p class="text-muted mb-0">Tracking details will appear here when available</p>
+                    </div>
+                  </div>
+                `);
+                return;
+              }
+
+              // Create timeline wrapper
+              const timeline = $('<div class="timeline"></div>');
+
+              // Sort tracking data by date (newest first)
+              const sortedData = trackingData.sort((a, b) => {
+                const dateA = new Date(a.scan_datetime || a.event_time || a.scan_date);
+                const dateB = new Date(b.scan_datetime || b.event_time || b.scan_date);
+                return dateB - dateA;
+              });
+
+              // Remove duplicates based on scan_datetime and scan_description
+              const uniqueData = sortedData.filter((item, index, self) => 
+                index === self.findIndex(t => 
+                  t.scan_datetime === item.scan_datetime && 
+                  t.scan_description === item.scan_description
+                )
+              );
+
+              uniqueData.forEach((item, index) => {
+                const timelineItem = createTimelineItem(item, index === 0);
+                timeline.append(timelineItem);
+              });
+
+              timelineContainer.html(`
+                <div class="card-body p-4">
+                  <div class="timeline-container">
+                    ${timeline.html()}
+                  </div>
+                </div>
+              `);
+            }
+
+            function createTimelineItem(item, isLatest) {
+              const scanDateTime = item.scan_datetime || item.event_time || item.scan_date;
+              const location = item.location || item.scanned_location || item.strOrigin || 'Unknown Location';
+              const description = item.scan_description || item.scan || item.strAction || 'Status Update';
+              const remark = item.remark || '';
+              const statusCode = item.code || item.strCode || '';
+
+              // Format date
+              const formattedDate = formatTrackingDate(scanDateTime);
+
+              // Determine status class
+              const statusClass = getTimelineStatusClass(description, statusCode);
+
+              return `
+                <div class="timeline-item ${isLatest ? 'latest' : ''} mb-3">
+                  <div class="d-flex">
+                    <div class="timeline-marker me-3">
+                      <div class="timeline-dot ${statusClass}"></div>
+                      ${!isLatest ? '<div class="timeline-line"></div>' : ''}
+                    </div>
+                    <div class="timeline-content flex-grow-1">
+                      <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div class="timeline-date text-muted small">
+                          <i class="fas fa-clock me-1"></i>${formattedDate}
+                        </div>
+                        <span class="badge ${statusClass}">${statusCode}</span>
+                      </div>
+                      <div class="timeline-location text-muted small mb-1">
+                        <i class="fas fa-map-marker-alt me-1"></i>${location}
+                      </div>
+                      <div class="timeline-description fw-semibold mb-1">${description}</div>
+                      ${remark ? `<div class="timeline-remark text-muted small">${remark}</div>` : ''}
+                    </div>
+                  </div>
+                </div>
+              `;
+            }
+
+            function formatTrackingDate(dateString) {
+              if (!dateString) return 'Unknown Date';
+
+              try {
+                const date = new Date(dateString);
+                if (isNaN(date.getTime())) return dateString;
+
+                const options = {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: true
+                };
+
+                return date.toLocaleDateString('en-IN', options);
+              } catch (error) {
+                return dateString;
+              }
+            }
+
+            function getTimelineStatusClass(description, statusCode) {
+              const desc = description.toLowerCase();
+              const code = statusCode.toLowerCase();
+
+              if (desc.includes('delivered') || code.includes('delivered')) {
+                return 'bg-success';
+              } else if (desc.includes('transit') || desc.includes('shipped') || code.includes('transit')) {
+                return 'bg-primary';
+              } else if (desc.includes('pending') || desc.includes('processing') || code.includes('pending')) {
+                return 'bg-warning';
+              } else if (desc.includes('failed') || desc.includes('return') || code.includes('failed')) {
+                return 'bg-danger';
+              } else if (desc.includes('dispatched') || code.includes('dispatched')) {
+                return 'bg-info';
+              } else {
+                return 'bg-secondary';
+              }
+            }
+
+            function showTrackingError(message) {
+              $('#deliveryTimeline').html(`
+                <div class="card-body p-4">
+                  <div class="text-center text-muted py-4">
+                    <i class="fas fa-exclamation-triangle fa-3x mb-3 text-warning"></i>
+                    <h5 class="text-dark mb-2">Error Loading Tracking Data</h5>
+                    <p class="text-muted mb-0">${message}</p>
+                  </div>
+                </div>
+              `);
+            }
+
+            // Handle page size dropdown change
+            $('#page-size-select').on('change', function () {
+              const newPageSize = parseInt($(this).val());
+
+              pageSize = newPageSize;
+              currentPage = 1; // Reset to first page
+
+              // Fetch data with new page size from backend
+              fetchData();
+            });
+
+
+            // Set default summary card values first
+            setDefaultSummaryCards();
+
+      
+
+            // Add test function to manually update cards
+            window.testSummaryCards = function() {
+              $('#total-orders').text('100');
+              $('#delivered-orders').text('75');
+              $('#rto-orders').text('10');
+              $('#in-transit-orders').text('10');
+              $('#ndr-orders').text('5');
+              $('#total-cod-amount').text('₹1,25,000');
+              $('#total-weight').text(formatWeight(500, 'gm'));
+              $('#avg-order-value').text('₹1,250');
+            };
+
+            // Add function to check current data and recalculate
+            window.recalculateSummary = function() {
+              if (table && table.rows) {
+                const data = table.rows().data().toArray();
+                if (data.length > 0) {
+                  updateSummaryCardsFromCurrentPage(data);
+                } else {
+                  fetchData();
+                }
+              } else {
+                fetchData();
+              }
+            };
+
+            // Add function to test with sample data
+            window.testWithSampleData = function() {
+              const sampleData = [
+                {
+                  id: 1,
+                  orderid: "TEST-001",
+                  ref_number: "REF-001",
+                  invoice_no: "INV-001",
+                  collectable_amount: "1000.00",
+                  grand_total: "1000.00",
+                  total_weight: "500.00",
+                  weight_unit: "gm",
+                  total_qty: 1,
+                  payment_mode: "cod",
+                  created_at: "2025-01-15T10:00:00.000Z",
+                  ecom_lrs: [{
+                    lr_no: "LR123456",
+                    tagged_api: "DELHIVERY",
+                    status: 4,
+                    created_at: "2025-01-15T10:00:00.000Z"
+                  }],
+                  orderClient: {
+                    company_name: "Test Company",
+                    first_name: "Test",
+                    last_name: "User"
+                  }
+                }
+              ];
+              
+              updateSummaryCardsFromCurrentPage(sampleData);
+              processFetchedData(sampleData, {});
+            };
+
+            // Add function to manually populate table without DataTable
+            window.populateTableManually = function(data) {
+              const tbody = $('#datatable_2 tbody');
+              tbody.empty();
+              
+              if (data && data.length > 0) {
+                data.forEach((rowData, index) => {
+                  const row = `<tr>${rowData.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
+                  tbody.append(row);
+                });
+              } else {
+                // Add sample row if no data
+                const sampleRow = `
+                  <tr>
+                    <td>Test Company</td>
+                    <td>TEST-001</td>
+                    <td>REF-001</td>
+                    <td>INV-001</td>
+                    <td>15/01/2025<br><small>10:00 AM</small></td>
+                    <td>1</td>
+                    <td>LR123456</td>
+                    <td>15/01/2025<br><small>10:00 AM</small></td>
+                    <td><span class="badge bg-success">Delivered</span></td>
+                    <td>DELHIVERY</td>
+                    <td></td>
+                    <td>₹1,000</td>
+                    <td>₹1,000</td>
+                    <td>cod</td>
+                    <td>500 gm</td>
+                    <td><button class="btn btn-primary btn-sm">View</button></td>
+                  </tr>
+                `;
+                tbody.append(sampleRow);
+              }
+            };
+
+            // Add function to filter table data
+            function filterTableData(searchValue) {
+              if (!table || !table.data) return;
+              
+              const tbody = $('#datatable_2 tbody');
+              tbody.empty();
+              
+              let filteredData = table.data;
+              
+              if (searchValue) {
+                filteredData = table.data.filter(rowData => {
+                  return rowData.some(cell => 
+                    cell.toString().toLowerCase().includes(searchValue.toLowerCase())
+                  );
+                });
+              }
+              
+              if (filteredData.length > 0) {
+                filteredData.forEach((rowData, index) => {
+                  const row = `<tr>${rowData.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
+                  tbody.append(row);
+                });
+              } else {
+                tbody.append('<tr><td colspan="16" class="text-center text-muted">No matching records found</td></tr>');
+              }
+            }
+
+            // Start loading data immediately
+            fetchData();
+
+          }); // End of $(document).ready
+
+        } catch (error) {
+          alert('Error initializing page: ' + error.message);
+        }
+      }
+
+      // Start the initialization process
+
+      // Add a simple test button that works without complex initialization
+      window.testAPIDirect = function () {
+
+        // Test with minimal payload
+        const testPayloadMinimal = { page: 1, limit: 1 };
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/ecom-cod-summary', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+              alert('Direct API test SUCCESS! Check console for details.');
+            } else {
+              alert('Direct API test FAILED! Status: ' + xhr.status + '. Check console for details.');
+            }
+          }
+        };
+
+        const testPayloadString = JSON.stringify({
+          page: 1,
+          limit: 10
+        });
+
+        xhr.send(testPayloadString);
+      };
+
+      waitForJQuery();
+    </script>
+    <%- include('../partials/footer') %>

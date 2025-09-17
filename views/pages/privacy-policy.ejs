@@ -1,0 +1,201 @@
+<%- include('../partials/header') %>
+  <%- include('../partials/left-sidebar') %>
+
+  <style>
+    .privacy-hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 3rem 0;
+      margin-top: -2rem;
+      margin-bottom: 3rem;
+    }
+    .privacy-content {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding: 3rem;
+      margin-bottom: 2rem;
+    }
+    .privacy-section {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+    .privacy-section:last-child {
+      border-bottom: none;
+    }
+    .section-title {
+      color: #2c3e50;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
+    .highlight-box {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-left: 4px solid #667eea;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+    .last-updated {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      color: #856404;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+  </style>
+
+  <main>
+    <div class="container-fluid">
+      <!-- Hero Section -->
+      <div class="privacy-hero">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 text-center">
+              <h1 class="display-4 font-weight-bold mb-3">Privacy Policy</h1>
+              <p class="lead mb-0">Your privacy and data security are our top priorities</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Breadcrumb -->
+      <div class="row">
+        <div class="col-12">
+          <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
+            <ol class="breadcrumb pt-0">
+              <li class="breadcrumb-item">
+                <a href="/index">Home</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Privacy Policy</li>
+            </ol>
+          </nav>
+          <div class="separator mb-5"></div>
+        </div>
+      </div>
+
+      <!-- Privacy Policy Content -->
+      <div class="row">
+        <div class="col-12">
+          <div class="privacy-content">
+            <div class="last-updated">
+              <i class="fas fa-calendar-alt mr-2"></i>
+              <strong>Last Updated:</strong> <%= new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+            </div>
+
+            <div class="privacy-section">
+              <h2 class="section-title">
+                <i class="fas fa-shield-alt text-primary mr-2"></i>1. Information We Collect
+              </h2>
+              <p>We collect information you provide directly to us, such as when you create an account, use our services, or contact us for support. This may include:</p>
+              <ul>
+                <li><strong>Personal Information:</strong> Name, email address, phone number, business details</li>
+                <li><strong>Account Information:</strong> Username, password, account preferences</li>
+                <li><strong>Usage Data:</strong> How you interact with our platform, features used, time spent</li>
+                <li><strong>Device Information:</strong> IP address, browser type, device information</li>
+              </ul>
+            </div>
+
+            <div class="privacy-section">
+              <h2 class="section-title">
+                <i class="fas fa-database text-primary mr-2"></i>2. How We Use Your Information
+              </h2>
+              <p>We use the information we collect to:</p>
+              <ul>
+                <li>Provide, maintain, and improve our services</li>
+                <li>Process transactions and send related information</li>
+                <li>Send you technical notices, updates, and support messages</li>
+                <li>Respond to your comments, questions, and customer service requests</li>
+                <li>Monitor and analyze trends and usage</li>
+                <li>Detect, investigate, and prevent fraudulent transactions</li>
+              </ul>
+            </div>
+
+            <div class="privacy-section">
+              <h2 class="section-title">
+                <i class="fas fa-share-alt text-primary mr-2"></i>3. Information Sharing
+              </h2>
+              <p>We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except as described in this policy:</p>
+              <ul>
+                <li><strong>Service Providers:</strong> We may share information with trusted third-party service providers</li>
+                <li><strong>Legal Requirements:</strong> We may disclose information if required by law or legal process</li>
+                <li><strong>Business Transfers:</strong> In connection with a merger, acquisition, or sale of assets</li>
+              </ul>
+            </div>
+
+            <div class="privacy-section">
+              <h2 class="section-title">
+                <i class="fas fa-lock text-primary mr-2"></i>4. Data Security
+              </h2>
+              <div class="highlight-box">
+                <p class="mb-0"><strong>🔒 Security Measures:</strong> We implement appropriate technical and organizational security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+              </div>
+              <p>While we strive to protect your personal information, no method of transmission over the internet or electronic storage is 100% secure. We cannot guarantee absolute security.</p>
+            </div>
+
+            <div class="privacy-section">
+              <h2 class="section-title">
+                <i class="fas fa-cookie-bite text-primary mr-2"></i>5. Cookies and Tracking
+              </h2>
+              <p>We use cookies and similar tracking technologies to enhance your experience on our platform:</p>
+              <ul>
+                <li><strong>Essential Cookies:</strong> Required for the website to function properly</li>
+                <li><strong>Analytics Cookies:</strong> Help us understand how you use our service</li>
+                <li><strong>Preference Cookies:</strong> Remember your settings and preferences</li>
+              </ul>
+            </div>
+
+            <div class="privacy-section">
+              <h2 class="section-title">
+                <i class="fas fa-user-shield text-primary mr-2"></i>6. Your Rights
+              </h2>
+              <p>You have the following rights regarding your personal information:</p>
+              <ul>
+                <li><strong>Access:</strong> Request access to your personal data</li>
+                <li><strong>Correction:</strong> Request correction of inaccurate data</li>
+                <li><strong>Deletion:</strong> Request deletion of your personal data</li>
+                <li><strong>Portability:</strong> Request transfer of your data</li>
+                <li><strong>Objection:</strong> Object to processing of your data</li>
+              </ul>
+            </div>
+
+            <div class="privacy-section">
+              <h2 class="section-title">
+                <i class="fas fa-envelope text-primary mr-2"></i>7. Contact Us
+              </h2>
+              <p>If you have any questions about this Privacy Policy, please contact us:</p>
+              <div class="row">
+                <div class="col-md-6">
+                  <p><strong>Email:</strong> privacy@yourcompany.com</p>
+                  <p><strong>Phone:</strong> +91-XXXXXXXXXX</p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong>Address:</strong><br>
+                  123 Business Street<br>
+                  Tech Park, City - 123456<br>
+                  India</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="privacy-section">
+              <h2 class="section-title">
+                <i class="fas fa-edit text-primary mr-2"></i>8. Changes to This Policy
+              </h2>
+              <p>We may update this Privacy Policy from time to time. We will notify you of any changes by:</p>
+              <ul>
+                <li>Posting the new Privacy Policy on this page</li>
+                <li>Sending you an email notification</li>
+                <li>Displaying a prominent notice on our platform</li>
+              </ul>
+              <p>Your continued use of our services after any changes constitutes acceptance of the updated policy.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>

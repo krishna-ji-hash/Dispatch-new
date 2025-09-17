@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../../partials/head') %>
+  <title>Express Calculator</title>
+  <style>
+    .calculator-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .form-section {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .results-section {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+    }
+    .rate-card {
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      background: white;
+    }
+    .rate-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .btn-calculate {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .btn-calculate:hover {
+      background: #0056b3;
+    }
+    .btn-calculate:disabled {
+      background: #6c757d;
+      cursor: not-allowed;
+    }
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #6c757d;
+    }
+    .error {
+      color: #dc3545;
+      background: #f8d7da;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+    .success {
+      color: #155724;
+      background: #d4edda;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+    .box-item {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6 !important;
+    }
+    .box-item:hover {
+      border-color: #007bff !important;
+    }
+    .remove-box-btn {
+      font-size: 12px;
+      padding: 4px 8px;
+    }
+    .box-item .form-control {
+      font-size: 14px;
+    }
+    .box-item .form-label {
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+    
+    .box-unit {
+      background-color: #fff;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      padding: 6px 8px;
+      font-size: 14px;
+    }
+    
+    .box-unit:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+    
+    .box-dimensions-header {
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      border: 1px solid #2196f3;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 15px;
+    }
+    
+    .box-dimensions-header h6 {
+      color: #1565c0;
+      margin: 0;
+      font-weight: 600;
+    }
+    
+    .box-dimensions-header p {
+      color: #1976d2;
+      margin: 5px 0 0 0;
+      font-size: 13px;
+    }
+    
+    .box-item.is-valid {
+      border-color: #28a745 !important;
+      background-color: #f8fff9;
+    }
+    
+    .box-item.is-invalid {
+      border-color: #dc3545 !important;
+      background-color: #fff8f8;
+    }
+    
+    .dimension-error {
+      font-size: 11px;
+      color: #dc3545;
+      margin-top: 5px;
+      padding: 2px 5px;
+      background-color: #fff5f5;
+      border-radius: 3px;
+      border-left: 3px solid #dc3545;
+    }
+    
+    /* Remove increment/decrement buttons from number inputs */
+    .box-item input[type="number"]::-webkit-outer-spin-button,
+    .box-item input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+    .box-item input[type="number"] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrapper" class="theme-cyan">
+    <%- include('../../partials/header') %>
+    <%- include('../../partials/left-sidebar') %>
+    <%- include('../../partials/right-iconbar') %>
+
+         <div id="main-content">
+       <div class="calculator-container">
+        <div class=" container pt-4">
+          <div class="block-header">
+           <div class="row">
+             <div class="col-lg-6 col-md-6 col-sm-12">
+               <h2>Express Shipping Calculator</h2>
+               <ul class="breadcrumb">
+                 <li class="breadcrumb-item">
+                   <a href="/index"><i class="fa fa-dashboard"></i></a>
+                 </li>
+                 <li class="breadcrumb-item">Express</li>
+                 <li class="breadcrumb-item active">Shipping Calculator</li>
+               </ul>
+             </div>
+           </div>
+         </div>
+       </div>
+         <div class="row card" style="
+         display: flex;
+         flex-direction: row;
+         flex-wrap: nowrap;
+         justify-content: space-around;
+        
+     ">
+           <!-- Left Side - Calculator Form -->
+           <div class="col-md-4">
+             <div class="form-section">
+               <h4>Shipment Details</h4>
+               <form id="calculatorForm">
+                 <div class="mb-3">
+                   <label for="originPincode" class="form-label">Origin Pincode *</label>
+                   <input type="text" class="form-control" id="originPincode" required maxlength="6" placeholder="e.g., 110001">
+                 </div>
+                 
+                 <div class="mb-3">
+                   <label for="destinationPincode" class="form-label">Destination Pincode *</label>
+                   <input type="text" class="form-control" id="destinationPincode" required maxlength="6" placeholder="e.g., 400001">
+                 </div>
+                 
+                 <div class="row">
+                   <div class="col-8">
+                     <div class="mb-3">
+                       <label for="weight" class="form-label">Weight *</label>
+                       <input type="number" class="form-control" id="weight" required min="0.1" step="0.1" placeholder="e.g., 2.5">
+                     </div>
+                   </div>
+                   <div class="col-4">
+                     <div class="mb-3">
+                       <label for="weightUnit" class="form-label">Unit</label>
+                       <select class="form-control" id="weightUnit" required>
+                         <option value="kg">kg</option>
+                         <option value="gm">gm</option>
+                       </select>
+                     </div>
+                   </div>
+                 </div>
+                 
+                 <div class="mb-3">
+                   <label for="paymentType" class="form-label">Payment Type *</label>
+                   <select class="form-control" id="paymentType" required>
+                     <option value="COD">COD</option>
+                     <option value="PREPAID">Prepaid</option>
+                   </select>
+                 </div>
+                 <div class="mb-3">
+                  <label for="invoiceamount" class="form-label">Invoice Amount *</label>
+                  <input type="number" class="form-control" id="invoiceamount" min="0" placeholder="e.g., 1000">
+                </div>
+                 
+                 <div class="mb-3" id="codAmountContainer">
+                   <label for="codAmount" class="form-label">COD Amount (₹)</label>
+                   <input type="number" class="form-control" id="codAmount" min="0" placeholder="e.g., 1000">
+                   <small class="form-text text-muted">Required only for COD shipments</small>
+                 </div>
+                 
+                 <!-- Box Dimensions Section -->
+                 <div class="mb-3">
+                   <div class="box-dimensions-header">
+                     <h6><i class="fa fa-cube me-2"></i>Box Dimensions</h6>
+                     <p>Enter dimensions for each box. You can select units: cm (centimeters), inches, or feet. Add multiple boxes if needed.</p>
+                     <div class="unit-info mt-2">
+                       <small class="text-info">
+                         <i class="fa fa-info-circle me-1"></i>
+                         <strong>Unit Guide:</strong> 1 cm = 0.39 inches, 1 foot = 12 inches = 30.48 cm
+                       </small>
+                     </div>
+                   </div>
+                   <div class="d-flex justify-content-between align-items-center mb-2">
+                     <label class="form-label mb-0">Boxes</label>
+                     <button type="button" class="btn btn-sm btn-outline-primary" id="addBoxBtn">
+                       <i class="fa fa-plus me-1"></i>Add Box
+                     </button>
+                   </div>
+                   <div id="boxesContainer">
+                     <!-- Default first box -->
+                     <div class="box-item border rounded p-3 mb-2" data-box-id="1">
+                       <div class="d-flex justify-content-between align-items-center mb-2">
+                         <span class="fw-bold">Box 1</span>
+                         <button type="button" class="btn btn-sm btn-outline-danger remove-box-btn" style="display: none;">
+                           <i class="fa fa-trash"></i>
+                         </button>
+                       </div>
+                       <div class="row">
+                         <div class="col-3">
+                           <label class="form-label small">Length</label>
+                           <input type="number" class="form-control box-length" min="0.1" step="0.1" placeholder="Length" required>
+                         </div>
+                         <div class="col-3">
+                           <label class="form-label small">Width</label>
+                           <input type="number" class="form-control box-width" min="0.1" step="0.1" placeholder="Width" required>
+                         </div>
+                         <div class="col-3">
+                           <label class="form-label small">Height</label>
+                           <input type="number" class="form-control box-height" min="0.1" step="0.1" placeholder="Height" required>
+                         </div>
+                         <div class="col-3">
+                           <label class="form-label small">Unit</label>
+                           <select class="form-control box-unit" required title="Select the unit for your dimensions">
+                             <option value="cm">cm (centimeters)</option>
+                             <option value="inches">inches</option>
+                             <option value="feet">feet</option>
+                           </select>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                 </div>
+                 
+                 <button type="submit" class="btn btn-calculate w-100" id="calculateBtn">
+                   <i class="fa fa-calculator me-2"></i>Calculate Rates
+                 </button>
+               </form>
+             </div>
+           </div>
+           
+                        <!-- Right Side - Results Display -->
+             <div class="col-md-8">
+               <div class="results-section" id="resultsSection">
+                 <h4>Available Shipping Rates</h4>
+                 <div id="ratesList" class="d-flex flex-wrap gap-3">
+                   <div class="text-center text-muted py-5 w-100">
+                     <i class="fa fa-calculator fa-3x mb-3"></i>
+                     <p>Fill in the shipment details and click "Calculate Rates" to see available shipping options.</p>
+                   </div>
+                 </div>
+               </div>
+             
+             <!-- Loading and Messages -->
+             <div id="loadingMessage" class="loading" style="display: none;">
+               <i class="fa fa-spinner fa-spin me-2"></i>Calculating rates...
+             </div>
+             <div id="messageContainer"></div>
+           </div>
+         </div>
+       </div>
+     </div>
+  </div>
+
+  <!-- FOOTER -->
+  <%- include('../../partials/footer') %>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('calculatorForm');
+      const calculateBtn = document.getElementById('calculateBtn');
+      const resultsSection = document.getElementById('resultsSection');
+      const ratesList = document.getElementById('ratesList');
+      const loadingMessage = document.getElementById('loadingMessage');
+      const messageContainer = document.getElementById('messageContainer');
+      let boxCounter = 1;
+      
+      // Box management functionality
+      document.getElementById('addBoxBtn').addEventListener('click', function() {
+        boxCounter++;
+        addBox(boxCounter);
+      });
+      
+      // Add remove functionality to the first box
+      document.querySelector('.remove-box-btn').addEventListener('click', function() {
+        const box = this.closest('.box-item');
+        if (document.querySelectorAll('.box-item').length > 1) {
+          box.remove();
+          updateBoxNumbers();
+        }
+      });
+      
+      // Initialize first box
+      updateBoxNumbers();
+      
+      // Add event listeners for unit changes to update labels
+      function addUnitChangeListeners() {
+        const boxes = document.querySelectorAll('.box-item');
+        boxes.forEach(box => {
+          const unitSelect = box.querySelector('.box-unit');
+          if (unitSelect) {
+            unitSelect.addEventListener('change', function() {
+              updateDimensionLabels(box);
+            });
+          }
+        });
+      }
+      
+      // Update dimension labels based on selected unit
+      function updateDimensionLabels(box) {
+        const unit = box.querySelector('.box-unit').value;
+        const lengthLabel = box.querySelector('.box-length').nextElementSibling || box.querySelector('.box-length').parentNode.querySelector('.form-label');
+        const widthLabel = box.querySelector('.box-width').nextElementSibling || box.querySelector('.box-width').parentNode.querySelector('.form-label');
+        const heightLabel = box.querySelector('.box-height').nextElementSibling || box.querySelector('.box-height').parentNode.querySelector('.form-label');
+        
+        if (lengthLabel) lengthLabel.textContent = `Length (${unit})`;
+        if (widthLabel) widthLabel.textContent = `Width (${unit})`;
+        if (heightLabel) heightLabel.textContent = `Height (${unit})`;
+      }
+      
+      // Initialize unit change listeners
+      addUnitChangeListeners();
+      
+      // Add real-time validation for dimension inputs
+      function addDimensionValidationListeners() {
+        const boxes = document.querySelectorAll('.box-item');
+        boxes.forEach(box => {
+          const inputs = box.querySelectorAll('.box-length, .box-width, .box-height');
+          inputs.forEach(input => {
+            input.addEventListener('input', function() {
+              validateDimensionInput(box);
+            });
+          });
+        });
+      }
+      
+      // Validate dimension input in real-time
+      function validateDimensionInput(box) {
+        const length = parseFloat(box.querySelector('.box-length').value) || 0;
+        const width = parseFloat(box.querySelector('.box-width').value) || 0;
+        const height = parseFloat(box.querySelector('.box-height').value) || 0;
+        const unit = box.querySelector('.box-unit').value;
+        
+        if (length > 0 && width > 0 && height > 0) {
+          const validationResult = validateDimensionsByUnit(length, width, height, unit);
+          
+          // Remove existing validation classes
+          box.classList.remove('is-valid', 'is-invalid');
+          
+          if (validationResult.valid) {
+            box.classList.add('is-valid');
+            // Remove any existing error message
+            const existingError = box.querySelector('.dimension-error');
+            if (existingError) existingError.remove();
+          } else {
+            box.classList.add('is-invalid');
+            // Show error message
+            showDimensionError(box, validationResult.message);
+          }
+        } else {
+          // Remove validation classes if not all dimensions are filled
+          box.classList.remove('is-valid', 'is-invalid');
+          const existingError = box.querySelector('.dimension-error');
+          if (existingError) existingError.remove();
+        }
+      }
+      
+      // Show dimension error message
+      function showDimensionError(box, message) {
+        // Remove existing error message
+        const existingError = box.querySelector('.dimension-error');
+        if (existingError) existingError.remove();
+        
+        // Create new error message
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'dimension-error text-danger small mt-1';
+        errorDiv.textContent = message;
+        
+        // Insert after the row containing the inputs
+        const inputRow = box.querySelector('.row');
+        inputRow.appendChild(errorDiv);
+      }
+      
+      // Initialize dimension validation listeners
+      addDimensionValidationListeners();
+      
+      // Validate dimensions based on unit
+      function validateDimensionsByUnit(length, width, height, unit) {
+        const maxDimensions = {
+          'cm': { max: 500, message: 'Dimensions in cm should not exceed 500 cm (5 meters)' },
+          'inches': { max: 200, message: 'Dimensions in inches should not exceed 200 inches (about 5 meters)' },
+          'feet': { max: 16, message: 'Dimensions in feet should not exceed 16 feet (about 5 meters)' }
+        };
+        
+        const limits = maxDimensions[unit];
+        if (!limits) return { valid: true, message: '' };
+        
+        if (length > limits.max || width > limits.max || height > limits.max) {
+          return { valid: false, message: limits.message };
+        }
+        
+        return { valid: true, message: '' };
+      }
+      
+      // Add box function
+      function addBox(boxId) {
+        const boxesContainer = document.getElementById('boxesContainer');
+        const newBox = document.createElement('div');
+        newBox.className = 'box-item border rounded p-3 mb-2';
+        newBox.setAttribute('data-box-id', boxId);
+        
+        newBox.innerHTML = `
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="fw-bold">Box ${boxId}</span>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-box-btn">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <label class="form-label small">Length</label>
+              <input type="number" class="form-control box-length" min="0.1" step="0.1" placeholder="Length" required>
+            </div>
+            <div class="col-3">
+              <label class="form-label small">Width</label>
+              <input type="number" class="form-control box-width" min="0.1" step="0.1" placeholder="Width" required>
+            </div>
+            <div class="col-3">
+              <label class="form-label small">Height</label>
+              <input type="number" class="form-control box-height" min="0.1" step="0.1" placeholder="Height" required>
+            </div>
+            <div class="col-3">
+              <label class="form-label small">Unit</label>
+              <select class="form-control box-unit" required title="Select the unit for your dimensions">
+                <option value="cm">cm (centimeters)</option>
+                <option value="inches">inches</option>
+                <option value="feet">feet</option>
+              </select>
+            </div>
+          </div>
+        `;
+        
+        boxesContainer.appendChild(newBox);
+        
+        // Add remove functionality to the new box
+        newBox.querySelector('.remove-box-btn').addEventListener('click', function() {
+          newBox.remove();
+          updateBoxNumbers();
+        });
+        
+        // Add unit change listener to the new box
+        const unitSelect = newBox.querySelector('.box-unit');
+        if (unitSelect) {
+          unitSelect.addEventListener('change', function() {
+            updateDimensionLabels(newBox);
+          });
+        }
+        
+        // Initialize labels for the new box
+        updateDimensionLabels(newBox);
+        
+        // Add dimension validation listeners to the new box
+        const inputs = newBox.querySelectorAll('.box-length, .box-width, .box-height');
+        inputs.forEach(input => {
+          input.addEventListener('input', function() {
+            validateDimensionInput(newBox);
+          });
+        });
+      }
+      
+      // Remove box and update numbering
+      function updateBoxNumbers() {
+        const boxes = document.querySelectorAll('.box-item');
+        boxes.forEach((box, index) => {
+          const boxNumber = index + 1;
+          box.setAttribute('data-box-id', boxNumber);
+          box.querySelector('.fw-bold').textContent = `Box ${boxNumber}`;
+          
+          // Show/hide remove button based on box count
+          const removeBtn = box.querySelector('.remove-box-btn');
+          if (boxes.length === 1) {
+            removeBtn.style.display = 'none';
+          } else {
+            removeBtn.style.display = 'block';
+          }
+        });
+        
+        // Reinitialize unit change listeners after updating box numbers
+        addUnitChangeListeners();
+        
+        // Reinitialize dimension validation listeners after updating box numbers
+        addDimensionValidationListeners();
+      }
+      
+      // Show/hide COD amount field based on payment type
+       document.getElementById('paymentType').addEventListener('change', function() {
+         const codAmountContainer = document.getElementById('codAmountContainer');
+         const codAmountField = document.getElementById('codAmount');
+         if (this.value === 'COD') {
+           codAmountField.required = true;
+           codAmountContainer.style.display = 'block';
+         } else {
+           codAmountField.required = false;
+           codAmountContainer.style.display = 'none';
+         }
+       });
+      
+      // Handle form submission
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+                 // Get form data
+                 const paymentType = document.getElementById('paymentType').value;
+        
+        // Get form data
+         const formData = {
+           originPincode: document.getElementById('originPincode').value,
+           destinationPincode: document.getElementById('destinationPincode').value,
+           weight: parseFloat(document.getElementById('weight').value) || 0,
+           weightUnit: document.getElementById('weightUnit').value,
+           paymentType: paymentType,
+           codAmount: paymentType === 'COD' 
+            ? (parseFloat(document.getElementById('codAmount').value) || 0)
+            : 0, // Always 0 for prepaid
+           invoiceAmount: parseFloat(document.getElementById('invoiceamount').value) || 0
+         };
+         
+         // Collect box dimensions
+         const boxDimensions = [];
+         const boxes = document.querySelectorAll('.box-item');
+         boxes.forEach((box, index) => {
+           const length = parseFloat(box.querySelector('.box-length').value) || 0;
+           const width = parseFloat(box.querySelector('.box-width').value) || 0;
+           const height = parseFloat(box.querySelector('.box-height').value) || 0;
+           const unit = box.querySelector('.box-unit').value;
+           
+           console.log(`Box ${index + 1} dimensions:`, { length, width, height, unit });
+           
+           if (length > 0 && width > 0 && height > 0) {
+             boxDimensions.push({
+               length: length.toFixed(2),
+               breadth: width.toFixed(2),
+               height: height.toFixed(2),
+               dimension_unit: unit
+             });
+           }
+         });
+         
+         console.log('Final box dimensions array:', boxDimensions);
+         formData.boxDimensions = boxDimensions;
+         formData.total_boxes = boxDimensions.length;
+         
+         // Store formData globally so it can be accessed by displayRates
+         window.currentFormData = formData;
+         console.log('FormData stored globally:', window.currentFormData);
+         console.log('Box Dimensions collected:', boxDimensions);
+         console.log('Total boxes:', boxDimensions.length);
+        
+        // Validate form
+        if (!validateForm(formData)) {
+          return;
+        }
+        
+        // Show loading state
+        showLoading();
+        hideResults();
+        hideMessage();
+        
+        try {
+                     // Prepare API parameters
+           const apiParams = {
+             type: 'all',
+             clientId: null,
+             pickupPincode: formData.originPincode,
+             destinationPincode: formData.destinationPincode,
+             total_weight: formData.weightUnit === 'gm' ? (formData.weight / 1000) : formData.weight,
+             total_boxes: formData.total_boxes,
+             paymentType: formData.paymentType,
+             clientBaseValue: formData.codAmount,
+             boxDimensions: formData.boxDimensions,
+             cod: formData.codAmount,
+             invoiceAmount: formData.invoiceAmount,
+             weight_unit: 'kg'
+           };
+          
+          console.log('API Parameters:', apiParams);
+          console.log('Box Dimensions being sent:', apiParams.boxDimensions);
+          
+          // Make API call
+          const response = await axios.get('/api/calculate-express-rate', { params: apiParams });
+          console.log('API Response:', response.data);
+          
+          if (response.data && response.data.rates && response.data.rates.length > 0) {
+            displayRates(response.data.rates);
+            showMessage('Rates calculated successfully!', 'success');
+          } else {
+            showMessage('No rates available for the given parameters.', 'warning');
+          }
+          
+        } catch (error) {
+          console.error('Error calculating rates:', error);
+          let errorMessage = 'Failed to calculate rates.';
+          
+          if (error.response) {
+            if (error.response.status === 404) {
+              errorMessage = 'No rates found for the given parameters.';
+            } else if (error.response.status === 500) {
+              errorMessage = 'Server error occurred while calculating rates.';
+            } else if (error.response.data && error.response.data.message) {
+              errorMessage = error.response.data.message;
+            }
+          } else if (error.request) {
+            errorMessage = 'Network error. Please check your connection.';
+          }
+          
+          showMessage(errorMessage, 'error');
+        } finally {
+          hideLoading();
+        }
+      });
+      
+      function validateForm(data) {
+        if (!data.originPincode || data.originPincode.length !== 6) {
+          showMessage('Please enter a valid 6-digit origin pincode.', 'error');
+          return false;
+        }
+        
+        if (!data.destinationPincode || data.destinationPincode.length !== 6) {
+          showMessage('Please enter a valid 6-digit destination pincode.', 'error');
+          return false;
+        }
+        
+        if (!data.weight || data.weight <= 0) {
+          showMessage('Please enter a valid weight.', 'error');
+          return false;
+        }
+        
+        if (!data.boxDimensions || data.boxDimensions.length === 0) {
+          showMessage('Please enter dimensions for at least one box.', 'error');
+          return false;
+        }
+        
+                // Validate each box has valid dimensions
+        for (let i = 0; i < data.boxDimensions.length; i++) {
+          const box = data.boxDimensions[i];
+          if (!box.length || !box.breadth || !box.height || 
+              box.length <= 0 || box.breadth <= 0 || box.height <= 0) {
+            showMessage(`Please enter valid dimensions for Box ${i + 1}.`, 'error');
+            return false;
+          }
+          
+          // Validate unit selection
+          if (!box.dimension_unit || !['cm', 'inches', 'feet'].includes(box.dimension_unit)) {
+            showMessage(`Please select a valid unit for Box ${i + 1}.`, 'error');
+            return false;
+          }
+
+          // Validate dimensions based on unit
+          const validationResult = validateDimensionsByUnit(
+            parseFloat(box.length),
+            parseFloat(box.breadth),
+            parseFloat(box.height),
+            box.dimension_unit
+          );
+
+          if (!validationResult.valid) {
+            showMessage(`Box ${i + 1}: ${validationResult.message}`, 'error');
+            return false;
+          }
+        }
+         
+         // Validate weight based on unit
+         if (data.weightUnit === 'gm' && data.weight < 1) {
+           showMessage('Weight in grams must be at least 1 gm.', 'error');
+           return false;
+         } else if (data.weightUnit === 'kg' && data.weight < 0.1) {
+           showMessage('Weight in kilograms must be at least 0.1 kg.', 'error');
+           return false;
+         }
+        
+        if (data.paymentType === 'COD' && (!data.codAmount || data.codAmount <= 0)) {
+          showMessage('Please enter a valid COD amount for COD shipments.', 'error');
+          return false;
+        }
+        
+        return true;
+      }
+      
+                    function displayRates(rates) {
+         console.log('displayRates called with rates:', rates);
+         
+         // Get formData from global storage
+         const formData = window.currentFormData;
+         if (!formData) {
+           console.error('No formData available for displayRates');
+           return;
+         }
+         console.log('FormData retrieved successfully in displayRates:', formData);
+         
+         // Ensure weight values are numbers
+         if (typeof formData.weight !== 'number') {
+           formData.weight = parseFloat(formData.weight) || 0;
+         }
+         console.log('Weight after conversion:', formData.weight, 'Type:', typeof formData.weight);
+         
+         ratesList.innerHTML = '';
+         
+         // Sort rates by price (cheapest first)
+         const sortedRates = [...rates].sort((a, b) => parseFloat(a.rate) - parseFloat(b.rate));
+         console.log('Sorted rates:', sortedRates);
+         
+         // Group rates by courier
+         const groupedRates = {};
+         sortedRates.forEach(rate => {
+           const key = rate.TaggedApi;
+           if (!groupedRates[key]) {
+             groupedRates[key] = [];
+           }
+           groupedRates[key].push(rate);
+         });
+         
+         // Get cheapest rate for summary
+         const cheapestRate = sortedRates[0];
+         const totalCarriers = Object.keys(groupedRates).length;
+         
+         // Add summary header
+         const summaryHeader = document.createElement('div');
+         summaryHeader.className = 'w-100 mb-4';
+         summaryHeader.innerHTML = `
+           <div class="d-flex justify-content-between align-items-center p-3" style="background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.2);">
+             <div>
+               <h5 class="mb-1" style="color: #3a3a3a; font-weight: 600;">
+                 ${totalCarriers} carriers • Cheapest ₹${cheapestRate?.rate || 'N/A'}
+               </h5>
+               <p class="mb-0" style="color: #6b7280; font-size: 14px;">
+                 Showing best rates first, grouped by courier partner
+               </p>
+             </div>
+             <div class="text-end">
+               <div class="badge bg-primary px-3 py-2" style="font-size: 12px;">
+                 ${sortedRates.length} rates available
+               </div>
+             </div>
+           </div>
+         `;
+         ratesList.appendChild(summaryHeader);
+         
+         // Create pagination container
+         const paginationContainer = document.createElement('div');
+         paginationContainer.className = 'w-100 mb-3';
+         paginationContainer.id = 'paginationContainer';
+         
+         // Show first 5 groups initially
+         const initialGroups = Object.entries(groupedRates).slice(0, 5);
+         let currentPage = 1;
+         const itemsPerPage = 5;
+         const totalPages = Math.ceil(Object.keys(groupedRates).length / itemsPerPage);
+         
+        
+         // Store grouped rates globally for pagination
+         window.currentGroupedRates = groupedRates;
+         window.currentPage = 1;
+         
+         // Initial render
+         window.renderPage(1);
+         
+         // Add pagination controls
+         if (totalPages > 1) {
+           paginationContainer.innerHTML = `
+             <div class="d-flex justify-content-center align-items-center gap-2">
+               <button class="btn btn-outline-primary btn-sm" onclick="window.changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                 <i class="fas fa-chevron-left"></i> Previous
+               </button>
+               <span class="px-3 py-2" style="color: #6b7280; font-weight: 500;">
+                 Page ${currentPage} of ${totalPages}
+               </span>
+               <button class="btn btn-outline-primary btn-sm" onclick="window.changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                 Next <i class="fas fa-chevron-right"></i>
+               </button>
+             </div>
+           `;
+           ratesList.appendChild(paginationContainer);
+         }
+         
+         showResults();
+       }
+       
+       // Store renderPage function globally
+       window.renderPage = function(page) {
+         const groupedRates = window.currentGroupedRates;
+         const formData = window.currentFormData; // Get form data from global storage
+         
+         // Debug logging
+         console.log('renderPage called with page:', page);
+         console.log('groupedRates:', groupedRates);
+         console.log('formData:', formData);
+         
+         if (!groupedRates || !formData) {
+           console.error('Missing required data for renderPage:', { groupedRates: !!groupedRates, formData: !!formData });
+           return;
+         }
+         
+         // Ensure weight values are numbers
+         if (typeof formData.weight !== 'number') {
+           formData.weight = parseFloat(formData.weight) || 0;
+         }
+         console.log('Weight in renderPage after conversion:', formData.weight, 'Type:', typeof formData.weight);
+         
+         const startIndex = (page - 1) * 5;
+         const endIndex = startIndex + 5;
+         const currentGroups = Object.entries(groupedRates).slice(startIndex, endIndex);
+         
+         // Clear existing cards
+         const existingCards = ratesList.querySelectorAll('.courier-card');
+         existingCards.forEach(card => card.remove());
+         
+         // Render current page cards
+         currentGroups.forEach(([courier, courierRates], groupIndex) => {
+           const actualGroupIndex = startIndex + groupIndex;
+           
+           courierRates.forEach((rate, rateIndex) => {
+             const rateCard = document.createElement('div');
+             rateCard.className = 'col-auto courier-card mb-3';
+             rateCard.setAttribute('data-group', `group-${actualGroupIndex}-${rateIndex}`);
+             rateCard.style.display = rateIndex === 0 ? 'block' : 'none'; // Show only first rate initially
+             
+                            const isSurface = rate.Aggrigator?.toLowerCase().includes('surface');
+               const mode = isSurface ? 'Surface' : 'Air';
+               const modeIcon = isSurface ? '<i class="fas fa-truck me-1"></i>Surface' : '<i class="fas fa-plane me-1"></i>Air';
+             
+             const gst = (rate.rate * 0.18).toFixed(2);
+             const totalRate = (rate.rate + parseFloat(gst)).toFixed(2);
+             const shipping = rate.rate; // Base shipping rate
+             
+             console.log('GST Debug:', {
+               originalRate: rate.rate,
+               calculatedGST: gst,
+               totalRate: totalRate,
+               shipping: shipping,
+               verification: (parseFloat(rate.rate) + parseFloat(gst)).toFixed(2)
+             });
+             // Debug weight calculations and rate data
+             console.log('Complete rate object in renderPage:', rate);
+             console.log('delhiveryApiVariant in renderPage:', rate.delhiveryApiVariant, 'Type:', typeof rate.delhiveryApiVariant);
+             console.log('Weight calculations for rate in renderPage:', {
+               rate: rate.rate,
+               volumetricWeight: rate.volumetricWeight,
+               chargableWeight: rate.chargableWeight,
+               total_weight: rate.total_weight,
+               parsed_volumetric: parseFloat(rate.volumetricWeight || 0),
+               parsed_chargeable: parseFloat(rate.chargableWeight || rate.total_weight || 0)
+             });
+             
+             // Get courier logo
+             const getCourierLogo = (courierName) => {
+               const logos = {
+                 'XPRESSBEES': '/assets/images/logos/expressbees.png',
+                 'DTDC': '/assets/images/logos/dtdc.png',
+                 'DELHIVERY': '/assets/images/logos/delhivery.png'
+               };
+               return logos[courierName] || '/assets/images/logos/default.png';
+             };
+             
+             // Check if delhiveryApiVariant is 2 for conditional styling
+             const isDelhiveryVariant2 = rate.delhiveryApiVariant === 2;
+             const cardBackground = isDelhiveryVariant2 
+               ? 'linear-gradient(135deg, rgb(181 246 59 / 10%), rgb(151 175 30 / 15%))'
+               : 'linear-gradient(135deg, #ffffff 0%, #f8fafc 30%, #e2e8f0 70%, #cbd5e1 100%)';
+             
+             rateCard.innerHTML = `
+               <div class="card shipping-option border-0 shadow position-relative" style="border-radius: 20px; width: 340px; height: 200px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                           background: ${cardBackground};
+                           box-shadow: 0 8px 25px rgba(58, 58, 58, 0.12), 0 3px 10px rgba(58, 58, 58, 0.08);
+                           border: 1px solid rgba(58, 58, 58, 0.1);
+                           backdrop-filter: blur(10px);">
+                 
+                 <!-- Professional Decorative Elements -->
+                 <div class="position-absolute" style="top: -30px; right: -30px; width: 120px; height: 120px; 
+                      background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, rgba(58, 58, 58, 0.04) 70%); 
+                      border-radius: 50%; opacity: 0.7;"></div>
+                 <div class="position-absolute" style="bottom: -40px; left: -40px; width: 140px; height: 140px; 
+                      background: radial-gradient(circle, rgba(58, 58, 58, 0.05) 0%, rgba(59, 130, 246, 0.06) 70%); 
+                      border-radius: 50%; opacity: 0.6;"></div>
+                 
+                 <!-- Professional accent line -->
+                 <div class="position-absolute" style="top: 0; left: 0; width: 100%; height: 4px; 
+                      background: ${isDelhiveryVariant2 ? 'linear-gradient(90deg, rgb(181 246 59), rgb(151 175 30) 50%, rgb(101 163 13) 100%)' : 'linear-gradient(90deg, #3b82f6 0%, #1e40af 50%, #3a3a3a 100%)'}; 
+                      border-radius: 20px 20px 0 0;"></div>
+                 
+                 <!-- Card Content -->
+                 <div class="h-100 d-flex flex-column p-4 position-relative" style="z-index: 2;">
+                   
+                   <!-- Header: Logo and Badge -->
+                   <div class="d-flex justify-content-between align-items-center mb-2">
+                     <div class="courier-logo d-flex align-items-center">
+                       <div style="background: rgba(255, 255, 255, 0.9); padding: 6px; border-radius: 8px; 
+                                   backdrop-filter: blur(5px); border: 1px solid rgba(59, 130, 246, 0.2);">
+                         <img src="${getCourierLogo(rate.TaggedApi)}" alt="${rate.TaggedApi}" style="height:15px;vertical-align:middle;margin-right:6px;">
+                       </div>
+                       ${isDelhiveryVariant2 ? '<div class="ms-2 badge rounded-pill" style="background: linear-gradient(135deg, rgb(181 246 59), rgb(151 175 30)); color: #1a1a1a; font-size: 8px; font-weight: 600; border: 1px solid rgba(181, 246, 59, 0.3);">V2</div>' : ''}
+                     </div>
+                     <div class="badge rounded-pill px-3 py-2" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(30, 64, 175, 0.15)); 
+                                 color: #3a3a3a; font-size: 10px; font-weight: 600; 
+                                 border: 1px solid rgba(59, 130, 246, 0.3);">
+                       <i class="fas fa-clock me-1"></i>${rate.days || 'N/A'} days
+                     </div>
+                   </div>
+
+                   <!-- Service Name -->
+                   <div class="mb-1">
+                     <h6 class="fw-bold mb-0" style="font-size: 12px; color: #3a3a3a; line-height: 1.3; letter-spacing: 0.3px;">
+                       ${rate.forwarderServiceType} ${rate.maxSlab || 'Unlimited'}gm
+                     </h6>
+                   </div>
+
+                   <!-- Weight Information Card -->
+                   <div class="mb-1">
+                     <div class="rounded-3 p-2" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(248, 250, 252, 0.8)); 
+                                 border: 1px solid rgba(59, 130, 246, 0.2); backdrop-filter: blur(5px);">
+                                                <div class="row g-1 text-center" style="font-size: 9px;">
+                           <div class="col-4">
+                             <div style="color: #6b7280; font-weight: 500;">Actual</div>
+                             <div class="fw-bold" style="color: #3a3a3a; font-size: 10px;">
+                               ${(formData.weightUnit === 'gm' ? parseFloat(formData.weight) : (parseFloat(formData.weight) * 1000)).toFixed(2)} gm
+                             </div>
+                           </div>
+                           <div class="col-4">
+                             <div style="color: #6b7280; font-weight: 500;">Vol</div>
+                             <div class="fw-bold" style="color: #3a3a3a; font-size: 10px;">
+                               ${(parseFloat(rate.volumetricWeight || 0) * 1000).toFixed(2)} gm
+                             </div>
+                           </div>
+                           <div class="col-4">
+                             <div style="color: #6b7280; font-weight: 500;">Chg</div>
+                             <div class="fw-bold" style="color: #3b82f6; font-size: 10px;">
+                               ${(parseFloat(rate.chargableWeight || rate.total_weight || 0) * 1000).toFixed(2)} gm
+                             </div>
+                           </div>
+                         </div>
+                     </div>
+                   </div>
+
+                   <!-- Price Display and GET AWB Button -->
+                   <div class="d-flex justify-content-between align-items-center mb-3">
+                     <!-- Price Display -->
+                     <div class="text-start">
+                       <div class="fw-bold" style="font-size: 18px; color: #3a3a3a; text-shadow: 0 1px 3px rgba(58, 58, 58, 0.2);">
+                         ₹${totalRate}
+                       </div>
+                       <div style="font-size: 8px; color: #6b7280; line-height: 1.3;">
+                         <div>Shipping: ₹${rate.rate}</div>
+                         <div>GST (18%): ₹${gst}</div>
+                       </div>
+                     </div>
+
+                     <!-- Mode Display with Icon -->
+                     <div class="text-end">
+                       <div class="badge rounded-pill px-2 py-1" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(30, 64, 175, 0.15)); color: #3a3a3a; font-size: 9px; font-weight: 600; border: 1px solid rgba(59, 130, 246, 0.3);">
+                         ${modeIcon}
+                       </div>
+                     </div> 
+                   </div>
+
+                   <!-- More Options Badge (if multiple rates for same courier) -->
+                   ${courierRates.length > 1 ? `
+                     <div class="position-absolute" style="top: 12px; right: 12px;">
+                       <span class="badge rounded-circle d-flex align-items-center justify-content-center" 
+                             style="width: 24px; height: 24px; font-size: 8px; cursor: pointer; font-weight: 600;
+                                    background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(30, 64, 175, 0.9)); 
+                                    color: white; border: 1px solid rgba(255, 255, 255, 0.8);" 
+                             onclick="window.toggleGroup('${actualGroupIndex}')" title="+${courierRates.length - 1} more options">
+                         +${courierRates.length - 1}
+                       </span>
+                     </div>
+                   ` : ''}
+                 </div>
+
+                 <!-- Card Hover Effect -->
+                 <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.03), rgba(99, 102, 241, 0.03)); 
+                             opacity: 0; transition: opacity 0.3s ease; pointer-events: none; border-radius: 20px;" 
+                      onmouseover="this.style.opacity='1'; this.parentElement.style.transform='translateY(-5px) scale(1.02)'; this.parentElement.style.boxShadow='0 15px 35px rgba(0, 0, 0, 0.12), 0 6px 15px rgba(0, 0, 0, 0.08)'" 
+                      onmouseout="this.style.opacity='0'; this.parentElement.style.transform='translateY(0) scale(1)'; this.parentElement.style.boxShadow='0 8px 25px rgba(0, 0, 0, 0.08), 0 3px 10px rgba(0, 0, 0, 0.04)'">
+                 </div>
+
+                 <!-- Shimmer Effect -->
+                 <div class="position-absolute top-0 start-0 w-100 h-100" style="transform: translateX(-100%); transition: transform 0.8s ease; pointer-events: none; border-radius: 20px;" 
+                      onmouseover="this.style.transform='translateX(100%)'" 
+                      onmouseout="this.style.transform='translateX(-100%)'">
+                 </div>
+               </div>
+             `;
+             
+             ratesList.appendChild(rateCard);
+           });
+         });
+       };
+       
+       // Pagination function
+       window.changePage = function(page) {
+         const groupedRates = window.currentGroupedRates;
+         if (!groupedRates) return;
+         
+         const totalPages = Math.ceil(Object.keys(groupedRates).length / 5);
+         if (page < 1 || page > totalPages) return;
+         
+         window.currentPage = page;
+         window.renderPage(page);
+         
+         // Update pagination controls
+         const paginationContainer = document.getElementById('paginationContainer');
+         if (paginationContainer) {
+           paginationContainer.innerHTML = `
+             <div class="d-flex justify-content-center align-items-center gap-2">
+               <button class="btn btn-outline-primary btn-sm" onclick="window.changePage(${page - 1})" ${page === 1 ? 'disabled' : ''}>
+                 <i class="fas fa-chevron-left"></i> Previous
+               </button>
+               <span class="px-3 py-2" style="color: #6b7280; font-weight: 500;">
+                 Page ${page} of ${totalPages}
+               </span>
+               <button class="btn btn-outline-primary btn-sm" onclick="window.changePage(${page + 1})" ${page === totalPages ? 'disabled' : ''}>
+                 Next <i class="fas fa-chevron-right"></i>
+               </button>
+             </div>
+           `;
+         }
+       };
+       
+               // Toggle group function
+        window.toggleGroup = function(groupIndex) {
+          console.log('toggleGroup called with index:', groupIndex);
+          const cards = document.querySelectorAll(`[data-group^="group-${groupIndex}-"]`);
+          console.log('Found cards:', cards.length);
+          cards.forEach((card, index) => {
+            if (index === 0) return; // Skip first card
+            const currentDisplay = card.style.display;
+            card.style.display = currentDisplay === 'none' ? 'block' : 'none';
+            console.log(`Card ${index} display changed from ${currentDisplay} to ${card.style.display}`);
+          });
+        };
+      
+      function showLoading() {
+        loadingMessage.style.display = 'block';
+        calculateBtn.disabled = true;
+      }
+      
+      function hideLoading() {
+        loadingMessage.style.display = 'none';
+        calculateBtn.disabled = false;
+      }
+      
+             function showResults() {
+         // Results section is always visible now, just update content
+         console.log('Results displayed');
+       }
+       
+       function hideResults() {
+         // Results section is always visible now, just clear content
+         ratesList.innerHTML = `
+           <div class="text-center text-muted py-5 w-100">
+             <i class="fa fa-calculator fa-3x mb-3"></i>
+             <p>Fill in the shipment details and click "Calculate Rates" to see available shipping options.</p>
+           </div>
+         `;
+       }
+      
+      function showMessage(message, type) {
+        messageContainer.innerHTML = `<div class="${type}">${message}</div>`;
+        messageContainer.style.display = 'block';
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+          hideMessage();
+        }, 5000);
+      }
+      
+      function hideMessage() {
+        messageContainer.style.display = 'none';
+      }
+      
+             // Initialize payment type change
+       document.getElementById('paymentType').dispatchEvent(new Event('change'));
+       
+       
+       
+       // Call the function to set client ID
+       
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1713 @@
+<%- include('../partials/header') %>
+<%- include('../partials/left-sidebar') %>
+
+
+<main>
+  <div class="container-fluid">
+    <!-- Header Breadcrumb Section -->
+    <div class="row">
+      <div class="col-12">
+        <h1>Bank Reconciliation</h1>
+        <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
+          <ol class="breadcrumb pt-0">
+            <li class="breadcrumb-item">
+              <a href="#">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="#">Finance</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Bank Reconciliation</li>
+          </ol>
+        </nav>
+        <div class="separator mb-5"></div>
+      </div>
+    </div>
+
+
+    <div>
+      <!-- Action Buttons Section -->
+      <div class="card mb-4" style="border-radius: 12px; box-shadow: 0 2px 8px rgba(90,153,252,0.08);">
+        <div class="card-header" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 12px 12px 0 0; border-bottom: 1px solid #e2e8f2;">
+          <h6 class="mb-0" style="color: #2d3748; font-weight: 600;">
+            <i class="fas fa-tools me-2"></i>Actions & Tools
+          </h6>
+        </div>
+        <div class="card-body p-4">
+          <div class="row">
+            <div class="col-md-8 d-flex gap-2">
+              <button class="btn btn-primary" data-toggle="modal" data-target="#addRecoModal">
+                <i class="fas fa-plus me-1"></i>Add New Reco
+          </button>
+              <div class="btn-group">
+              <!-- <button id="downloadBtn" class="btn btn-outline-success">
+                  <i class="fas fa-download me-1"></i>Sample File
+              </button> -->
+                <!-- <button type="button" class="btn btn-outline-success dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span class="visually-hidden">Toggle Dropdown</span>
+                </button> -->
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#" id="downloadCsvBtn">
+                    <i class="fas fa-file-csv me-2"></i>Download CSV Sample
+                  </a></li>
+                  <li><a class="dropdown-item" href="#" id="downloadExcelBtn">
+                    <i class="fas fa-file-excel me-2"></i>Download Excel Sample
+                  </a></li>
+                </ul>
+              </div>
+              <button id="exportBtn" class="btn btn-outline-info">
+                <i class="fas fa-file-excel me-1"></i>Export Data
+              </button>
+              <button id="refreshBtn" class="btn btn-outline-secondary">
+                <i class="fas fa-sync-alt me-1"></i>Refresh
+              </button>
+            </div>
+            <div class="col-md-4 text-end">
+              <!-- <button id="clearFiltersBtn" class="btn btn-outline-warning">
+                <i class="fas fa-eraser me-1"></i>Clear All Filters
+              </button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+   
+      <div class="p-2">
+        <ul class="nav nav-tabs custom-nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="name-tab" data-toggle="tab" data-target="#name" type="button" role="tab" aria-controls="name" aria-selected="true">
+              Bank Forwarder Reconciliation Summary UTR
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="dashboard-tab" data-toggle="tab" data-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">
+              Bank Forwarder Reconciliation Summary Client
+            </button>
+          </li>
+        </ul>
+  
+        <div class="tab-content" id="myTabContent">
+          <!-- First Tab Content -->
+          <div class="tab-pane fade show active" id="name" role="tabpanel" aria-labelledby="name-tab">
+            <!-- Loading Spinner -->
+            <div id="remitence-loading" class="text-center py-4" style="display: none;">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p class="mt-2 text-muted">Loading data...</p>
+            </div>
+            
+            <!-- Error State -->
+            <div id="remitence-error" class="alert alert-danger d-none">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              <span id="remitence-error-message">Failed to load data</span>
+            </div>
+            
+            <!-- API Filters -->
+            <div class="card mb-3" id="remitence-filters" style="display: none;">
+              <div class="card-header">
+                <h6 class="mb-0">
+                  <i class="fas fa-filter me-2"></i>Bank Remittance Filters
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label">UTR Number</label>
+                    <input type="text" id="remitence-utr-number" class="form-control" placeholder="Enter UTR number">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Bank Name</label>
+                    <input type="text" id="remitence-bank-name" class="form-control" placeholder="Enter bank name">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">Shipment Mode</label>
+                    <input type="text" id="remitence-shipment-mode" class="form-control" placeholder="e.g., expressbees/Standard-Air">
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label">File Uploaded On</label>
+                    <input type="date" id="remitence-file-uploaded-on" class="form-control">
+                  </div>
+                </div>
+                <div class="row g-3 mt-2">
+                  <div class="col-md-9 d-flex align-items-end">
+                    <button id="apply-remitence-filters" class="btn btn-primary btn-sm me-2">
+                      <i class="fas fa-search me-1"></i>Apply Filters
+                    </button>
+                    <button id="clear-remitence-filters" class="btn btn-outline-secondary btn-sm">
+                      <i class="fas fa-times me-1"></i>Clear Filters
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Summary Cards -->
+            <div class="row mb-4" id="remitence-summary-cards">
+              <div class="col-md-3">
+                <div class="card text-center" style="border-radius: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                  <div class="card-body py-3">
+                    <h5 class="card-title mb-1" id="remitence-totalRecords">0</h5>
+                    <p class="card-text small mb-0">Total Records</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card text-center" style="border-radius: 12px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+                  <div class="card-body py-3">
+                    <h5 class="card-title mb-1" id="remitence-totalAmount">₹0</h5>
+                    <p class="card-text small mb-0">Total Amount</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card text-center" style="border-radius: 12px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+                  <div class="card-body py-3">
+                    <h5 class="card-title mb-1" id="remitence-avgAmount">₹0</h5>
+                    <p class="card-text small mb-0">Average Amount</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="card text-center" style="border-radius: 12px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white;">
+                  <div class="card-body py-3">
+                    <h5 class="card-title mb-1" id="remitence-uniqueBanks">0</h5>
+                    <p class="card-text small mb-0">Unique Banks</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-responsive scrollable-tbody">
+              <table class="table table-hover custom-table" id="datatable_2">
+                <thead>
+                  <tr>
+                    <th class="sortable" data-column="0" style="cursor: pointer;">
+                      UTR Deposited On
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th class="sortable" data-column="1" style="cursor: pointer;">
+                      UTR Number
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th> 
+                    <th class="sortable" data-column="2" style="cursor: pointer;">
+                      Amount
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th class="sortable" data-column="3" style="cursor: pointer;">
+                      File Uploaded On
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th class="sortable" data-column="4" style="cursor: pointer;">
+                      Bank Name
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th class="sortable" data-column="5" style="cursor: pointer;">
+                      Shipment Mode
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="remitence-data-body">
+                  <tr>
+                    <td colspan="7" class="text-center text-muted">Loading data...</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div id="remitence-pagination" class="d-flex justify-content-between align-items-center mt-3" style="display: none;">
+              <div class="pagination-info">
+                <span id="remitence-pagination-info">Showing 0 to 0 of 0 entries</span>
+              </div>
+              <div id="remitence-pagination-controls" class="pagination-controls">
+                <button id="remitence-prev-page" class="btn btn-sm btn-outline-primary me-1" disabled>
+                  <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                <span id="remitence-page-numbers" class="mx-2"></span>
+                <button id="remitence-next-page" class="btn btn-sm btn-outline-primary ms-1" disabled>
+                  Next <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Second Tab Content -->
+          <div class="tab-pane fade" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+            <!-- Loading Spinner -->
+            <div id="api-loading" class="text-center py-4" style="display: none;">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p class="mt-2 text-muted">Loading data...</p>
+            </div>
+            
+            <!-- Error State -->
+            <div id="api-error" class="alert alert-danger d-none">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              <span id="api-error-message">Failed to load data</span>
+            </div>
+            
+            <!-- API Filters -->
+            <div class="card mb-3" id="api-filters" style="display: none;">
+              <div class="card-header">
+                <h6 class="mb-0">
+                  <i class="fas fa-filter me-2"></i>Bank Forwarder Reconciliation Filters
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <label class="form-label">Client Name</label>
+                    <input type="text" id="api-client-name" class="form-control" placeholder="Enter client name">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">AWB Number</label>
+                    <input type="text" id="api-awb-number" class="form-control" placeholder="Enter AWB number">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Forwarder</label>
+                    <input type="text" id="api-forwarder" class="form-control" placeholder="Enter forwarder name">
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col-12">
+                    <button id="apply-api-filters" class="btn btn-primary btn-sm">
+                      <i class="fas fa-search me-1"></i>Apply Filters
+                    </button>
+                    <button id="clear-api-filters" class="btn btn-outline-secondary btn-sm ms-2">
+                      <i class="fas fa-times me-1"></i>Clear Filters
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="table-responsive scrollable-tbody">
+              <table class="table custom-table" id="datatable_3">
+                <thead>
+                  <tr>
+                    <th class="sortable" data-column="0" style="cursor: pointer;">
+                      ID
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th class="sortable" data-column="1" style="cursor: pointer;">
+                      Client Name
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th class="sortable" data-column="2" style="cursor: pointer;">
+                      AWB Number
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th class="sortable" data-column="3" style="cursor: pointer;">
+                      Quantity
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th class="sortable" data-column="4" style="cursor: pointer;">
+                      COD Amount
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th class="sortable" data-column="5" style="cursor: pointer;">
+                      Order Type
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th class="sortable" data-column="6" style="cursor: pointer;">
+                      Status
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th class="sortable" data-column="7" style="cursor: pointer;">
+                      Forwarder
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th class="sortable" data-column="8" style="cursor: pointer;">
+                      Bank Name
+                      <i class="fas fa-sort sort-icon" style="opacity: 0.3; margin-left: 5px;"></i>
+                    </th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="api-data-body">
+                  <tr>
+                    <td colspan="10" class="text-center text-muted">Loading data...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div id="api-pagination" class="d-flex justify-content-between align-items-center mt-3" style="display: none;">
+              <div class="pagination-info">
+                <span id="pagination-info">Showing 0 to 0 of 0 entries</span>
+              </div>
+              <div id="api-pagination-controls" class="pagination-controls">
+                <button id="prev-page" class="btn btn-sm btn-outline-primary me-1" disabled>
+                  <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                <span id="page-numbers" class="mx-2"></span>
+                <button id="next-page" class="btn btn-sm btn-outline-primary ms-1" disabled>
+                  Next <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Structure -->
+    <div class="modal fade" id="addRecoModal" tabindex="-1" role="dialog" aria-labelledby="addRecoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content" style="border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+        <div class="modal-header" style="background: linear-gradient(135deg, #fdfcfb 0%, #f1faff 100%); border-radius: 15px 15px 0 0; border-bottom: 1px solid #e5e9f2;">
+          <h5 class="modal-title" id="addRecoModalLabel" style="color: #5a99fc; font-weight: 600;">
+            <i class="fas fa-plus-circle me-2"></i>Add New Reco
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body p-4">
+          <!-- Tab Navigation -->
+          <ul class="nav nav-pills mb-4" id="addRecoTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="manual-tab" data-toggle="pill" data-target="#manual-form" type="button" role="tab">
+                <i class="fas fa-plus me-1"></i>Add Manual Record
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="upload-tab" data-toggle="pill" data-target="#upload-form" type="button" role="tab">
+                <i class="fas fa-upload me-1"></i>Upload Excel File
+              </button>
+            </li>
+          </ul>
+
+          <!-- Tab Content -->
+          <div class="tab-content" id="addRecoTabContent">
+            <!-- Manual Form Tab -->
+            <div class="tab-pane fade show active" id="manual-form" role="tabpanel">
+              <form id="manualForm" class="needs-validation" novalidate>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="utrNumber" class="form-label">UTR Number *</label>
+                    <input type="text" class="form-control" id="utrNumber" name="utr_number" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="clientName" class="form-label">Client Name *</label>
+                    <input type="text" class="form-control" id="clientName" name="client_name" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="quantity" class="form-label">Quantity *</label>
+                    <input type="number" class="form-control" id="quantity" name="qty" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="lrAwb" class="form-label">LR/AWB *</label>
+                    <input type="text" class="form-control" id="lrAwb" name="lr_awb" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="status" class="form-label">Status *</label>
+                    <select class="form-select" id="status" name="status" required>
+                      <option value="">Select Status</option>
+                      <option value="Pending">Pending</option>
+                      <option value="Completed">Completed</option>
+                      <option value="Failed">Failed</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="remittedAmount" class="form-label">Remitted Amount *</label>
+                    <input type="number" class="form-control" id="remittedAmount" name="remitted_amount" step="0.01" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="forwarder" class="form-label">Forwarder Name *</label>
+                    <input type="text" class="form-control" id="forwarder" name="forwarder" required placeholder="Enter forwarder name">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="bankName" class="form-label">Bank Name *</label>
+                    <input type="text" class="form-control" id="bankName" name="bank_name" required placeholder="Enter bank name">
+                  </div>
+                </div>
+                <div class="d-grid gap-2 mt-4">
+                  <button type="submit" class="btn btn-primary" style="background: #5a99fc; border: none; padding: 12px; border-radius: 8px; font-weight: 500;">
+                    <i class="fas fa-save me-2"></i>Add Record
+                  </button>
+                  <button type="button" class="btn btn-light" data-dismiss="modal" style="padding: 12px; border-radius: 8px; border: 1px solid #e5e9f2;">
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Upload Form Tab -->
+            <div class="tab-pane fade" id="upload-form" role="tabpanel">
+          <form id="uploadForm" class="needs-validation" novalidate>
+                <div class="row g-3">
+                  <div class="col-md-12">
+                    <label for="fileInput" class="form-label text-muted mb-2">Upload Excel/CSV File</label>
+              <div class="input-group">
+                <input type="file" 
+                       class="form-control" 
+                       name="file" 
+                       id="fileInput" 
+                           accept=".xlsx,.xls,.csv"
+                       required 
+                       style="border-radius: 8px; padding: 12px; background: #f8fafc; border: 1px solid #e5e9f2;" />
+              </div>
+                    <div class="form-text mt-2">Supported formats: .xlsx, .xls, .csv<br>
+                      <strong>Expected columns:</strong> Client Name, Awb, AMOUNT, MODE, Client Code, Booking date, etc.<br>
+                      <small class="text-muted">UTR numbers will be generated automatically from AWB numbers.</small><br>
+                      <small class="text-warning"><strong>Note:</strong> Only COD orders (with AMOUNT > 0 or MODE = COD) will be processed. Prepaid orders will be skipped.</small>
+                    </div>
+            </div>
+                  <div class="col-md-6">
+                    <label for="uploadForwarder" class="form-label">Forwarder Name *</label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="uploadForwarder" 
+                           name="forwarder" 
+                           required 
+                           placeholder="Enter forwarder name for all records in this file"
+                           style="border-radius: 8px; padding: 12px; background: #f8fafc; border: 1px solid #e5e9f2;">
+                    <div class="form-text mt-1">This forwarder name will be applied to all records in the uploaded file.</div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="uploadBankName" class="form-label">Bank Name *</label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="uploadBankName" 
+                           name="bank_name" 
+                           required 
+                           placeholder="Enter bank name for all records in this file"
+                           style="border-radius: 8px; padding: 12px; background: #f8fafc; border: 1px solid #e5e9f2;">
+                    <div class="form-text mt-1">This bank name will be applied to all records in the uploaded file.</div>
+                  </div>
+                </div>
+                <div class="d-grid gap-2 mt-4">
+              <button type="submit" class="btn btn-primary" style="background: #5a99fc; border: none; padding: 12px; border-radius: 8px; font-weight: 500;">
+                <i class="fas fa-upload me-2"></i>Upload File
+              </button>
+              <button type="button" class="btn btn-light" data-dismiss="modal" style="padding: 12px; border-radius: 8px; border: 1px solid #e5e9f2;">
+                Cancel
+              </button>
+            </div>
+          </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Wait for jQuery to be loaded
+    function waitForJQuery() {
+      if (typeof $ !== 'undefined') {
+        $(document).ready(function () {
+      // This will trigger the modal when the "Add New Reco" button is clicked
+      $('#addRecoModal').on('show.bs.modal', function () {
+        console.log("Modal is opened");
+        // Reset forms when modal opens
+        $('#manualForm')[0].reset();
+        $('#uploadForm')[0].reset();
+        // Switch to manual form tab by default
+        $('#manual-tab').tab('show');
+        
+        // Test if form elements exist
+        console.log('=== TESTING FORM ELEMENTS ===');
+        console.log('Manual form exists:', $('#manualForm').length > 0);
+        console.log('Submit button exists:', $('#manualForm button[type="submit"]').length > 0);
+        console.log('UTR Number field exists:', $('#utrNumber').length > 0);
+        console.log('Client Name field exists:', $('#clientName').length > 0);
+        console.log('Quantity field exists:', $('#quantity').length > 0);
+        console.log('LR/AWB field exists:', $('#lrAwb').length > 0);
+        console.log('Status field exists:', $('#status').length > 0);
+        console.log('Remitted Amount field exists:', $('#remittedAmount').length > 0);
+        console.log('Forwarder field exists:', $('#forwarder').length > 0);
+      });
+
+      // Add click listener to submit button for debugging
+      $('#manualForm button[type="submit"]').on('click', function(e) {
+        console.log('=== SUBMIT BUTTON CLICKED ===');
+        console.log('Button element:', this);
+        console.log('Form element:', $('#manualForm')[0]);
+      });
+
+      // Manual form submission
+      $('#manualForm').on('submit', function(e) {
+        try {
+          e.preventDefault();
+          console.log('=== FORM SUBMIT EVENT TRIGGERED ===');
+          console.log('Form element:', this);
+          console.log('Event:', e);
+          
+        const formData = {
+          utr_number: $('#utrNumber').val(),
+          client_name: $('#clientName').val(),
+          qty: parseInt($('#quantity').val()),
+          lr_awb: $('#lrAwb').val(),
+          status: $('#status').val(),
+          remitted_amount: parseFloat($('#remittedAmount').val()),
+          forwarder: $('#forwarder').val(),
+          bank_name: $('#bankName').val()
+        };
+
+          console.log('=== MANUAL FORM SUBMISSION ===');
+          console.log('Form data:', formData);
+          console.log('Individual field values:');
+          console.log('UTR Number:', $('#utrNumber').val());
+          console.log('Client Name:', $('#clientName').val());
+          console.log('Quantity:', $('#quantity').val());
+          console.log('LR/AWB:', $('#lrAwb').val());
+          console.log('Status:', $('#status').val());
+          console.log('Remitted Amount:', $('#remittedAmount').val());
+          console.log('Forwarder:', $('#forwarder').val());
+
+        // Validate form
+        if (!formData.utr_number || !formData.client_name || !formData.qty || 
+            !formData.lr_awb || !formData.status || !formData.remitted_amount || 
+            !formData.forwarder || !formData.bank_name) {
+          console.log('Form validation failed:', formData);
+          Swal.fire({
+            icon: 'warning',
+            title: 'Validation Error',
+            text: 'Please fill in all required fields.'
+          });
+          return;
+        }
+
+        console.log('Form validation passed, submitting...');
+
+        // Show loading
+        Swal.fire({
+          title: 'Adding Record...',
+          text: 'Please wait while we add the new record.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        // Submit to API
+        $.ajax({
+          url: '/api/bank-recovery/add',
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(formData),
+          success: function(response) {
+            console.log('=== MANUAL FORM SUCCESS ===');
+            console.log('Response:', response);
+            
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Record added successfully!',
+              confirmButtonText: 'OK'
+            }).then(() => {
+              $('#addRecoModal').modal('hide');
+              // Refresh the appropriate tab data
+              // Manual record addition always goes to tbl_bankrecovspoid (Bank Forwarder Reconciliation tab)
+              console.log('Manual record added - refreshing Bank Forwarder Reconciliation tab');
+              loadApiData();
+              
+              // Also refresh the other tab if it's currently active
+              const activeTab = $('.nav-link.active').attr('id');
+              console.log('Active tab after manual add:', activeTab);
+              if (activeTab === 'name-tab') {
+                console.log('Also refreshing Bank Remittance tab');
+                loadRemitenceApiData();
+              }
+            });
+          },
+          error: function(xhr, status, error) {
+            console.error('Error adding record:', error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: 'Failed to add record. Please try again.'
+            });
+          }
+        });
+        } catch (error) {
+          console.error('=== FORM SUBMISSION ERROR ===');
+          console.error('Error:', error);
+          console.error('Stack trace:', error.stack);
+          Swal.fire({
+            icon: 'error',
+            title: 'JavaScript Error',
+            text: 'An error occurred while processing the form. Check console for details.'
+          });
+        }
+      });
+
+      // Upload form submission
+      $('#uploadForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const forwarderName = $('#uploadForwarder').val().trim();
+        const bankName = $('#uploadBankName').val().trim();
+        
+        // Validate forwarder name and bank name
+        if (!forwarderName || !bankName) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Validation Error',
+            text: 'Please enter both forwarder name and bank name.'
+          });
+          return;
+        }
+
+        // Check if file is selected
+        const fileInput = document.getElementById('fileInput');
+        if (!fileInput.files.length) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'No file selected',
+            text: 'Please select a file to upload.'
+          });
+          return;
+        }
+
+        // Create FormData with file, forwarder name, and bank name
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+        formData.append('forwarder', forwarderName);
+        formData.append('bank_name', bankName);
+        
+        // Debug: Log form data
+        console.log('=== FORM DATA DEBUG ===');
+        console.log('File:', fileInput.files[0]);
+        console.log('Forwarder:', forwarderName);
+        console.log('Bank Name:', bankName);
+        console.log('FormData entries:');
+        for (let pair of formData.entries()) {
+          console.log(pair[0] + ': ' + pair[1]);
+        }
+
+        // Show loading
+        Swal.fire({
+          title: 'Uploading File...',
+          text: 'Please wait while we process your file.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        // Submit to API
+        $.ajax({
+          url: '/api/bank-recovery/upload',
+          method: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            let message = `${response.message}`;
+            if (response.skippedRows > 0) {
+              message += `\n\nSkipped ${response.skippedRows} rows due to missing required fields.`;
+              if (response.skippedReasons && response.skippedReasons.length > 0) {
+                message += `\n\nSample reasons:\n${response.skippedReasons.join('\n')}`;
+              }
+            }
+            
+            Swal.fire({
+              icon: 'success',
+              title: 'Upload Successful!',
+              text: message,
+              confirmButtonText: 'OK'
+            }).then(() => {
+              $('#addRecoModal').modal('hide');
+              // Refresh both tabs since data is inserted into both tables
+              console.log('File upload completed - refreshing both tabs');
+              
+              // Always refresh Bank Forwarder Reconciliation tab (main data)
+              loadApiData();
+              
+              // Also refresh Bank Remittance tab (secondary data)
+              loadRemitenceApiData();
+              
+              console.log('Both tabs refreshed after file upload');
+            });
+          },
+          error: function(xhr, status, error) {
+            console.error('=== UPLOAD ERROR DEBUG ===');
+            console.error('Status:', status);
+            console.error('Error:', error);
+            console.error('XHR Status:', xhr.status);
+            console.error('XHR Response Text:', xhr.responseText);
+            console.error('XHR Response JSON:', xhr.responseJSON);
+            
+            let errorMessage = 'Failed to upload file. Please try again.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              errorMessage = xhr.responseJSON.message;
+            } else if (xhr.responseText) {
+              try {
+                const response = JSON.parse(xhr.responseText);
+                errorMessage = response.message || errorMessage;
+              } catch (e) {
+                errorMessage = xhr.responseText;
+              }
+            }
+            
+            Swal.fire({
+              icon: 'error',
+              title: 'Upload Failed',
+              text: errorMessage
+            });
+          }
+        });
+      });
+    });
+      } else {
+        // jQuery not loaded yet, try again in 100ms
+        setTimeout(waitForJQuery, 100);
+      }
+    }
+    
+    // Start waiting for jQuery
+    waitForJQuery();
+  </script>
+
+<script>
+  // Wait for jQuery to be loaded for the second script block
+  function waitForJQuery2() {
+    if (typeof $ !== 'undefined') {
+      // Remittance API Data Management
+  let remitenceCurrentPage = 1;
+  let remitencePageSize = 10;
+  let remitenceTotalRecords = 0;
+  let remitenceTotalPages = 0;
+  let remitenceCurrentFilters = {};
+  let remitenceCurrentSort = { column: -1, direction: 'asc' };
+
+  // API Data Management
+  let currentPage = 1;
+  let pageSize = 10;
+  let totalRecords = 0;
+  let totalPages = 0;
+  let currentFilters = {};
+  let currentSort = { column: -1, direction: 'asc' };
+
+  $(document).ready(function () {
+    // Initialize remittance API functionality when name tab is shown
+    $('#name-tab').on('shown.bs.tab', function () {
+      console.log('=== NAME TAB ACTIVATED ===');
+      console.log('Tab element:', this);
+      initializeRemitenceApiData();
+    });
+    
+    // Initialize API functionality when dashboard tab is shown
+    $('#dashboard-tab').on('shown.bs.tab', function () {
+      console.log('=== DASHBOARD TAB ACTIVATED ===');
+      console.log('Tab element:', this);
+      initializeApiData();
+    });
+    
+    // Add click handlers for debugging
+    $('#name-tab').on('click', function() {
+      console.log('=== NAME TAB CLICKED ===');
+    });
+    
+    $('#dashboard-tab').on('click', function() {
+      console.log('=== DASHBOARD TAB CLICKED ===');
+    });
+    
+    // Initialize both filter sets
+    initializeRemitenceApiFilters();
+    initializeApiFilters();
+    
+    // Initialize action buttons
+    initializeActionButtons();
+    
+    // Initialize sorting
+    initializeSorting();
+    
+    // Auto-load first tab data when page loads
+    console.log('Page loaded - auto-initializing remittance API');
+    initializeRemitenceApiData();
+  });
+
+  function initializeActionButtons() {
+    // Sample CSV download
+    $('#downloadCsvBtn').on('click', function(e) {
+      e.preventDefault();
+      downloadSampleFile('csv');
+    });
+
+    // Sample Excel download
+    $('#downloadExcelBtn').on('click', function(e) {
+      e.preventDefault();
+      downloadSampleFile('xlsx');
+    });
+
+    // Default download (CSV)
+    $('#downloadBtn').on('click', function() {
+      downloadSampleFile('csv');
+    });
+
+    function downloadSampleFile(format) {
+      const sampleData = "S.no,Booking date,Client Code,Client Name,DAILY/ REVERSE,Consignee Name,Origin,Destination,PIN CODE,STATE,Awb,VENDOR NAME,Remarks,MODE,AMOUNT,STATUS\n" +
+                        "1,4/14/2025,C186,JEWELLERY 4 ALL,DAILY PICKUP,SATISH KURI,DELHI,GOKAK,591307,Karnataka,34508810025336,DELHIVERY ONE,,COD,550,2-May\n" +
+                        "2,4/19/2025,C186,JEWELLERY 4 ALL,DAILY PICKUP,AKSHAY KHUNTE,DELHI,LONAND,415521,Maharashtra,34508810025642,DELHIVERY ONE,,COD,550,2-May\n" +
+                        "3,4/22/2025,C186,JEWELLERY 4 ALL,DAILY PICKUP,SHIVPRASAD CHIMAJI JANGAM,DELHI,KOLHAPUR,416112,Maharashtra,34508810029245,DELHIVERY ONE,,COD,550,2-May";
+      
+      if (format === 'csv') {
+        const csvContent = "data:text/csv;charset=utf-8,";
+        const encodedUri = encodeURI(csvContent + sampleData);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "bank_recovery_sample_new_format.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else if (format === 'xlsx') {
+        // For Excel, we'll create a CSV that can be opened in Excel
+        const csvContent = "data:text/csv;charset=utf-8,";
+        const encodedUri = encodeURI(csvContent + sampleData);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "bank_recovery_sample_new_format.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+
+    // Export Data
+    $('#exportBtn').on('click', function() {
+      // Get current tab data and export
+      const activeTab = $('.nav-link.active').attr('id');
+      if (activeTab === 'name-tab') {
+        exportRemitenceData();
+      } else if (activeTab === 'dashboard-tab') {
+        exportApiData();
+      }
+    });
+
+    // Refresh functionality
+    $('#refreshBtn').on('click', function() {
+      const activeTab = $('.nav-link.active').attr('id');
+      if (activeTab === 'name-tab') {
+        loadRemitenceApiData();
+      } else if (activeTab === 'dashboard-tab') {
+        loadApiData();
+      }
+    });
+
+    // Clear all filters
+    $('#clearFiltersBtn').on('click', function() {
+      const activeTab = $('.nav-link.active').attr('id');
+      if (activeTab === 'name-tab') {
+        clearRemitenceFilters();
+      } else if (activeTab === 'dashboard-tab') {
+        clearApiFilters();
+      }
+    });
+  }
+
+  function exportRemitenceData() {
+    const csvContent = "data:text/csv;charset=utf-8,";
+    let csv = "UTR Deposited On,UTR Number,Amount,File Uploaded On,Bank Name,Shipment Mode\n";
+    
+    $('#remitence-data-body tr').each(function() {
+      const row = [];
+      $(this).find('td').each(function(index) {
+        if (index < 6) { // Only first 6 columns (excluding Actions)
+          let cellText = $(this).text().trim();
+          // Clean up the text (remove extra spaces, newlines)
+          cellText = cellText.replace(/\s+/g, ' ').replace(/\n/g, ' ');
+          row.push(cellText);
+        }
+      });
+      if (row.length > 0 && row[0] !== 'No data found') {
+        csv += row.join(',') + "\n";
+      }
+    });
+    
+    const encodedUri = encodeURI(csvContent + csv);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "bank_remittance_" + new Date().toISOString().split('T')[0] + ".csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function exportApiData() {
+    const csvContent = "data:text/csv;charset=utf-8,";
+    let csv = "ID,Client Name,AWB Number,Quantity,COD Amount,Order Type,Status,Forwarder\n";
+    
+    $('#api-data-body tr').each(function() {
+      const row = [];
+      $(this).find('td').each(function(index) {
+        if (index < 8) { // Only first 8 columns (excluding Actions)
+          let cellText = $(this).text().trim();
+          // Clean up the text (remove extra spaces, newlines)
+          cellText = cellText.replace(/\s+/g, ' ').replace(/\n/g, ' ');
+          row.push(cellText);
+        }
+      });
+      if (row.length > 0 && row[0] !== 'No data found') {
+        csv += row.join(',') + "\n";
+      }
+    });
+    
+    const encodedUri = encodeURI(csvContent + csv);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "bank_recovery_" + new Date().toISOString().split('T')[0] + ".csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function clearRemitenceFilters() {
+    $('#remitence-utr-number').val('');
+    $('#remitence-bank-name').val('');
+    $('#remitence-shipment-mode').val('');
+    $('#remitence-file-uploaded-on').val('');
+    
+    remitenceCurrentFilters = {};
+    remitenceCurrentPage = 1;
+    loadRemitenceApiData();
+    
+    Swal.fire({
+      title: 'Filters Cleared',
+      text: 'All remittance filters have been reset successfully!',
+      icon: 'success',
+      timer: 1500,
+      showConfirmButton: false
+    });
+  }
+
+  function clearApiFilters() {
+    $('#api-client-name').val('');
+    $('#api-status').val('');
+    $('#api-forwarder').val('');
+    $('#api-utr-number').val('');
+    
+    currentFilters = {};
+    currentPage = 1;
+    loadApiData();
+    
+    Swal.fire({
+      title: 'Filters Cleared',
+      text: 'All API filters have been reset successfully!',
+      icon: 'success',
+      timer: 1500,
+      showConfirmButton: false
+    });
+  }
+
+  function initializeSorting() {
+    // Remittance table sorting
+    $(document).on('click', '#datatable_2 .sortable', function() {
+      const column = parseInt($(this).data('column'));
+      const $icon = $(this).find('.sort-icon');
+      const $header = $(this);
+      
+      // Remove sort classes from all remittance headers
+      $('#datatable_2 .sortable').removeClass('sort-asc sort-desc');
+      
+      // Determine sort direction
+      if (remitenceCurrentSort.column === column) {
+        remitenceCurrentSort.direction = remitenceCurrentSort.direction === 'asc' ? 'desc' : 'asc';
+      } else {
+        remitenceCurrentSort.direction = 'asc';
+      }
+      remitenceCurrentSort.column = column;
+      
+      // Add appropriate class
+      $header.addClass(remitenceCurrentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+      
+      // Sort the remittance table
+      sortRemitenceTable(column, remitenceCurrentSort.direction);
+    });
+
+    // API table sorting
+    $(document).on('click', '#datatable_3 .sortable', function() {
+      const column = parseInt($(this).data('column'));
+      const $icon = $(this).find('.sort-icon');
+      const $header = $(this);
+      
+      // Remove sort classes from all API headers
+      $('#datatable_3 .sortable').removeClass('sort-asc sort-desc');
+      
+      // Determine sort direction
+      if (currentSort.column === column) {
+        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+      } else {
+        currentSort.direction = 'asc';
+      }
+      currentSort.column = column;
+      
+      // Add appropriate class
+      $header.addClass(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+      
+      // Sort the API table
+      sortApiTable(column, currentSort.direction);
+    });
+  }
+
+  function sortRemitenceTable(column, direction) {
+    const tbody = $('#remitence-data-body');
+    const rows = tbody.find('tr').toArray();
+    
+    rows.sort(function(a, b) {
+      let aVal = $(a).find('td').eq(column).text().trim();
+      let bVal = $(b).find('td').eq(column).text().trim();
+      
+      // Special handling for different column types
+      if (column === 2) { // Amount column
+        aVal = parseFloat(aVal.replace(/[₹,]/g, '')) || 0;
+        bVal = parseFloat(bVal.replace(/[₹,]/g, '')) || 0;
+      } else if (column === 0 || column === 3) { // Date columns
+        // Extract date from the first line of the cell
+        aVal = aVal.split('\n')[0];
+        bVal = bVal.split('\n')[0];
+        aVal = new Date(aVal);
+        bVal = new Date(bVal);
+      }
+      
+      if (direction === 'asc') {
+        return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+      } else {
+        return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+      }
+    });
+    
+    // Re-append sorted rows
+    tbody.empty().append(rows);
+  }
+
+  function sortApiTable(column, direction) {
+    const tbody = $('#api-data-body');
+    const rows = tbody.find('tr').toArray();
+    
+    rows.sort(function(a, b) {
+      let aVal = $(a).find('td').eq(column).text().trim();
+      let bVal = $(b).find('td').eq(column).text().trim();
+      
+      // Special handling for different column types
+      if (column === 0) { // ID column
+        aVal = parseInt(aVal) || 0;
+        bVal = parseInt(bVal) || 0;
+      } else if (column === 4) { // COD Amount column
+        aVal = parseFloat(aVal.replace(/[₹,]/g, '')) || 0;
+        bVal = parseFloat(bVal.replace(/[₹,]/g, '')) || 0;
+      } else if (column === 3) { // Quantity column
+        aVal = parseInt(aVal) || 0;
+        bVal = parseInt(bVal) || 0;
+      }
+      
+      if (direction === 'asc') {
+        return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+      } else {
+        return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+      }
+    });
+    
+    // Re-append sorted rows
+    tbody.empty().append(rows);
+  }
+
+  // Remittance API Functions
+  function initializeRemitenceApiData() {
+    console.log('=== INITIALIZING REMITTANCE API DATA ===');
+    $('#remitence-filters').show();
+    loadRemitenceApiData();
+  }
+
+  function loadRemitenceApiData() {
+    console.log('=== LOADING REMITTANCE API DATA ===');
+    console.log('Current filters:', remitenceCurrentFilters);
+    console.log('Current page:', remitenceCurrentPage);
+    
+    $('#remitence-loading').show();
+    $('#remitence-error').addClass('d-none');
+    
+    const payload = {
+      page: remitenceCurrentPage,
+      limit: remitencePageSize,
+      ...remitenceCurrentFilters
+    };
+    
+    console.log('Remittance API Payload:', payload);
+    
+    $.ajax({
+      url: '/bank-remitence',
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(payload),
+      timeout: 30000,
+      success: function(response) {
+        console.log('=== REMITTANCE API SUCCESS ===');
+        console.log('Response:', response);
+        console.log('Response success:', response.success);
+        console.log('Response data:', response.data);
+        console.log('Response pagination:', response.pagination);
+        
+        if (response.success && response.data) {
+          displayRemitenceApiData(response);
+      } else {
+          console.error('API returned success=false or no data');
+          console.error('Response:', response);
+          showRemitenceApiError(response.error || response.message || 'Failed to load data');
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('=== REMITTANCE API ERROR ===');
+        console.error('Status:', status, 'Error:', error);
+        console.error('Response Text:', xhr.responseText);
+        console.error('XHR Object:', xhr);
+        
+        let errorMessage = 'Failed to load data. ';
+        if (xhr.status === 404) {
+          errorMessage += 'API endpoint not found.';
+        } else if (xhr.status === 500) {
+          errorMessage += 'Server error. Please try again later.';
+        } else if (xhr.status === 0) {
+          errorMessage += 'Network error. Please check your connection.';
+      } else {
+          errorMessage += 'Please try again.';
+        }
+        
+        showRemitenceApiError(errorMessage);
+      },
+      complete: function() {
+        $('#remitence-loading').hide();
+      }
+    });
+  }
+
+  function displayRemitenceApiData(response) {
+    console.log('=== DISPLAYING REMITTANCE API DATA ===');
+    console.log('Data length:', response.data ? response.data.length : 'No data property');
+    console.log('Pagination:', response.pagination);
+    console.log('Full response:', response);
+    
+    // Check if response has the expected structure
+    if (!response.pagination) {
+      console.error('No pagination object in response');
+      showRemitenceApiError('Invalid response format from server');
+        return;
+    }
+
+    // Update pagination info
+    remitenceTotalRecords = response.pagination.totalRecords || 0;
+    remitenceTotalPages = response.pagination.totalPages || 0;
+    remitenceCurrentPage = response.pagination.currentPage || 1;
+    
+    console.log('Updated pagination - Total Records:', remitenceTotalRecords, 'Total Pages:', remitenceTotalPages, 'Current Page:', remitenceCurrentPage);
+    
+    // Clear existing data
+    const tbody = $('#remitence-data-body');
+    tbody.empty();
+    
+    if (response.data && response.data.length > 0) {
+      console.log('Processing', response.data.length, 'records');
+      let totalAmount = 0;
+      let uniqueBanks = new Set();
+      
+      response.data.forEach((row, index) => {
+        console.log(`Processing row ${index}:`, row);
+        // Try multiple possible field names for amount
+        const amount = parseFloat(row.Amt_Bank_Recv_Forwarder || row.remitted_amount || row.amount || 0) || 0;
+        totalAmount += amount;
+        if (row.bank_name) uniqueBanks.add(row.bank_name);
+        
+        const deposited = formatDateTimeSplit(row.utr_deposited_on);
+        const uploaded = formatDateTimeSplit(row.file_uploaded_on);
+        
+        const newRow = `
+          <tr>
+            <td>
+              <div>
+                <div>${deposited.date}</div>
+                <small class="text-muted">${deposited.time}</small>
+              </div>
+            </td>
+            <td>${row.utr_number || '-'}</td>
+            <td>₹${amount.toLocaleString('en-IN')}</td>
+            <td>
+              <div>
+                <div>${uploaded.date}</div>
+                <small class="text-muted">${uploaded.time}</small>
+              </div>
+            </td>
+            <td>${row.bank_name || '-'}</td>
+            <td>${row.shipment_mode || '-'}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary" onclick="viewRemitenceDetails('${row.utr_number}')">
+                <i class="fas fa-eye me-1"></i>View
+              </button>
+            </td>
+          </tr>
+        `;
+        tbody.append(newRow);
+      });
+      
+      // Update summary cards
+      updateRemitenceSummaryCards(response.data.length, totalAmount, uniqueBanks.size);
+    } else {
+      console.log('No data found in response');
+      tbody.append(`
+        <tr>
+          <td colspan="7" class="text-center text-muted">No data found</td>
+        </tr>
+      `);
+      updateRemitenceSummaryCards(0, 0, 0);
+    }
+    
+    // Update pagination
+    updateRemitencePagination();
+  }
+
+  function updateRemitenceSummaryCards(totalRecords, totalAmount, uniqueBanks) {
+    const avgAmount = totalRecords > 0 ? totalAmount / totalRecords : 0;
+    
+    $('#remitence-totalRecords').text(totalRecords.toLocaleString());
+    $('#remitence-totalAmount').text('₹' + totalAmount.toLocaleString('en-IN'));
+    $('#remitence-avgAmount').text('₹' + avgAmount.toLocaleString('en-IN', {maximumFractionDigits: 0}));
+    $('#remitence-uniqueBanks').text(uniqueBanks);
+  }
+
+  function updateRemitencePagination() {
+    console.log('=== UPDATING REMITTANCE PAGINATION ===');
+    console.log('Current page:', remitenceCurrentPage, 'Total pages:', remitenceTotalPages, 'Total records:', remitenceTotalRecords);
+    
+    // Always show pagination info, even for single page
+    $('#remitence-pagination').show();
+    
+    // Update pagination info
+    const startRecord = ((remitenceCurrentPage - 1) * remitencePageSize) + 1;
+    const endRecord = Math.min(remitenceCurrentPage * remitencePageSize, remitenceTotalRecords);
+    $('#remitence-pagination-info').text(`Showing ${startRecord} to ${endRecord} of ${remitenceTotalRecords} entries`);
+    
+    // Hide pagination controls if only one page
+    if (remitenceTotalPages <= 1) {
+      $('#remitence-pagination-controls').hide();
+    } else {
+      $('#remitence-pagination-controls').show();
+      // Update buttons
+      $('#remitence-prev-page').prop('disabled', remitenceCurrentPage === 1);
+      $('#remitence-next-page').prop('disabled', remitenceCurrentPage === remitenceTotalPages);
+    }
+    
+    // Generate page numbers
+    generateRemitencePageNumbers();
+  }
+
+  function generateRemitencePageNumbers() {
+    const pageNumbers = $('#remitence-page-numbers');
+    pageNumbers.empty();
+    
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, remitenceCurrentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(remitenceTotalPages, startPage + maxVisiblePages - 1);
+    
+    // Adjust start page if we're near the end
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      const isActive = i === remitenceCurrentPage;
+      const pageBtn = $(`
+        <button class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-outline-primary'} me-1 remitence-page-number" data-page="${i}">
+          ${i}
+        </button>
+      `);
+      pageNumbers.append(pageBtn);
+    }
+  }
+
+  function initializeRemitenceApiFilters() {
+    // Apply filters button
+    $('#apply-remitence-filters').on('click', function() {
+      console.log('=== APPLYING REMITTANCE API FILTERS ===');
+      
+      remitenceCurrentFilters = {};
+      
+      const utrNumber = $('#remitence-utr-number').val().trim();
+      if (utrNumber) remitenceCurrentFilters.utr_number = utrNumber;
+      
+      const bankName = $('#remitence-bank-name').val().trim();
+      if (bankName) remitenceCurrentFilters.bank_name = bankName;
+      
+      const shipmentMode = $('#remitence-shipment-mode').val().trim();
+      if (shipmentMode) remitenceCurrentFilters.shipment_mode = shipmentMode;
+      
+      const fileUploadedOn = $('#remitence-file-uploaded-on').val();
+      if (fileUploadedOn) remitenceCurrentFilters.file_uploaded_on = fileUploadedOn;
+      
+      console.log('Applied remittance filters:', remitenceCurrentFilters);
+      
+      // Reset to first page and load data
+      remitenceCurrentPage = 1;
+      loadRemitenceApiData();
+    });
+    
+    // Clear filters button
+    $('#clear-remitence-filters').on('click', function() {
+      console.log('=== CLEARING REMITTANCE API FILTERS ===');
+      
+      $('#remitence-utr-number').val('');
+      $('#remitence-bank-name').val('');
+      $('#remitence-shipment-mode').val('');
+      $('#remitence-file-uploaded-on').val('');
+      
+      remitenceCurrentFilters = {};
+      remitenceCurrentPage = 1;
+      loadRemitenceApiData();
+    });
+    
+    // Pagination buttons
+    $('#remitence-prev-page').on('click', function() {
+      if (remitenceCurrentPage > 1) {
+        remitenceCurrentPage--;
+        loadRemitenceApiData();
+      }
+    });
+    
+    $('#remitence-next-page').on('click', function() {
+      if (remitenceCurrentPage < remitenceTotalPages) {
+        remitenceCurrentPage++;
+        loadRemitenceApiData();
+      }
+    });
+    
+    // Page number buttons
+    $(document).on('click', '.remitence-page-number', function() {
+      const pageNumber = parseInt($(this).data('page'));
+      if (pageNumber !== remitenceCurrentPage && pageNumber >= 1 && pageNumber <= remitenceTotalPages) {
+        remitenceCurrentPage = pageNumber;
+        loadRemitenceApiData();
+      }
+    });
+  }
+
+  function showRemitenceApiError(message) {
+    console.error('=== REMITTANCE API ERROR ===');
+    console.error('Message:', message);
+    
+    $('#remitence-error').removeClass('d-none');
+    $('#remitence-error-message').text(message);
+    
+    // Clear table
+    $('#remitence-data-body').html(`
+      <tr>
+        <td colspan="7" class="text-center text-danger">${message}</td>
+      </tr>
+    `);
+    
+    // Reset summary cards
+    updateRemitenceSummaryCards(0, 0, 0);
+  }
+
+  function viewRemitenceDetails(utrNumber) {
+    console.log('View remittance details for UTR:', utrNumber);
+    Swal.fire({
+      title: 'UTR Details',
+      text: `Details for UTR: ${utrNumber}`,
+      icon: 'info',
+      confirmButtonText: 'OK'
+    });
+  }
+
+  // Helper function for date formatting
+  function formatDateTimeSplit(dateStr) {
+    if (!dateStr) return { date: '', time: '' };
+    const date = new Date(dateStr);
+    if (isNaN(date)) return { date: dateStr, time: '' };
+    
+    const optionsDate = {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+      timeZone: 'Asia/Kolkata'
+    };
+    const optionsTime = {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+      timeZone: 'Asia/Kolkata'
+    };
+    
+    return {
+      date: date.toLocaleDateString('en-IN', optionsDate),
+      time: date.toLocaleTimeString('en-IN', optionsTime)
+    };
+  }
+
+  function initializeApiData() {
+    console.log('=== INITIALIZING API DATA ===');
+    $('#api-filters').show();
+    loadApiData();
+  }
+
+  function loadApiData() {
+    console.log('=== LOADING API DATA ===');
+    console.log('Current filters:', currentFilters);
+    console.log('Current page:', currentPage);
+    
+    $('#api-loading').show();
+    $('#api-error').addClass('d-none');
+    
+    const payload = {
+      page: currentPage,
+      limit: pageSize,
+      ...currentFilters
+    };
+    
+    console.log('API Payload:', payload);
+    
+    $.ajax({
+      url: '/bankrecovspoid',
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(payload),
+      timeout: 30000,
+      success: function(response) {
+        console.log('=== API SUCCESS ===');
+        console.log('Response:', response);
+        
+        if (response.success && response.data) {
+          displayApiData(response);
+        } else {
+          showApiError(response.error || 'Failed to load data');
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('=== API ERROR ===');
+        console.error('Status:', status, 'Error:', error);
+        console.error('Response Text:', xhr.responseText);
+        
+        let errorMessage = 'Failed to load data. ';
+        if (xhr.status === 404) {
+          errorMessage += 'API endpoint not found.';
+        } else if (xhr.status === 500) {
+          errorMessage += 'Server error. Please try again later.';
+        } else {
+          errorMessage += 'Please try again.';
+        }
+        
+        showApiError(errorMessage);
+      },
+      complete: function() {
+        $('#api-loading').hide();
+      }
+    });
+  }
+
+  function displayApiData(response) {
+    console.log('=== DISPLAYING API DATA ===');
+    console.log('Data length:', response.data.length);
+    console.log('Pagination:', response.pagination);
+    
+    // Update pagination info
+    totalRecords = response.pagination.totalRecords;
+    totalPages = response.pagination.totalPages;
+    currentPage = response.pagination.currentPage;
+    
+    // Clear existing data
+    const tbody = $('#api-data-body');
+    tbody.empty();
+    
+    if (response.data && response.data.length > 0) {
+      response.data.forEach(row => {
+        // Determine order type based on status and amount
+        let orderType = 'Unknown';
+        if (row.status === 'Completed' && row.remitted_amount == 0) {
+          orderType = 'Prepaid';
+        } else if (row.remitted_amount > 0) {
+          orderType = 'COD';
+        }
+        
+        const newRow = `
+          <tr>
+            <td>${row.id || '-'}</td>
+            <td>${row.client_name || '-'}</td>
+            <td>${row.lr_awb || '-'}</td>
+            <td>${row.qty || '-'}</td>
+            <td>₹${row.remitted_amount ? parseFloat(row.remitted_amount).toLocaleString('en-IN') : '0'}</td>
+            <td>
+              <span class="badge ${orderType === 'COD' ? 'badge-warning' : orderType === 'Prepaid' ? 'badge-success' : 'badge-secondary'}">
+                ${orderType}
+              </span>
+            </td>
+            <td>
+              <span class="badge ${row.status === 'Completed' ? 'badge-success' : row.status === 'Pending' ? 'badge-warning' : 'badge-danger'}">
+                ${row.status || 'Pending'}
+              </span>
+            </td>
+            <td>${row.forwarder || '-'}</td>
+            <td>${row.bank_name || '-'}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary" onclick="viewApiDetails(${row.id})">
+                <i class="fas fa-eye me-1"></i>View
+              </button>
+            </td>
+          </tr>
+        `;
+        tbody.append(newRow);
+      });
+    } else {
+      tbody.append(`
+        <tr>
+          <td colspan="10" class="text-center text-muted">No data found</td>
+        </tr>
+      `);
+    }
+    
+    // Update pagination
+    updatePagination();
+  }
+
+  function updatePagination() {
+    console.log('=== UPDATING PAGINATION ===');
+    console.log('Current page:', currentPage, 'Total pages:', totalPages, 'Total records:', totalRecords);
+    
+    // Always show pagination info, even for single page
+    $('#api-pagination').show();
+    
+    // Update pagination info
+    const startRecord = ((currentPage - 1) * pageSize) + 1;
+    const endRecord = Math.min(currentPage * pageSize, totalRecords);
+    $('#pagination-info').text(`Showing ${startRecord} to ${endRecord} of ${totalRecords} entries`);
+    
+    // Hide pagination controls if only one page
+    if (totalPages <= 1) {
+      $('#api-pagination-controls').hide();
+    } else {
+      $('#api-pagination-controls').show();
+      // Update buttons
+      $('#prev-page').prop('disabled', currentPage === 1);
+      $('#next-page').prop('disabled', currentPage === totalPages);
+      
+      // Generate page numbers
+      generatePageNumbers();
+    }
+  }
+
+  function generatePageNumbers() {
+    const pageNumbers = $('#page-numbers');
+    pageNumbers.empty();
+    
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    // Adjust start page if we're near the end
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      const isActive = i === currentPage;
+      const pageBtn = $(`
+        <button class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-outline-primary'} me-1 page-number" data-page="${i}">
+          ${i}
+        </button>
+      `);
+      pageNumbers.append(pageBtn);
+    }
+  }
+
+  function initializeApiFilters() {
+    // Apply filters button
+    $('#apply-api-filters').on('click', function() {
+      console.log('=== APPLYING API FILTERS ===');
+      
+      currentFilters = {};
+      
+      const clientName = $('#api-client-name').val().trim();
+      if (clientName) currentFilters.client_name = clientName;
+      
+      const awbNumber = $('#api-awb-number').val().trim();
+      if (awbNumber) currentFilters.lr_awb = awbNumber;
+      
+      const forwarder = $('#api-forwarder').val().trim();
+      if (forwarder) currentFilters.forwarder = forwarder;
+      
+      console.log('Applied filters:', currentFilters);
+      
+      // Reset to first page and load data
+      currentPage = 1;
+      loadApiData();
+    });
+    
+    // Clear filters button
+    $('#clear-api-filters').on('click', function() {
+      console.log('=== CLEARING API FILTERS ===');
+      
+      $('#api-client-name').val('');
+      $('#api-awb-number').val('');
+      $('#api-forwarder').val('');
+      
+      currentFilters = {};
+      currentPage = 1;
+      loadApiData();
+    });
+    
+    // Pagination buttons
+    $('#prev-page').on('click', function() {
+      if (currentPage > 1) {
+        currentPage--;
+        loadApiData();
+      }
+    });
+    
+    $('#next-page').on('click', function() {
+      if (currentPage < totalPages) {
+        currentPage++;
+        loadApiData();
+      }
+    });
+    
+    // Page number buttons
+    $(document).on('click', '.page-number', function() {
+      const pageNumber = parseInt($(this).data('page'));
+      if (pageNumber !== currentPage && pageNumber >= 1 && pageNumber <= totalPages) {
+        currentPage = pageNumber;
+        loadApiData();
+      }
+    });
+  }
+
+  function showApiError(message) {
+    console.error('=== API ERROR ===');
+    console.error('Message:', message);
+    
+    $('#api-error').removeClass('d-none');
+    $('#api-error-message').text(message);
+    
+    // Clear table
+    $('#api-data-body').html(`
+      <tr>
+        <td colspan="9" class="text-center text-danger">${message}</td>
+      </tr>
+    `);
+  }
+
+  function viewApiDetails(id) {
+    console.log('View details for ID:', id);
+    Swal.fire({
+      title: 'Record Details',
+      text: `Details for record ID: ${id}`,
+      icon: 'info',
+      confirmButtonText: 'OK'
+    });
+  }
+    } else {
+      // jQuery not loaded yet, try again in 100ms
+      setTimeout(waitForJQuery2, 100);
+    }
+  }
+  
+  // Start waiting for jQuery
+  waitForJQuery2();
+</script>
+  </div>
+</main>
+<%- include('../partials/footer') %>
+
+
+

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+  <%- include('../partials/head') %>
+  <!-- SweetAlert2 CSS and JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    /* Responsive table styles */
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 1rem;
+      border-radius: 0.375rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+      width: 100%;
+      max-width: 100%;
+    }
+    
+    .table-responsive::-webkit-scrollbar {
+      height: 8px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+    
+    .table-responsive::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+    
+    .table {
+      margin-bottom: 0;
+      width: 100%;
+      min-width: 1000px; /* Force minimum width to trigger scrolling */
+      table-layout: fixed;
+    }
+    
+    .table th,
+    .table td {
+      white-space: nowrap;
+      vertical-align: middle;
+      padding: 0.75rem 0.5rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .table th {
+      background-color: #77bbf6;
+      color: white;
+      font-weight: 600;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      min-width: 120px; /* Ensure minimum column width */
+    }
+    
+    .table td {
+      border-bottom: 1px solid #dee2e6;
+      min-width: 120px; /* Ensure minimum column width */
+    }
+    
+    /* Specific column widths for better layout */
+    .table th:nth-child(1), .table td:nth-child(1) { min-width: 80px; }  /* ID */
+    .table th:nth-child(2), .table td:nth-child(2) { min-width: 150px; } /* Name */
+    .table th:nth-child(3), .table td:nth-child(3) { min-width: 200px; } /* Email */
+    .table th:nth-child(4), .table td:nth-child(4) { min-width: 150px; } /* Organization */
+    .table th:nth-child(5), .table td:nth-child(5) { min-width: 120px; } /* Monthly Parcels */
+    .table th:nth-child(6), .table td:nth-child(6) { min-width: 120px; } /* Business Volume */
+    .table th:nth-child(7), .table td:nth-child(7) { min-width: 120px; } /* Company Type */
+    .table th:nth-child(8), .table td:nth-child(8) { min-width: 120px; } /* Phone */
+    .table th:nth-child(9), .table td:nth-child(9) { min-width: 100px; } /* Segment */
+    .table th:nth-child(10), .table td:nth-child(10) { min-width: 150px; } /* Created At */
+    .table th:nth-child(11), .table td:nth-child(11) { min-width: 200px; } /* Action */
+    
+    .table tbody tr:hover {
+      background-color: rgba(0, 123, 255, 0.05);
+    }
+    
+    
+    
+    .action-buttons .btn {
+      min-width: 70px;
+      font-size: 0.8rem;
+      padding: 0.25rem 0.5rem;
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      .container {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+      
+      .block-header h2 {
+        font-size: 1.5rem;
+      }
+      
+      .table-responsive {
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+        border-radius: 0;
+        overflow-x: scroll; /* Force scroll on mobile */
+      }
+      
+      .table {
+        min-width: 1000px; /* Keep minimum width for scrolling */
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+        gap: 0.125rem;
+        min-width: 160px;
+      }
+      
+      .action-buttons .btn {
+        min-width: 60px;
+        font-size: 0.75rem;
+        padding: 0.2rem 0.4rem;
+      }
+    }
+    
+    /* Small mobile devices */
+    @media (max-width: 480px) {
+      .block-header h2 {
+        font-size: 1.25rem;
+      }
+      
+      .table-responsive {
+        overflow-x: scroll; /* Force scroll on small mobile */
+      }
+      
+      .table th,
+      .table td {
+        padding: 0.5rem 0.25rem;
+        font-size: 0.875rem;
+      }
+      
+      .action-buttons .btn {
+        min-width: 50px;
+        font-size: 0.7rem;
+        padding: 0.15rem 0.3rem;
+      }
+    }
+    
+    /* Card-like container for better mobile experience */
+    .table-card {
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+      overflow: hidden;
+    }
+    
+    /* Status indicators */
+    .status-indicator {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    
+    .status-pending {
+      background-color: #ffc107;
+    }
+    
+    /* Scroll indicator for mobile */
+    .scroll-hint {
+      display: none;
+      text-align: center;
+      padding: 0.5rem;
+      background: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      color: #6c757d;
+      font-size: 0.875rem;
+    }
+    
+    @media (max-width: 768px) {
+      .scroll-hint {
+        display: block;
+      }
+    }
+  </style>
+</head>
+
+<body data-theme="light" class="font-nunito">
+  <div id="wrapper" class="theme-cyan">
+
+    <%- include('../partials/header') %>
+      <%- include('../partials/left-sidebar') %>
+        <%- include('../partials/right-iconbar') %>
+
+          <div id="main-content">
+            <div class="container pt-4">
+              <div class="block-header">
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-12">
+                    <h2>KYC List</h2>
+                    <ul class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="/"><i class="fa fa-dashboard"></i></a></li>
+                      <li class="breadcrumb-item active">KYC List</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title mb-0">
+                          <i class="fa fa-users me-2"></i>
+                          Pending Users
+                        </h3>
+                      </div>
+                                             <div class="card-body p-0">
+                         <div class="scroll-hint">
+                           <i class="fa fa-arrows-h me-2"></i>
+                           Scroll horizontally to see all columns
+                         </div>
+                         <div class="table-responsive  p-3 ">
+                           <table class="table table-hover table-bordered mb-0">
+                            <thead>
+                              <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Organization</th>
+                                <th>Monthly Parcels</th>
+                                <th>Business Volume</th>
+                                <th>Company Type</th>
+                                <th>Phone</th>
+                                <th>Segment</th>
+                                <th>Created At</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody id="pendingBody">
+                              <% if (users && users.length) { %>
+                                <% users.forEach(function(u) { %>
+                                  <tr id="row-<%= u.id %>">
+                                    <td class="text-center">
+                                      <strong><%= u.id %></strong>
+                                    </td>
+                                    <td>
+                                      <span class="status-indicator status-pending"></span>
+                                      <%= u.name %>
+                                    </td>
+                                    <td>
+                                      <a href="mailto:<%= u.email %>" class="text-primary">
+                                        <%= u.email %>
+                                      </a>
+                                    </td>
+                                    <td>
+                                      <%= u.organization || '-' %>
+                                    </td>
+                                    <td class="text-center">
+                                      <%= u.monthly_parcels || '-' %>
+                                    </td>
+                                    <td class="text-center">
+                                      <%= u.business_volume || '-' %>
+                                    </td>
+                                    <td>
+                                      <%= u.company_type || '-' %>
+                                    </td>
+                                    <td>
+                                      <% if (u.phone_no) { %>
+                                        <a href="tel:<%= u.phone_no %>" class="text-primary">
+                                          <%= u.phone_no %>
+                                        </a>
+                                      <% } else { %>
+                                        <span class="text-muted">-</span>
+                                      <% } %>
+                                    </td>
+                                    <td>
+                                      <%= u.segment_type || '-' %>
+                                    </td>
+                                    <td class="text-center">
+                                      <% if (u.created_at) { %>
+                                        <small class="text-muted">
+                                          <%= new Date(u.created_at).toLocaleDateString() %>
+                                          <br>
+                                          <%= new Date(u.created_at).toLocaleTimeString() %>
+                                        </small>
+                                      <% } else { %>
+                                        <span class="text-muted">-</span>
+                                      <% } %>
+                                    </td>
+                                    <td>
+                                      <div class="action-buttons" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                        <button class="btn btn-sm btn-success"
+                                          onclick="handlePendingUser(<%= u.id %>, 'approve')"
+                                          title="Approve User"
+                                          style="margin-bottom: 0.25rem;">
+                                          <i class="fa fa-check me-1"></i>Approve
+                                        </button>
+                                        <button class="btn btn-sm btn-danger"
+                                          onclick="handlePendingUser(<%= u.id %>, 'reject')"
+                                          title="Reject User"
+                                          style="margin-bottom: 0.25rem;">
+                                          <i class="fa fa-times me-1"></i>Reject
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                <% }); %>
+                              <% } else { %>
+                                <tr>
+                                  <td colspan="11" class="text-center py-4">
+                                    <div class="text-muted">
+                                      <i class="fa fa-inbox fa-2x mb-2"></i>
+                                      <br>
+                                      No pending users found
+                                    </div>
+                                  </td>
+                                </tr>
+                              <% } %>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  </div>
+  
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Axios CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  
+  <script>
+    async function handlePendingUser(id, action) {
+      // action = 'approve' | 'reject'
+      const isApprove = action === 'approve';
+
+      const confirmResult = await Swal.fire({
+        title: isApprove ? 'Approve User?' : 'Reject User?',
+        text: isApprove
+          ? 'Do you really want to approve this pending user?'
+          : 'Do you really want to reject this pending user?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: isApprove ? 'Yes, approve' : 'Yes, reject',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: isApprove ? '#28a745' : '#dc3545',
+        cancelButtonColor: '#6c757d'
+      });
+
+      if (!confirmResult.isConfirmed) return;
+
+      try {
+        // Show loading state
+        Swal.fire({
+          title: 'Processing...',
+          text: isApprove ? 'Approving user...' : 'Rejecting user...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        const resp = await axios.post('/pending-user-action', { id, action });
+        const data = resp.data;
+
+        if (resp.status === 200 && data.success) {
+          // remove the row from UI
+          const row = document.getElementById('row-' + id);
+          if (row) {
+            // Add fade out effect
+            row.style.transition = 'opacity 0.5s ease-out';
+            row.style.opacity = '0';
+            setTimeout(() => {
+              row.remove();
+              // Check if table is empty
+              const tbody = document.getElementById('pendingBody');
+              if (tbody.children.length === 0) {
+                location.reload(); // Reload to show "no users" message
+              }
+            }, 500);
+          }
+
+          await Swal.fire({
+            icon: 'success',
+            title: isApprove ? 'User Approved' : 'User Rejected',
+            text: data.message || 'Operation completed successfully',
+            timer: 2000,
+            showConfirmButton: false
+          });
+        } else {
+          await Swal.fire({
+            icon: 'error',
+            title: isApprove ? 'Approve Failed' : 'Reject Failed',
+            text: data.message || 'Operation failed. Please try again.'
+          });
+        }
+      } catch (err) {
+        console.error(`${action} request error:`, err);
+        const msg = err?.response?.data?.message || err.message || 'Request failed. Please check your connection and try again.';
+        await Swal.fire({ 
+          icon: 'error', 
+          title: 'Error', 
+          text: msg 
+        });
+      }
+    }
+
+    // Add error handling for when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if users data exists
+      const pendingBody = document.getElementById('pendingBody');
+      if (pendingBody && pendingBody.children.length === 0) {
+        console.log('No pending users found');
+      }
+      
+      // Add table row hover effect
+      const tableRows = document.querySelectorAll('#pendingBody tr');
+      tableRows.forEach(row => {
+        row.addEventListener('mouseenter', function() {
+          this.style.backgroundColor = 'rgba(0, 123, 255, 0.05)';
+        });
+        row.addEventListener('mouseleave', function() {
+          this.style.backgroundColor = '';
+        });
+      });
+    });
+  </script>
+
+  <%- include('../partials/footer') %>
+
+</body>
+
+</html>

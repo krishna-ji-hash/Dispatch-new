@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<head>
+    <%- include('../partials/head') %>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Client Details</title>
+
+        <style>
+            :root {
+                --primary-blue: #2563eb;
+                --primary-blue-light: #3b82f6;
+                --primary-blue-dark: #1d4ed8;
+                --secondary-blue: #60a5fa;
+                --accent-blue: #dbeafe;
+                --text-primary: #1f2937;
+                --text-secondary: #6b7280;
+                --border-color: #e5e7eb;
+                --bg-light: #f8fafc;
+                --bg-white: #ffffff;
+                --success-color: #10b981;
+                --warning-color: #f59e0b;
+                --danger-color: #ef4444;
+            }
+
+            body {
+                background-color: var(--bg-light);
+                color: var(--text-primary);
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            }
+
+            .profile-header {
+                background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+                color: white;
+                padding: 2.5rem 0;
+                margin-bottom: 2rem;
+                border-radius: 0 0 20px 20px;
+                box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+            }
+
+            .profile-img {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 3px solid rgba(255, 255, 255, 0.3);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .status-badge {
+                font-size: 0.75rem;
+                padding: 0.25rem 0.75rem;
+                border-radius: 20px;
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .form-section {
+                background: var(--bg-white);
+                border-radius: 16px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+                margin-bottom: 1.5rem;
+                border: 1px solid var(--border-color);
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .form-section:hover {
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.1);
+                transform: translateY(-1px);
+            }
+
+            .section-header {
+                background: linear-gradient(135deg, var(--accent-blue) 0%, #eff6ff 100%);
+                padding: 1.25rem 1.5rem;
+                border-bottom: 1px solid var(--border-color);
+                border-radius: 16px 16px 0 0;
+            }
+
+            .section-header h5 {
+                color: var(--primary-blue);
+                font-weight: 600;
+                margin: 0;
+                font-size: 1.1rem;
+            }
+
+            .section-header i {
+                font-size: 0.9rem;
+                color: var(--primary-blue);
+            }
+
+            .form-control, .form-select {
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+                transition: all 0.2s ease;
+                background-color: var(--bg-white);
+            }
+
+            .form-control:focus, .form-select:focus {
+                border-color: var(--primary-blue);
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+                outline: none;
+            }
+
+            .form-label {
+                font-weight: 500;
+                color: var(--text-primary);
+                font-size: 0.875rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .btn-primary {
+                background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
+                border: none;
+                border-radius: 8px;
+                padding: 0.75rem 1.5rem;
+                font-weight: 500;
+                transition: all 0.2s ease;
+                box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+            }
+
+            .btn-primary:hover {
+                background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue) 100%);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+            }
+
+            .checkbox-switch {
+                position: relative;
+                display: inline-block;
+                width: 48px;
+                height: 24px;
+            }
+
+            .checkbox-switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #d1d5db;
+                transition: .3s ease;
+                border-radius: 24px;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 18px;
+                width: 18px;
+                left: 3px;
+                bottom: 3px;
+                background-color: white;
+                transition: .3s ease;
+                border-radius: 50%;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            input:checked + .slider {
+                background: linear-gradient(135deg, var(--success-color) 0%, #34d399 100%);
+            }
+
+            input:checked + .slider:before {
+                transform: translateX(24px);
+            }
+
+            .doc-preview {
+                max-width: 180px;
+                max-height: 120px;
+                object-fit: cover;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: transform 0.2s ease;
+            }
+
+            .doc-preview:hover {
+                transform: scale(1.05);
+            }
+
+            .loading-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(37, 99, 235, 0.1);
+                backdrop-filter: blur(4px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+            }
+
+            .spinner-border {
+                color: var(--primary-blue);
+            }
+
+            .error-message {
+                text-align: center;
+                padding: 2rem;
+            }
+
+            .alert {
+                border-radius: 12px;
+                border: none;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+
+            .alert-success {
+                background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+                color: #065f46;
+            }
+
+            .alert-danger {
+                background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+                color: #991b1b;
+            }
+
+            .modal-content {
+                border-radius: 16px;
+                border: none;
+                box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+            }
+
+            .modal-header {
+                background: var(--accent-blue);
+                border-bottom: 1px solid var(--border-color);
+                border-radius: 16px 16px 0 0;
+            }
+
+            .modal-title {
+                color: var(--primary-blue);
+                font-weight: 600;
+            }
+
+            .btn-close {
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                color: var(--text-secondary);
+            }
+
+            .btn-close:hover {
+                color: var(--text-primary);
+            }
+
+            .input-group .form-select {
+                border-right: none;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+            }
+
+            .input-group .form-control {
+                border-left: none;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+
+            .input-group .form-select:focus + .form-control,
+            .input-group .form-control:focus {
+                border-left-color: var(--primary-blue);
+            }
+
+            .quick-controls {
+                background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+                border: 1px solid #bae6fd;
+            }
+
+            .quick-controls .section-header {
+                background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+                color: white;
+            }
+
+            .quick-controls .section-header h5,
+            .quick-controls .section-header i {
+                color: white;
+            }
+
+            @media (max-width: 768px) {
+                .profile-header {
+                    padding: 1.5rem 0;
+                    border-radius: 0 0 16px 16px;
+                }
+
+                .profile-img {
+                    width: 60px;
+                    height: 60px;
+                }
+
+                .form-section {
+                    margin-bottom: 1rem;
+                    border-radius: 12px;
+                }
+
+                .section-header {
+                    padding: 1rem;
+                }
+
+                .btn-primary {
+                    width: 100%;
+                    margin-top: 1rem;
+                }
+
+                .col-md-4, .col-md-6 {
+                    margin-bottom: 1rem;
+                }
+            }
+
+            @media (max-width: 576px) {
+                .container {
+                    padding: 0 1rem;
+                }
+
+                .profile-header .row {
+                    text-align: center;
+                }
+
+                .status-badge {
+                    font-size: 0.7rem;
+                    padding: 0.2rem 0.5rem;
+                }
+            }
+
+            /* Additional modern styling */
+            .form-section .p-3 {
+                padding: 1.5rem !important;
+            }
+
+            .form-section .row > div {
+                margin-bottom: 1rem;
+            }
+
+            .form-section .row > div:last-child {
+                margin-bottom: 0;
+            }
+
+            .btn-sm {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+                border-radius: 6px;
+            }
+
+            .btn-outline-primary {
+                color: var(--primary-blue);
+                border-color: var(--primary-blue);
+                background: transparent;
+            }
+
+            .btn-outline-primary:hover {
+                background: var(--primary-blue);
+                border-color: var(--primary-blue);
+                color: white;
+            }
+
+            .bg-light {
+                background-color: #f8fafc !important;
+            }
+
+            .text-muted {
+                color: var(--text-secondary) !important;
+            }
+
+            .breadcrumb {
+                background: transparent;
+                padding: 0;
+                margin: 0;
+            }
+
+            .breadcrumb-item a {
+                color: var(--primary-blue);
+                text-decoration: none;
+            }
+
+            .breadcrumb-item.active {
+                color: var(--text-secondary);
+            }
+
+            .block-header h2 {
+                color: var(--text-primary);
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }
+        </style>
+</head>
+
+<body data-theme="light" class="font-nunito">
+    <div id="wrapper" class="theme-cyan">
+
+        <%- include('../partials/header') %>
+            <%- include('../partials/left-sidebar') %>
+                <%- include('../partials/right-iconbar') %>
+
+                    <div id="main-content">
+                        <div class="container pt-4">
+                            <div class="block-header">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <h2>KYC Submissions</h2>
+                                        <ul class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="/"><i class="fa fa-dashboard"></i></a>
+                                            </li>
+                                            <li class="breadcrumb-item active">KYC Submissions</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Loading Overlay -->
+                            <div id="loadingOverlay" class="loading-overlay">
+                                <div class="text-center text-white">
+                                    <div class="spinner-border mb-3" role="status"></div>
+                                    <div>Loading client details...</div>
+                                </div>
+                            </div>
+
+                            <!-- Error Message -->
+                            <div id="errorMessage" class="container mt-5" style="display: none;">
+                                <div class="alert alert-danger error-message">
+                                    <i class="fas fa-exclamation-triangle fa-lg mb-3"></i>
+                                    <h4>Error Loading Client Details</h4>
+                                    <p id="errorText">Failed to load client information. Please try again.</p>
+                                    <button class="btn btn-primary" onclick="loadClientData()">
+                                        <i class="fas fa-redo me-2"></i>Retry
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Main Content -->
+                            <div id="mainContent" style="display: none;">
+                                <!-- Profile Header -->
+                                <div class="profile-header">
+                                    <div class="container">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <div id="profileImageContainer">
+                                                    <div
+                                                        class="profile-img bg-secondary d-flex align-items-center justify-content-center">
+                                                        <i class="fas fa-user fa-lg"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <h2 class="mb-1" id="clientName">Loading...</h2>
+                                                <p class="mb-2" id="companyName">Loading...</p>
+                                                <div id="statusBadges" class="d-flex gap-2 flex-wrap">
+                                                    <!-- Status badges will be inserted here -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="container">
+                                    <!-- Quick Status Controls -->
+                                    <div class="form-section quick-controls">
+                                        <div class="section-header">
+                                            <h5 class="mb-0"><i class="fas fa-toggle-on me-2"></i>Quick Controls</h5>
+                                        </div>
+                                        <div class="p-3">
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">Account Status</label>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <label class="checkbox-switch">
+                                                            <input type="checkbox" id="is_active"
+                                                                onchange="updateStatus('is_active', this.checked)">
+                                                            <span class="slider"></span>
+                                                        </label>
+                                                        <span id="active_label">Loading...</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">Email Verification</label>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <label class="checkbox-switch">
+                                                            <input type="checkbox" id="is_verified"
+                                                                onchange="updateStatus('is_verified', this.checked)">
+                                                            <span class="slider"></span>
+                                                        </label>
+                                                        <span id="verified_label">Loading...</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">KYC Submission</label>
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <label class="checkbox-switch">
+                                                            <input type="checkbox" id="is_kyc_submitted"
+                                                                onchange="updateStatus('is_kyc_submitted', this.checked)">
+                                                            <span class="slider"></span>
+                                                        </label>
+                                                        <!-- <span id="kyc_verified_label">Loading...</span> -->
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">KYC Approval</label>
+                                                    <div class="d-flex align-items-center gap-2" id="kycApprovalButtons">
+                                                        <button class="btn btn-success btn-sm approveKYC"
+                                                            id="approveKycBtn"
+                                                            data-id=""
+                                                            title="Click to approve this KYC">
+                                                            <i class="fas fa-check"></i> Approve
+                                                        </button>
+                                                        <button class="btn btn-danger btn-sm rejectKYC"
+                                                            id="rejectKycBtn"
+                                                            data-id=""
+                                                            title="Click to reject this KYC">
+                                                            <i class="fas fa-times"></i> Reject
+                                                        </button>
+                                                        <span id="kyc_verified_label" class="ms-2">
+                                                            <small class="text-muted">Loading...</small>
+                                                        </span>
+                                                    </div>
+                                                    <div class="mt-1">
+                                                        <small id="kyc_status_debug" class="text-muted"></small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Basic Information -->
+                                    <div class="form-section">
+                                        <div class="section-header">
+                                            <h5 class="mb-0"><i class="fas fa-user me-2"></i>Basic Information</h5>
+                                        </div>
+                                        <div class="p-3">
+                                            <form id="basicInfoForm">
+                                                <input type="hidden" name="admin_id" id="adminId">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">First Name *</label>
+                                                        <input type="text" class="form-control" name="first_name"
+                                                            id="firstName" required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Last Name</label>
+                                                        <input type="text" class="form-control" name="last_name"
+                                                            id="lastName">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Email *</label>
+                                                        <input type="email" class="form-control" name="email" id="email"
+                                                            required>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Phone Number</label>
+                                                        <div class="input-group">
+                                                            <select class="form-select" name="country_code"
+                                                                id="countryCode" style="max-width: 100px;">
+                                                                <option value="+91">+91</option>
+                                                                <option value="+1">+1</option>
+                                                                <option value="+44">+44</option>
+                                                            </select>
+                                                            <input type="text" class="form-control" name="phone_no"
+                                                                id="phoneNo">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Role</label>
+                                                        <input type="text" class="form-control" name="role_name"
+                                                            id="roleName" readonly>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">User Type</label>
+                                                        <input type="text" class="form-control" name="user_type"
+                                                            id="userType">
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fas fa-save me-2"></i>Update Basic Info
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <!-- Company Information -->
+                                    <div class="form-section">
+                                        <div class="section-header">
+                                            <h5 class="mb-0"><i class="fas fa-building me-2"></i>Company Information
+                                            </h5>
+                                        </div>
+                                        <div class="p-3">
+                                            <form id="companyInfoForm">
+                                                <input type="hidden" name="admin_id" id="companyAdminId">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Company Name</label>
+                                                        <input type="text" class="form-control" name="company_name"
+                                                            id="companyNameField">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Organization</label>
+                                                        <input type="text" class="form-control" name="organization"
+                                                            id="organization">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">GST Number</label>
+                                                        <input type="text" class="form-control" name="gst" id="gst">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Payment Mode</label>
+                                                        <select class="form-select" name="payment_mode"
+                                                            id="paymentMode">
+                                                            <option value="">Select Payment Mode</option>
+                                                            <option value="prepaid">Prepaid</option>
+                                                            <option value="cod">COD</option>
+                                                            <option value="credit">Credit</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Monthly Parcels</label>
+                                                        <select class="form-select" name="monthly_parcels"
+                                                            id="monthlyParcels">
+                                                            <option value="">Select Range</option>
+                                                            <option value="1">0-500</option>
+                                                            <option value="2">500-1000</option>
+                                                            <option value="3">1000-5000</option>
+                                                            <option value="4">5000+</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Company Type</label>
+                                                        <select class="form-select" name="company_type"
+                                                            id="companyType">
+                                                            <option value="">Select Type</option>
+                                                            <option value="private">Private Limited</option>
+                                                            <option value="public">Public Limited</option>
+                                                            <option value="llp">LLP</option>
+                                                            <option value="partnership">Partnership</option>
+                                                            <option value="proprietorship">Proprietorship</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fas fa-save me-2"></i>Update Company Info
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <!-- KYC Information -->
+                                    <div class="form-section" id="kycSection" style="display: none;">
+                                        <div class="section-header">
+                                            <h5 class="mb-0"><i class="fas fa-id-card me-2"></i>KYC Information</h5>
+                                        </div>
+                                        <div class="p-3">
+                                            <form id="kycInfoForm">
+                                                <input type="hidden" name="kyc_id" id="kycId">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Business Type</label>
+                                                        <input type="text" class="form-control" name="business_type"
+                                                            id="businessType">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Sub Type</label>
+                                                        <input type="text" class="form-control" name="sub_type"
+                                                            id="subType">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Aadhaar Number</label>
+                                                        <input type="text" class="form-control" name="aadhaar_number"
+                                                            id="aadhaarNumber">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">PAN Number</label>
+                                                        <input type="text" class="form-control" name="pan_number"
+                                                            id="panNumber">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label">PAN Name</label>
+                                                        <input type="text" class="form-control" name="pan_name"
+                                                            id="panName">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">GST Number</label>
+                                                        <input type="text" class="form-control" name="gst_number"
+                                                            id="gstNumber">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">GST Trade Name</label>
+                                                        <input type="text" class="form-control" name="gst_trade_name"
+                                                            id="gstTradeName">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label class="form-label">GST Business Activities</label>
+                                                        <input type="text" class="form-control"
+                                                            name="gst_nature_of_business_activities" id="gstActivities">
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Registered Company Name</label>
+                                                        <input type="text" class="form-control"
+                                                            name="registered_company_name" id="registeredCompanyName">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Brand Name</label>
+                                                        <input type="text" class="form-control" name="brand_name"
+                                                            id="brandName">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Company Email</label>
+                                                        <input type="email" class="form-control" name="company_email"
+                                                            id="companyEmail">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Website</label>
+                                                        <input type="text" class="form-control" name="website"
+                                                            id="website">
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Company Type</label>
+                                                        <input type="text" class="form-control" name="company_type"
+                                                            id="kycCompanyType">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Organization</label>
+                                                        <input type="text" class="form-control" name="organization"
+                                                            id="kycOrganization">
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Monthly Parcels</label>
+                                                        <input type="text" class="form-control" name="monthly_parcels"
+                                                            id="kycMonthlyParcels">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Business Volume</label>
+                                                        <input type="text" class="form-control" name="business_volume"
+                                                            id="businessVolume">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Segment Type</label>
+                                                        <input type="text" class="form-control" name="segment_type"
+                                                            id="segmentType">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">GST Constitution of Business</label>
+                                                        <input type="text" class="form-control"
+                                                            name="gst_constitution_of_business" id="gstConstitution">
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Company Reg. Number</label>
+                                                        <input type="text" class="form-control"
+                                                            name="company_reg_number" id="companyRegNumber">
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Cancelled Cheque Number</label>
+                                                        <input type="text" class="form-control"
+                                                            name="cancelled_cheque_number" id="cancelledChequeNumber">
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">Selfie</label>
+                                                        <input type="file" class="form-control" name="selfie_path"
+                                                            accept="image/*,application/pdf">
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">Aadhaar Front</label>
+                                                        <input type="file" class="form-control" name="aadhaar_front_doc"
+                                                            accept="image/*,application/pdf">
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">Aadhaar Back</label>
+                                                        <input type="file" class="form-control" name="aadhar_back_doc"
+                                                            accept="image/*,application/pdf">
+                                                    </div>
+
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">PAN</label>
+                                                        <input type="file" class="form-control" name="pan_path"
+                                                            accept="image/*,application/pdf">
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">GST Doc</label>
+                                                        <input type="file" class="form-control" name="gst_path"
+                                                            accept="image/*,application/pdf">
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">Company Reg. Doc</label>
+                                                        <input type="file" class="form-control" name="company_reg_doc"
+                                                            accept="image/*,application/pdf">
+                                                    </div>
+
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">Cancelled Cheque</label>
+                                                        <input type="file" class="form-control"
+                                                            name="cancelled_cheque_doc"
+                                                            accept="image/*,application/pdf">
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label class="form-label">Business Logo</label>
+                                                        <input type="file" class="form-control"
+                                                            name="business_logo_path" accept="image/*,application/pdf">
+                                                    </div>
+                                                </div>
+                                                <!-- Document Preview Section -->
+                                                <div class="row" id="documentsContainer">
+                                                    <!-- Documents will be inserted here -->
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fas fa-save me-2"></i>Update KYC Info
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <!-- No KYC Section -->
+                                    <div class="form-section" id="noKycSection" style="display: none;">
+                                        <div class="section-header">
+                                            <h5 class="mb-0"><i class="fas fa-id-card me-2"></i>KYC Information</h5>
+                                        </div>
+                                        <div class="p-3 text-center">
+                                            <i class="fas fa-file-alt fa-2x text-muted mb-3"></i>
+                                            <p class="text-muted">No KYC information available</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Document Modal -->
+                            <div class="modal fade" id="documentModal" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Document Preview</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <img id="modalImage" src="" class="img-fluid" alt="Document">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Scripts -->
+                            <script
+                                src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                            <script>
+                                function isImage(path) {
+                                    return /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(path || '');
+                                }
+                                function isPdf(path) {
+                                    return /\.pdf$/i.test(path || '');
+                                }
+                                function renderDocCard(label, relPath) {
+                                    const src = `/${relPath}`; // relPath is like "uploads/kyc/123-file.png"
+                                    const preview = isImage(relPath)
+                                        ? `<img src="${src}" class="doc-preview img-fluid" alt="${label}" onclick="openModal('${src}')">`
+                                        : isPdf(relPath)
+                                            ? `<div class="d-flex flex-column align-items-center py-4">
+        <i class="fa-regular fa-file-pdf fa-2x text-danger mb-2"></i>
+        <small class="text-muted">PDF Preview not inline</small>
+     </div>`
+                                            : `<div class="d-flex flex-column align-items-center py-4">
+        <i class="fa-regular fa-file-lines fa-2x text-secondary mb-2"></i>
+        <small class="text-muted">Preview not available</small>
+     </div>`;
+
+                                    return `
+<div class="col-md-4 mb-3">
+  <label class="form-label">${label}</label>
+  <div class="bg-light rounded p-3 d-flex flex-column gap-2 align-items-center">
+    ${preview}
+    <div>
+      <a class="btn btn-sm btn-primary" href="${src}" download>
+        <i class="fa fa-download me-1"></i>Download
+      </a>
+      ${!isImage(relPath) ? `<a class="btn btn-sm btn-outline-primary ms-2" target="_blank" href="${src}">
+        <i class="fa fa-up-right-from-square me-1"></i>Open
+      </a>` : ''}
+    </div>
+  </div>
+</div>
+`;
+                                }
+                            </script>
+                            <script>
+                                let clientData = null;
+
+                                // Get client ID from URL or set it here
+                                // const clientId = getClientIdFromUrl(); 
+                                const clientId = '<%= clientId %>'; // Passed from server
+                                // Load client data on page load
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    loadClientData();
+                                });
+
+                                function getClientIdFromUrl() {
+                                    // Extract client ID from URL path like /client-detail/123
+                                    const pathParts = window.location.pathname.split('/');
+                                    return pathParts[pathParts.length - 1]
+                                }
+
+                                async function loadClientData() {
+                                    try {
+                                        showLoading(true);
+
+                                        const response = await axios.get(`/api/client-data/${clientId}`);
+
+                                        if (response.data.ok) {
+                                            clientData = response.data.data;
+                                            populateData();
+                                            showContent();
+                                        } else {
+                                            throw new Error(response.data.message || 'Failed to load client data');
+                                        }
+                                    } catch (error) {
+                                        console.error('Error loading client data:', error);
+                                        showError(error.message || 'Failed to load client details');
+                                    }
+                                }
+
+                                function populateData() {
+                                    const admin = clientData.admin;
+                                    const kyc = clientData.kyc;
+
+                                    // Debug KYC status
+                                    console.log('🔍 KYC Debug Info:');
+                                    console.log('Admin KYC verified:', admin.is_kyc_verified);
+                                    console.log('Admin KYC verified type:', typeof admin.is_kyc_verified);
+                                    console.log('Admin data:', admin);
+
+                                    // Update page title
+                                    document.title = `Client Details - ${admin.company_name || admin.first_name}`;
+
+                                    // Profile Header
+                                    document.getElementById('clientName').textContent = `${admin.first_name} ${admin.last_name || ''}`;
+                                    document.getElementById('companyName').textContent = admin.company_name || 'No Company Name';
+
+                                    // Profile Image
+                                    updateProfileImage(admin.logo_path);
+
+                                    // Status Badges
+                                    updateStatusBadges(admin);
+
+                                    // Quick Controls
+                                    updateQuickControls(admin);
+
+                                    // Basic Information Form
+                                    updateBasicInfo(admin);
+
+                                    // Company Information Form
+                                    updateCompanyInfo(admin);
+
+                                    // KYC Information
+                                    updateKYCInfo(kyc);
+                                }
+
+                                function updateProfileImage(logoPath) {
+                                    const container = document.getElementById('profileImageContainer');
+                                    if (logoPath) {
+                                        container.innerHTML = `<img src="/${logoPath}" alt="Profile" class="profile-img">`;
+                                    } else {
+                                        container.innerHTML = `
+  <div class="profile-img bg-secondary d-flex align-items-center justify-content-center">
+    <i class="fas fa-user fa-lg"></i>
+  </div>`;
+                                    }
+                                }
+
+                                function updateStatusBadges(admin) {
+                                    const container = document.getElementById('statusBadges');
+                                    container.innerHTML = `
+            <span class="badge status-badge ${admin.is_active ? 'bg-success' : 'bg-danger'}">
+                ${admin.is_active ? 'Active' : 'Inactive'}
+            </span>
+            <span class="badge status-badge ${admin.is_verified ? 'bg-success' : 'bg-warning'}">
+                ${admin.is_verified ? 'Verified' : 'Unverified'}
+            </span>
+             <span class="badge status-badge ${admin.is_kyc_submitted ? 'bg-success' : 'bg-secondary'}">
+                ${admin.is_kyc_submitted ? 'KYC Submitted' : 'KYC Submission Pending'}
+            </span>
+            <span class="badge status-badge ${admin.is_kyc_verified ? 'bg-success' : 'bg-secondary'}">
+                ${admin.is_kyc_verified ? 'KYC Verified' : 'KYC Approval Pending'}
+            </span>              
+        `;
+                                }
+
+                                function updateQuickControls(admin) {
+                                    // Update checkboxes with null checks
+                                    const activeCheckbox = document.getElementById('is_active');
+                                    const verifiedCheckbox = document.getElementById('is_verified');
+                                    const kycVerifiedCheckbox = document.getElementById('is_kyc_verified');
+                                    const kycSubmittedCheckbox = document.getElementById('is_kyc_submitted');
+
+                                    if (activeCheckbox) activeCheckbox.checked = admin.is_active;
+                                    if (verifiedCheckbox) verifiedCheckbox.checked = admin.is_verified;
+                                    if (kycVerifiedCheckbox) kycVerifiedCheckbox.checked = admin.is_kyc_verified;
+                                    if (kycSubmittedCheckbox) kycSubmittedCheckbox.checked = admin.is_kyc_submitted;
+
+                                    // Update labels with null checks
+                                    const activeLabel = document.getElementById('active_label');
+                                    const verifiedLabel = document.getElementById('verified_label');
+
+                                    if (activeLabel) activeLabel.textContent = admin.is_active ? 'Active' : 'Inactive';
+                                    if (verifiedLabel) verifiedLabel.textContent = admin.is_verified ? 'Verified' : 'Unverified';
+
+                                    // Update KYC approval buttons and label
+                                    const approveBtn = document.getElementById('approveKycBtn');
+                                    const rejectBtn = document.getElementById('rejectKycBtn');
+                                    const kycLabel = document.getElementById('kyc_verified_label');
+
+                                    // Handle KYC status: 0 = Pending (show buttons), 1 = Approved (hide buttons)
+                                    console.log('KYC Status:', admin.is_kyc_verified, 'Type:', typeof admin.is_kyc_verified);
+
+                                    // Show debug info in UI
+                                    const debugElement = document.getElementById('kyc_status_debug');
+                                    if (debugElement) {
+                                        debugElement.textContent = `Status: ${admin.is_kyc_verified} (${typeof admin.is_kyc_verified})`;
+                                    }
+
+                                    if (admin.is_kyc_verified == 1 || admin.is_kyc_verified === true) {
+                                        // Already approved - hide buttons
+                                        if (approveBtn) approveBtn.style.display = 'none';
+                                        if (rejectBtn) rejectBtn.style.display = 'none';
+                                        if (kycLabel) {
+                                            kycLabel.textContent = '✅ Already Approved';
+                                            kycLabel.className = 'ms-2 text-success fw-bold';
+                                        }
+                                        console.log('Showing approved state - buttons hidden');
+                                    } else if (admin.is_kyc_verified == 0 || admin.is_kyc_verified === false || admin.is_kyc_verified === null) {
+                                        // Not approved yet - show buttons for approve/reject
+                                        if (approveBtn) approveBtn.style.display = 'inline-block';
+                                        if (rejectBtn) rejectBtn.style.display = 'inline-block';
+                                        if (kycLabel) {
+                                            kycLabel.textContent = '⏳ Pending Approval - You can Approve or Reject';
+                                            kycLabel.className = 'ms-2 text-warning fw-bold';
+                                        }
+                                        console.log('Showing pending state - buttons visible');
+                                    } else {
+                                        // Unknown state - default to showing buttons
+                                        if (approveBtn) approveBtn.style.display = 'inline-block';
+                                        if (rejectBtn) rejectBtn.style.display = 'inline-block';
+                                        if (kycLabel) {
+                                            kycLabel.textContent = '❓ Status Unknown - You can Approve or Reject';
+                                            kycLabel.className = 'ms-2 text-secondary';
+                                        }
+                                        console.log('Unknown KYC state - showing buttons as fallback');
+                                    }
+
+                                    // Update button data attributes with current admin ID
+                                    if (approveBtn && rejectBtn) {
+                                        approveBtn.setAttribute('data-id', admin.id);
+                                        rejectBtn.setAttribute('data-id', admin.id);
+                                    }
+                                }
+
+                                function updateBasicInfo(admin) {
+                                    const adminId = document.getElementById('adminId');
+                                    const firstName = document.getElementById('firstName');
+                                    const lastName = document.getElementById('lastName');
+                                    const email = document.getElementById('email');
+                                    const countryCode = document.getElementById('countryCode');
+                                    const phoneNo = document.getElementById('phoneNo');
+                                    const roleName = document.getElementById('roleName');
+                                    const userType = document.getElementById('userType');
+
+                                    if (adminId) adminId.value = admin.id;
+                                    if (firstName) firstName.value = admin.first_name || '';
+                                    if (lastName) lastName.value = admin.last_name || '';
+                                    if (email) email.value = admin.email || '';
+                                    if (countryCode) countryCode.value = admin.country_code || '+91';
+                                    if (phoneNo) phoneNo.value = admin.phone_no || '';
+                                    if (roleName) roleName.value = admin.role_name || '';
+                                    if (userType) userType.value = admin.user_type || '';
+                                }
+
+                                function updateCompanyInfo(admin) {
+                                    const companyAdminId = document.getElementById('companyAdminId');
+                                    const companyNameField = document.getElementById('companyNameField');
+                                    const organization = document.getElementById('organization');
+                                    const gst = document.getElementById('gst');
+                                    const paymentMode = document.getElementById('paymentMode');
+                                    const monthlyParcels = document.getElementById('monthlyParcels');
+                                    const companyType = document.getElementById('companyType');
+
+                                    if (companyAdminId) companyAdminId.value = admin.id;
+                                    if (companyNameField) companyNameField.value = admin.company_name || '';
+                                    if (organization) organization.value = admin.organization || '';
+                                    if (gst) gst.value = admin.gst || '';
+                                    if (paymentMode) paymentMode.value = admin.payment_mode || '';
+                                    if (monthlyParcels) monthlyParcels.value = admin.monthly_parcels || '';
+                                    if (companyType) companyType.value = admin.company_type || '';
+                                }
+                                function updateKYCInfo(kyc) {
+                                    if (kyc) {
+                                        const kycSection = document.getElementById('kycSection');
+                                        const noKycSection = document.getElementById('noKycSection');
+
+                                        if (kycSection) kycSection.style.display = 'block';
+                                        if (noKycSection) noKycSection.style.display = 'none';
+
+                                        // Get all KYC form elements
+                                        const kycId = document.getElementById('kycId');
+                                        const businessType = document.getElementById('businessType');
+                                        const subType = document.getElementById('subType');
+                                        const aadhaarNumber = document.getElementById('aadhaarNumber');
+                                        const panNumber = document.getElementById('panNumber');
+                                        const panName = document.getElementById('panName');
+                                        const gstNumber = document.getElementById('gstNumber');
+                                        const gstTradeName = document.getElementById('gstTradeName');
+                                        const gstActivities = document.getElementById('gstActivities');
+                                        const registeredCompanyName = document.getElementById('registeredCompanyName');
+                                        const brandName = document.getElementById('brandName');
+                                        const companyEmail = document.getElementById('companyEmail');
+                                        const website = document.getElementById('website');
+                                        const kycCompanyType = document.getElementById('kycCompanyType');
+                                        const kycOrganization = document.getElementById('kycOrganization');
+                                        const kycMonthlyParcels = document.getElementById('kycMonthlyParcels');
+                                        const businessVolume = document.getElementById('businessVolume');
+                                        const segmentType = document.getElementById('segmentType');
+                                        const gstConstitution = document.getElementById('gstConstitution');
+                                        const companyRegNumber = document.getElementById('companyRegNumber');
+                                        const cancelledChequeNumber = document.getElementById('cancelledChequeNumber');
+
+                                        // Set values with null checks
+                                        if (kycId) kycId.value = kyc.id || '';
+                                        if (businessType) businessType.value = kyc.business_type || '';
+                                        if (subType) subType.value = kyc.sub_type || '';
+                                        if (aadhaarNumber) aadhaarNumber.value = kyc.aadhaar_number || '';
+                                        if (panNumber) panNumber.value = kyc.pan_number || '';
+                                        if (panName) panName.value = kyc.pan_name || '';
+                                        if (gstNumber) gstNumber.value = kyc.gst_number || '';
+                                        if (gstTradeName) gstTradeName.value = kyc.gst_trade_name || '';
+                                        if (gstActivities) gstActivities.value = kyc.gst_nature_of_business_activities || '';
+                                        if (registeredCompanyName) registeredCompanyName.value = kyc.registered_company_name || '';
+                                        if (brandName) brandName.value = kyc.brand_name || '';
+                                        if (companyEmail) companyEmail.value = kyc.company_email || '';
+                                        if (website) website.value = kyc.website || '';
+                                        if (kycCompanyType) kycCompanyType.value = kyc.company_type || '';
+                                        if (kycOrganization) kycOrganization.value = kyc.organization || '';
+                                        if (kycMonthlyParcels) kycMonthlyParcels.value = kyc.monthly_parcels || '';
+                                        if (businessVolume) businessVolume.value = kyc.business_volume || '';
+                                        if (segmentType) segmentType.value = kyc.segment_type || '';
+                                        if (gstConstitution) gstConstitution.value = kyc.gst_constitution_of_business || '';
+                                        if (companyRegNumber) companyRegNumber.value = kyc.company_reg_number || '';
+                                        if (cancelledChequeNumber) cancelledChequeNumber.value = kyc.cancelled_cheque_number || '';
+
+                                        updateDocuments(kyc);
+                                    } else {
+                                        const kycSection = document.getElementById('kycSection');
+                                        const noKycSection = document.getElementById('noKycSection');
+                                        if (kycSection) kycSection.style.display = 'none';
+                                        if (noKycSection) noKycSection.style.display = 'block';
+                                    }
+                                }
+
+                                function updateDocuments(kyc) {
+                                    const container = document.getElementById('documentsContainer');
+                                    const docs = [
+                                        { key: 'selfie_path', label: 'Selfie' },
+                                        { key: 'aadhaar_front_doc', label: 'Aadhaar Front' },
+                                        { key: 'aadhar_back_doc', label: 'Aadhaar Back' }, // table spelling
+                                        { key: 'pan_path', label: 'PAN Card' },
+                                        { key: 'gst_path', label: 'GST Document' },
+                                        { key: 'company_reg_doc', label: 'Company Registration' },
+                                        { key: 'cancelled_cheque_doc', label: 'Cancelled Cheque' },
+                                        { key: 'business_logo_path', label: 'Business Logo' }
+                                    ];
+
+                                    container.innerHTML = docs
+                                        .filter(d => kyc?.[d.key])
+                                        .map(d => renderDocCard(d.label, kyc[d.key]))
+                                        .join('') || `<div class="col-12 text-muted">No documents uploaded.</div>`;
+                                }
+                                function showLoading(show) {
+                                    document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+                                }
+
+                                function showError(message) {
+                                    document.getElementById('errorText').textContent = message;
+                                    document.getElementById('errorMessage').style.display = 'block';
+                                    document.getElementById('loadingOverlay').style.display = 'none';
+                                    document.getElementById('mainContent').style.display = 'none';
+                                }
+
+                                function showContent() {
+                                    document.getElementById('loadingOverlay').style.display = 'none';
+                                    document.getElementById('errorMessage').style.display = 'none';
+                                    document.getElementById('mainContent').style.display = 'block';
+                                }
+
+                                // Update status function for checkboxes
+                                async function updateStatus(field, value) {
+                                    const checkbox = document.getElementById(field);
+                                    const label = document.getElementById(field + '_label');
+
+                                    try {
+                                        checkbox.disabled = true;
+
+                                        const response = await axios.post('/api/admin/update-status', {
+                                            admin_id: clientData.admin.id,
+                                            field,
+                                            value
+                                        });
+
+                                        if (response.data.success) {
+                                            clientData.admin[field] = value; // update local data
+                                            console.log("Status updated:", field, value);
+                                        } else {
+                                            // revert if backend says fail
+                                            checkbox.checked = !value;
+                                            console.error("Update failed:", response.data.message);
+                                        }
+                                    } catch (error) {
+                                        // revert if error
+                                        checkbox.checked = !value;
+                                        console.error("Request error:", error.message);
+                                    } finally {
+                                        checkbox.disabled = false;
+                                    }
+                                }
+
+                                // KYC Approval/Rejection Functions
+                                function showSuccessAlert(message) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success',
+                                        text: message,
+                                        timer: 2000,
+                                        showConfirmButton: false
+                                    });
+                                }
+
+                                function showErrorAlert(message) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: message
+                                    });
+                                }
+
+                                // Test SweetAlert2 functionality
+                                console.log('Testing SweetAlert2 availability...');
+                                if (typeof Swal !== 'undefined') {
+                                    console.log('✅ SweetAlert2 is loaded');
+                                } else {
+                                    console.log('❌ SweetAlert2 is not loaded');
+                                }
+
+                                // Approve KYC
+                                document.addEventListener('click', function(e) {
+                                    if (e.target.classList.contains('approveKYC') || e.target.closest('.approveKYC')) {
+                                        const button = e.target.classList.contains('approveKYC') ? e.target : e.target.closest('.approveKYC');
+                                        const clientId = button.getAttribute('data-id');
+
+                                        Swal.fire({
+                                            title: 'Approve KYC & Set Payment Mode',
+                                            html: `
+                                                <div class="mb-3">
+                                                    <p class="mb-3">Are you sure you want to approve this KYC?</p>
+                                                    <label for="paymentMode" class="form-label fw-bold">Select Payment Mode:</label>
+                                                    <select id="paymentMode" class="form-select">
+                                                        <option value="">Choose Payment Mode</option>
+                                                        <option value="prepaid">Prepaid</option>
+                                                        <option value="postpaid">Postpaid</option>
+                                                    </select>
+                                                </div>
+                                            `,
+                                            icon: 'question',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Yes, Approve',
+                                            confirmButtonColor: '#28a745',
+                                            preConfirm: () => {
+                                                // Get the select element from within the SweetAlert modal
+                                                const popup = Swal.getPopup();
+                                                const paymentModeSelect = popup ? popup.querySelector('#paymentMode') : null;
+                                                const paymentMode = paymentModeSelect ? paymentModeSelect.value : '';
+
+                                                console.log('Selected payment mode:', paymentMode);
+
+                                                if (!paymentMode || paymentMode === '') {
+                                                    Swal.showValidationMessage('Please select a payment mode');
+                                                    return false;
+                                                }
+                                                return paymentMode;
+                                            }
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                const paymentMode = result.value;
+                                                console.log('Final selected payment mode:', paymentMode);
+
+                                                button.disabled = true;
+                                                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+                                                axios.post('/approve-client-kyc', {
+                                                    client_id: clientId,
+                                                    payment_mode: paymentMode
+                                                })
+                                                .then(res => {
+                                                    showSuccessAlert(res.data.message || 'KYC approved successfully');
+                                                    // Reload client data to update UI
+                                                    setTimeout(() => location.reload(), 1500);
+                                                })
+                                                .catch(err => {
+                                                    button.disabled = false;
+                                                    button.innerHTML = '<i class="fas fa-check"></i> Approve';
+                                                    showErrorAlert(err.response?.data?.error || 'Failed to approve KYC');
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+
+                                // Reject KYC
+                                document.addEventListener('click', function(e) {
+                                    if (e.target.classList.contains('rejectKYC') || e.target.closest('.rejectKYC')) {
+                                        const button = e.target.classList.contains('rejectKYC') ? e.target : e.target.closest('.rejectKYC');
+                                        const userId = button.getAttribute('data-id');
+
+                                        Swal.fire({
+                                            title: 'Reject KYC?',
+                                            text: 'Are you sure you want to reject this KYC?',
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Yes, Reject',
+                                            confirmButtonColor: '#dc3545',
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                button.disabled = true;
+                                                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+                                                axios.post('/kyc/verify', {
+                                                    user_id: userId,
+                                                    status: 'rejected'
+                                                })
+                                                .then(() => {
+                                                    showSuccessAlert('KYC rejected successfully');
+                                                    // Reload client data to update UI
+                                                    setTimeout(() => location.reload(), 1500);
+                                                })
+                                                .catch(() => {
+                                                    button.disabled = false;
+                                                    button.innerHTML = '<i class="fas fa-times"></i> Reject';
+                                                    showErrorAlert('Failed to reject KYC');
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+
+                                // Form submission handlers
+                                document.getElementById('basicInfoForm').addEventListener('submit', async (e) => {
+                                    e.preventDefault();
+                                    await submitForm(e.target, '/api/admin/update-basic-info');
+                                });
+
+                                document.getElementById('companyInfoForm').addEventListener('submit', async (e) => {
+                                    e.preventDefault();
+                                    await submitForm(e.target, '/api/admin/update-company-info');
+                                });
+                                document.getElementById('kycInfoForm').addEventListener('submit', submitKycForm);
+
+                                async function submitKycForm(e) {
+                                    e.preventDefault();
+                                    const form = e.target;
+                                    try {
+                                        form.classList.add('loading');
+                                        const fd = new FormData(form);
+
+                                        // include user_id (admin.id) if needed by backend
+                                        fd.append('user_id', clientData.admin.id);
+
+                                        const resp = await axios.post('/api/admin/update-kyc-info', fd, {
+                                            headers: { 'Content-Type': 'multipart/form-data' }
+                                        });
+
+                                        if (resp.data.success) {
+                                            await loadClientData();
+                                            showAlert('KYC updated successfully!', 'success');
+                                        } else {
+                                            throw new Error(resp.data.message || 'Update failed');
+                                        }
+                                    } catch (err) {
+                                        showAlert('Failed to update KYC: ' + err.message, 'danger');
+                                    } finally {
+                                        form.classList.remove('loading');
+                                    }
+                                }
+
+                                async function submitForm(form, url) {
+                                    const formData = new FormData(form);
+                                    const data = Object.fromEntries(formData.entries());
+
+                                    try {
+                                        form.classList.add('loading');
+                                        const response = await axios.post(url, data);
+
+                                        if (response.data.success) {
+                                            // Reload data to reflect changes
+                                            await loadClientData();
+                                            showAlert('Information updated successfully!', 'success');
+                                        } else {
+                                            throw new Error(response.data.message || 'Update failed');
+                                        }
+                                    } catch (error) {
+                                        showAlert('Failed to update: ' + error.message, 'danger');
+                                    } finally {
+                                        form.classList.remove('loading');
+                                    }
+                                }
+
+                                function showAlert(message, type) {
+                                    const alertDiv = document.createElement('div');
+                                    alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+                                    alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                                    alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+                                    document.body.appendChild(alertDiv);
+
+                                    setTimeout(() => {
+                                        alertDiv.remove();
+                                    }, 5000);
+                                }
+
+                                function openModal(imageSrc) {
+                                    document.getElementById('modalImage').src = imageSrc;
+                                    new bootstrap.Modal(document.getElementById('documentModal')).show();
+                                }
+                            </script>
+                            <%- include('../partials/footer') %>
+                        </div>
+
+                    </div>
+    </div>
+</body>
+
+</html>

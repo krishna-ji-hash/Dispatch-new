@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <%- include('../partials/head') %>
+    <style>
+        /* Blue Color Scheme & Responsive Design */
+        :root {
+            --primary-blue: #2563eb;
+            --secondary-blue: #1d4ed8;
+            --light-blue: #dbeafe;
+            --dark-blue: #1e40af;
+            --accent-blue: #3b82f6;
+            --hover-blue: #1e3a8a;
+        }
+        
+        .kyc-container {
+            padding: 1rem;
+            max-width: 100%;
+            margin: 0 auto;
+            overflow-x: hidden;
+        }
+        
+
+        
+        .kyc-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-filter-section {
+            background: transparent;
+            
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .search-input {
+            border: 2px solid #bfdbfe;
+            border-radius: 8px 0 0 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            border-right: none;
+        }
+        
+        .search-input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+        
+        .search-icon {
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+        }
+        
+        .input-group-text {
+            border: 2px solid #bfdbfe;
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus + .input-group-text {
+            border-color: var(--primary-blue);
+        }
+        
+        .search-btn {
+            background: var(--primary-blue);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .search-btn:hover {
+            background: var(--hover-blue);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+        
+        .kyc-table-container {
+            border-radius: 12px;
+            background: white;
+            overflow-x: auto;
+        }
+        
+        .kyc-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        .kyc-table th {
+            background: linear-gradient(135deg, var(--light-blue) 0%, #e0f2fe 100%);
+            color: var(--dark-blue);
+            font-weight: 600;
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 2px solid #bfdbfe;
+            white-space: nowrap;
+            font-size: 0.9rem;
+        }
+        
+        .kyc-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #f1f3f4;
+            vertical-align: middle;
+            font-size: 0.9rem;
+        }
+        
+        .kyc-table tbody tr:hover {
+            background-color: var(--light-blue);
+            transform: translateY(-1px);
+            transition: all 0.2s ease;
+        }
+        
+        .kyc-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+        
+        .status-verified {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .status-pending {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+        }
+        
+        .action-btn {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .btn-edit {
+          
+            color: #232323;
+        }
+        
+        .btn-edit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+            color: var(--primary-blue);
+        }
+        
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-blue);
+        }
+        
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+        
+        /* Pagination and Entries Styles */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding: 0.75rem 0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .entries-info {
+            color: var(--dark-blue);
+            font-weight: 600;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+        
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+        
+        .pagination-btn {
+            background: white;
+            border: 2px solid #bfdbfe;
+            color: var(--primary-blue);
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 32px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        
+        .pagination-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+        
+        .pagination-btn.active {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+        
+        .pagination-btn:disabled {
+            background: #f3f4f6;
+            color: #9ca3af;
+            border-color: #d1d5db;
+            cursor: not-allowed;
+        }
+        
+        .page-numbers {
+            display: flex;
+            gap: 0.2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .page-number {
+            background: white;
+            border: 2px solid #bfdbfe;
+            color: var(--primary-blue);
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 32px;
+            text-align: center;
+            font-size: 0.8rem;
+            user-select: none;
+        }
+        
+        .page-number:hover {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+        
+        .page-number.active {
+            background: var(--primary-blue) !important;
+            color: white !important;
+            border-color: var(--primary-blue) !important;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .kyc-container {
+                padding: 0.5rem;
+            }
+            
+            .search-filter-section {
+                padding: 1rem;
+            }
+            
+            .search-input {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .input-group-text {
+                padding: 0.6rem 0.8rem;
+            }
+            
+            .kyc-table th,
+            .kyc-table td {
+                padding: 0.5rem 0.4rem;
+                font-size: 0.8rem;
+            }
+            
+            .status-badge {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.7rem;
+            }
+            
+            .action-btn {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.75rem;
+            }
+            
+            .pagination-container {
+                flex-direction: column;
+                gap: 0.75rem;
+                text-align: center;
+            }
+            
+            .pagination-controls {
+                justify-content: center;
+            }
+            
+            .pagination-btn,
+            .page-number {
+                padding: 0.35rem 0.5rem;
+                font-size: 0.75rem;
+                min-width: 30px;
+            }
+            
+            .entries-info {
+                font-size: 0.8rem;
+            }
+        }
+        
+        /* Tablet Responsive */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .kyc-container {
+                padding: 1rem 1.5rem;
+            }
+            
+            .search-filter-section {
+                padding: 1.25rem;
+            }
+            
+            .kyc-table th,
+            .kyc-table td {
+                padding: 0.6rem 0.5rem;
+                font-size: 0.85rem;
+            }
+            
+            .status-badge {
+                padding: 0.35rem 0.7rem;
+                font-size: 0.7rem;
+            }
+            
+            .action-btn {
+                padding: 0.35rem 0.7rem;
+                font-size: 0.75rem;
+            }
+        }
+        
+        /* Small Mobile */
+        @media (max-width: 480px) {
+            .kyc-container {
+                padding: 0.25rem;
+            }
+            
+            .kyc-table th,
+            .kyc-table td {
+                padding: 0.4rem 0.25rem;
+                font-size: 0.75rem;
+            }
+            
+            .status-badge {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.65rem;
+            }
+            
+            .action-btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.7rem;
+            }
+            
+            .search-filter-section {
+                padding: 0.5rem;
+            }
+            
+            .search-input {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.85rem;
+            }
+            
+            .input-group-text {
+                padding: 0.4rem 0.6rem;
+            }
+            
+            .pagination-container {
+                gap: 0.5rem;
+            }
+            
+            .pagination-btn,
+            .page-number {
+                padding: 0.3rem 0.4rem;
+                font-size: 0.7rem;
+                min-width: 28px;
+            }
+            
+            .entries-info {
+                font-size: 0.75rem;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Smooth Transitions */
+        .kyc-card {
+            transition: all 0.3s ease;
+        }
+        
+        .kyc-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        
+        /* Search Results Count */
+        .results-count {
+            background: var(--light-blue);
+            color: var(--dark-blue);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            border-left: 4px solid var(--primary-blue);
+        }
+        
+        /* Responsive table improvements */
+        .table-responsive {
+            border-radius: 12px;
+            overflow: hidden;
+           
+        }
+        
+        .table-responsive .table {
+            margin-bottom: 0;
+        }
+        
+        /* Ensure table is responsive on all devices */
+        @media (max-width: 1200px) {
+            .table-responsive {
+                overflow-x: auto;
+                border-radius: 8px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .table-responsive {
+                border-radius: 6px;
+                margin: 0 -0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .table-responsive {
+                border-radius: 4px;
+                margin: 0 -0.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body data-theme="light" class="font-nunito">
+    <div id="wrapper" class="theme-cyan">
+
+        <%- include('../partials/header') %>
+        <%- include('../partials/left-sidebar') %>
+        <%- include('../partials/right-iconbar') %>
+
+        <div id="main-content">
+            <div class="container pt-4">
+                <div class="block-header">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <h2>KYC List</h2>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/"><i class="fa fa-dashboard"></i></a></li>
+                                <li class="breadcrumb-item active">KYC List</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kyc-container">
+                   
+
+                    <!-- Search and Filter Section -->
+                    <div class="search-filter-section">
+                        <div class="row align-items-center">
+                            <div class="col-sm-4 mb-3 mb-sm-0">
+                                <div class="input-group">
+                                    <input type="text" id="searchInput" class="form-control form-control-lg search-input" 
+                                           placeholder="Search by name, email, or phone..." 
+                                           aria-label="Search KYC submissions">
+                                    <span class="input-group-text bg-white border-start-0">
+                                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Error Alert -->
+                    <% if (typeof error !=='undefined' && error) { %>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fa fa-exclamation-triangle me-2"></i>
+                            <%= error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    <% } %>
+
+               
+                    <!-- KYC List Card -->
+                    <div class="kyc-card card mb-5">
+                        <% if (!kycList || kycList.length===0) { %>
+                            <div class="empty-state">
+                                <i class="fa fa-clipboard-list"></i>
+                                <h3>No KYC Submissions</h3>
+                                <p>There are currently no pending KYC submissions to review.</p>
+                            </div>
+                        <% } else { %>
+                            <div class=" p-3  ">
+                            <div class=" table-responsive ">
+                                <table class="table table-hover kyc-table" id="kycTable">
+                                    <thead>
+                                        <tr>
+                                            <th><i class="fa fa-hashtag me-2"></i>ID</th>
+                                            <th><i class="fa fa-user me-2"></i>User Name</th>
+                                            <th><i class="fa fa-envelope me-2"></i>Email</th>   
+                                            <th><i class="fa fa-phone me-2"></i>Phone</th> 
+                                            <th><i class="fa fa-check-circle me-2"></i>KYC Status</th>
+                                            <th><i class="fa fa-cogs me-2"></i>Actions</th>                                                                                                  
+                                        </tr>
+                                    </thead>
+                                    <tbody id="kycTableBody">
+                                        <% kycList.forEach((kyc)=> { %>
+                                            <tr class="kyc-row" data-search="<%= (kyc.first_name || '') + ' ' + (kyc.email || '') + ' ' + (kyc.phone_no || '') %>">
+                                                <td>
+                                                    <strong>#<%= kyc.id %></strong>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fa fa-user-circle me-2 text-primary"></i>
+                                                        <%= kyc.first_name || 'N/A' %>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fa fa-envelope me-2 text-info"></i>
+                                                        <%= kyc.email || 'N/A' %>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fa fa-phone me-2 text-success"></i>
+                                                        <%= kyc.phone_no || 'N/A' %>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <% if (kyc.is_kyc_verified) { %>
+                                                        <span class="status-badge status-verified">
+                                                            <i class="fa fa-check me-1"></i>Verified
+                                                        </span>
+                                                    <% } else { %>
+                                                        <span class="status-badge status-pending">
+                                                            <i class="fa fa-clock me-1"></i>Pending
+                                                        </span>
+                                                    <% } %>
+                                                </td>
+                                                <td>
+                                                    <button class="action-btn btn-edit editKYC" data-id="<%= kyc.id %>">
+                                                        <i class="fa fa-edit me-1"></i>Edit
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Pagination -->
+                            <div class="pagination-container" id="paginationContainer">
+                                <div class="entries-info">
+                                    Showing <span id="startEntry">1</span> to <span id="endEntry">10</span> of <span id="totalEntries">0</span> entries
+                                </div>
+                                <div class="pagination-controls">
+                                    <button class="pagination-btn" id="prevPage">
+                                        <i class="fa fa-chevron-left"></i>
+                                    </button>
+                                    <div class="page-numbers" id="pageNumbers">
+                                        <!-- Page numbers will be generated here -->
+                                    </div>
+                                    <button class="pagination-btn" id="nextPage">
+                                        <i class="fa fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <%- include('../partials/footer') %>
+        
+        <script>
+            // Global variables for pagination
+            let currentPage = 1;
+            let itemsPerPage = 10;
+            let filteredData = [];
+            let allData = [];
+            let searchTimeout;
+            
+            // Initialize the page
+            $(document).ready(function() {
+                initializePage();
+                setupEventListeners();
+            });
+            
+            function initializePage() {
+                // Store all data for filtering and pagination
+                allData = Array.from(document.querySelectorAll('.kyc-row')).map(row => row.outerHTML);
+                filteredData = [...allData];
+                
+                // Initialize pagination
+                updatePagination();
+                showPage(1);
+                
+                // Show results count
+                updateResultsCount();
+            }
+            
+            function setupEventListeners() {
+                // Real-time search functionality
+                $('#searchInput').on('input', function() {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        performSearch();
+                    }, 300); // 300ms delay for better performance
+                });
+                
+                // Clear search
+                $('#clearSearch').click(clearSearch);
+                
+                // Pagination
+                $('#prevPage').click(() => changePage(-1));
+                $('#nextPage').click(() => changePage(1));
+                
+                // Edit KYC
+                $(document).on('click', '.editKYC', handleEditKYC);
+            }
+            
+            function performSearch() {
+                const searchTerm = $('#searchInput').val().toLowerCase().trim();
+                
+                if (!searchTerm) {
+                    filteredData = [...allData];
+                } else {
+                    filteredData = allData.filter(row => {
+                        const searchData = $(row).attr('data-search') || '';
+                        return searchData.toLowerCase().includes(searchTerm);
+                    });
+                }
+                
+                currentPage = 1;
+                updatePagination();
+                showPage(1);
+                updateResultsCount();
+            }
+            
+            function clearSearch() {
+                $('#searchInput').val('');
+                filteredData = [...allData];
+                currentPage = 1;
+                updatePagination();
+                showPage(1);
+                updateResultsCount();
+            }
+            
+            function updateResultsCount() {
+                const totalResults = filteredData.length;
+                const startIndex = (currentPage - 1) * itemsPerPage + 1;
+                const endIndex = Math.min(currentPage * itemsPerPage, totalResults);
+                
+                if (totalResults === 0) {
+                    $('#resultsCount').hide();
+                } else {
+                    $('#resultsCount').show();
+                    $('#resultsText').text(`Showing ${startIndex}-${endIndex} of ${totalResults} results`);
+                }
+            }
+            
+            function updatePagination() {
+                const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+                const totalResults = filteredData.length;
+                
+                // Update entries info
+                const startIndex = (currentPage - 1) * itemsPerPage + 1;
+                const endIndex = Math.min(currentPage * itemsPerPage, totalResults);
+                $('#startEntry').text(startIndex);
+                $('#endEntry').text(endIndex);
+                $('#totalEntries').text(totalResults);
+                
+                // Update pagination buttons
+                $('#prevPage').prop('disabled', currentPage <= 1);
+                $('#nextPage').prop('disabled', currentPage >= totalPages);
+                
+                // Generate page numbers
+                generatePageNumbers(currentPage, totalPages);
+            }
+            
+            function generatePageNumbers(currentPage, totalPages) {
+                const pageNumbersContainer = $('#pageNumbers');
+                pageNumbersContainer.empty();
+                
+                if (totalPages <= 1) return;
+                
+                // Show all page numbers from 1 to totalPages
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === currentPage) {
+                        pageNumbersContainer.append(`<span class="page-number active" data-page="${i}">${i}</span>`);
+                    } else {
+                        pageNumbersContainer.append(`<span class="page-number" data-page="${i}">${i}</span>`);
+                    }
+                }
+                
+                // Add click event to page numbers
+                $('.page-number').off('click').on('click', function() {
+                    const page = $(this).data('page');
+                    if (page && !isNaN(page)) {
+                        currentPage = parseInt(page);
+                        showPage(currentPage);
+                        updatePagination();
+                        
+                        // Update active state immediately
+                        $('.page-number').removeClass('active');
+                        $(this).addClass('active');
+                    }
+                });
+            }
+            
+            function showPage(page) {
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const pageData = filteredData.slice(startIndex, endIndex);
+                
+                $('#kycTableBody').html(pageData.join(''));
+                updateResultsCount();
+                
+                // Ensure current page is marked as active
+                currentPage = page;
+            }
+            
+            function changePage(direction) {
+                const newPage = currentPage + direction;
+                if (newPage >= 1 && newPage <= Math.ceil(filteredData.length / itemsPerPage)) {
+                    currentPage = newPage;
+                    showPage(currentPage);
+                    updatePagination();
+                    
+                    // Update active state for page numbers
+                    $('.page-number').removeClass('active');
+                    $(`.page-number[data-page="${currentPage}"]`).addClass('active');
+                }
+            }
+            
+            function handleEditKYC() {
+                const userId = $(this).data("id");
+                showLoading();
+                
+                setTimeout(() => {
+                    window.location.href = `/client-data/${userId}`;
+                }, 500);
+            }
+            
+            // Utility Functions
+            function showSuccessAlert(message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: message || 'Action completed successfully!',
+                    confirmButtonColor: '#2563eb',
+                    confirmButtonText: 'Great!',
+                    timer: 3000,
+                    timerProgressBar: true
+                }).then(() => location.reload());
+            }
+
+            function showErrorAlert(message) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: message || 'Something went wrong. Please try again.',
+                    confirmButtonColor: '#dc3545',
+                    confirmButtonText: 'Try Again'
+                });
+            }
+
+            function showLoading() {
+                Swal.fire({
+                    title: 'Processing...',
+                    text: 'Please wait while we process your request.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            }
+
+            // Enhanced error handling
+            $(document).ajaxError(function(event, xhr, settings) {
+                if (xhr.status === 0) {
+                    showErrorAlert('Network error. Please check your connection.');
+                } else if (xhr.status === 500) {
+                    showErrorAlert('Server error. Please try again later.');
+                } else {
+                    showErrorAlert('An unexpected error occurred.');
+                }
+            });
+        </script>
+    </div>
+
+</body>
+
+</html>

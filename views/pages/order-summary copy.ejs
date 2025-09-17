@@ -1,0 +1,2626 @@
+<%- include('../partials/header') %>
+    <%- include('../partials/left-sidebar') %>
+
+
+
+
+        <style>
+            .metric-value {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: #0F172A;
+            }
+            .metric-change {
+                font-size: 0.875rem;
+                font-weight: 600;
+            }
+            .stat-value {
+                font-weight: 600;
+                color: #0F172A;
+            }
+            .stat-change {
+                font-size: 0.75rem;
+                font-weight: 500;
+            }
+            .chart-legend-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 1rem;
+                padding: 1rem 0;
+            }
+            .legend-item {
+                text-align: center;
+                padding: 0.5rem;
+            }
+            .count-number {
+                display: block;
+                font-size: 1.125rem;
+                font-weight: 700;
+                color: #0F172A;
+            }
+            .metrics-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+            .shipping-mode-counts {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .mode-count-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.5rem;
+                background: #f8f9fa;
+                border-radius: 0.375rem;
+            }
+            .mode-count-item .count {
+                font-weight: 700;
+                font-size: 1.25rem;
+                color: #0F172A;
+            }
+        </style>
+        <main class="card p-4">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <h1>Order Summary</h1>
+                        <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
+                            <ol class="breadcrumb pt-0">
+                                <li class="breadcrumb-item">
+                                    <a href="#">Home</a>
+                                </li>
+                                <li class="breadcrumb-item">
+                                    <a href="#">Dashboard</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Order Summary</li>
+                            </ol>
+                        </nav>
+                        <div class="separator mb-5"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="main-content">
+                <div class="container pt-4">
+                    <div class="">
+                  
+                        <div class="dashboard-tabs">
+                            <ul class="nav nav-pills" id="tabMenu">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-tab="overview" href="#">Overview</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-tab="shipments" href="#">Shipments</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-tab="rto" href="#">RTO</a>
+                                </li>
+                                
+                                <li class="nav-item">
+                                    <a class="nav-link" data-tab="ndr" href="#">NDR</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-tab="cod" href="#">COD</a>
+                                </li>
+                               
+                            </ul>
+
+                        </div>
+
+                    </div>
+                    <!-- Tab Contents -->
+                    <div id="tabContents" class="tab-content mt-3">
+                        <!-- Overview Tab -->
+                        <div class="tab-pane active" id="overview">
+
+                            <!-- First Row: Business Insights, Average Order Value, Today's Order Value -->
+                            <div class="row mb-4 d-flex align-items-stretch">
+                                <!-- Business Insights -->
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Business Insights</span>
+                                            <span>Last 30 days</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-3 card-metric">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-store me-2"></i>
+                                                    <div>
+                                                        <div class="metric-value">0</div>
+                                                        <div class="metric-label">Average Daily Orders</div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <div class="metric-change">▲ 0.00%</div>
+                                                    <div class="metric-label">vs previous 30 days</div>
+                                                </div>
+                                            </div>
+                            
+                                            <div class="d-flex justify-content-between align-items-center card-metric">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-rupee-sign me-2"></i>
+                                                    <div>
+                                                        <div class="metric-value">₹0</div>
+                                                        <div class="metric-label">Average Order Value</div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <div class="metric-change">▲ 0.00%</div>
+                                                    <div class="metric-label">vs previous 30 days</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <!-- Today's Orders -->
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Today's Orders</span>
+                                            <span>&nbsp;</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-shopping-cart me-2"></i>
+                                                    <div>
+                                                        <div class="metric-value">0</div>
+                                                        <div class="metric-label">vs Yesterday</div>
+                                                        </div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <div class="metric-change">▲ 0 %</div>
+                                                    <div class="metric-label">vs Yesterday</div>
+                                                </div>
+                                            </div>
+                            
+                                            <div class="d-flex justify-content-between align-items-center mb-2 stat-item">
+                                                <div class="metric-label">This week (vs last week)</div>
+                                                    <div>
+                                                    <span class="me-2 stat-value">4</span>
+                                                    <span class="metric-change stat-change">▲ 0 %</span>
+                                                    </div>
+                                                </div>
+                            
+                                            <div class="d-flex justify-content-between align-items-center mb-2 stat-item">
+                                                <div class="metric-label">This month (vs last month)</div>
+                                                <div>
+                                                    <span class="me-2 stat-value">4</span>
+                                                    <span class="metric-change stat-change">▲ 0 %</span>
+                                                </div>
+                                            </div>
+                            
+                                            <div class="d-flex justify-content-between align-items-center stat-item">
+                                                <div>This quarter (vs last quarter)</div>
+                                                <div>
+                                                    <span class="me-2 stat-value">4</span>
+                                                    <span class="stat-change">▲ 0 %</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                    </div>
+                                </div>
+                            
+                                <!-- Today's Order Value -->
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Today's Order Value</span>
+                                            <span>&nbsp;</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-rupee-sign me-2"></i>
+                                                    <div>
+                                                        <div class="metric-value">₹0.00</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                            
+                                            <div class="d-flex justify-content-between align-items-center mb-2 stat-item">
+                                                <div>This week (vs last week)</div>
+                                                    <div>
+                                                    <span class="me-2 stat-value">₹12500.00</span>
+                                                    <span class="stat-change">▲ 0 %</span>
+                                                    </div>
+                                                </div>
+                            
+                                            <div class="d-flex justify-content-between align-items-center mb-2 stat-item">
+                                                <div>This month (vs last month)</div>
+                                                <div>
+                                                    <span class="me-2 stat-value">₹12500.00</span>
+                                                    <span class="stat-change">▲ 0 %</span>
+                                            </div>
+                                        </div>
+                            
+                                            <div class="d-flex justify-content-between align-items-center stat-item">
+                                                <div>This quarter (vs last quarter)</div>
+                                                <div>
+                                                    <span class="me-2 stat-value">₹12500.00</span>
+                                                    <span class="stat-change">▲ 0 %</span>
+                                    </div>
+                                </div>
+                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <!-- Second Row: Order-split by Payment Mode, Shipment-split by Shipping Mode, Shipment-split by Courier -->
+                            <div class="row mb-4 d-flex align-items-stretch">
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Order-split by Payment Mode</span>
+                                            <span>Last 30 days</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card-chart">
+                                                <div class="chart-legend-grid" id="payment-mode-grid">
+                                                    <!-- Data will be populated dynamically -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Shipment-split by Shipping Mode</span>
+                                            <span>Last 30 days</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card-chart">
+                                                <div class="chart-legend-grid" id="shipping-mode-grid">
+                                                    <!-- Data will be populated dynamically -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Shipment-split by Courier</span>
+                                            <span>Last 30 days</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card-chart">
+                                                <div class="chart-legend-grid" id="courier-grid">
+                                                    <!-- Data will be populated dynamically -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Third Row: Shipment-split by Weight, Order Split Across Top 5 States, Delivery Performance -->
+                            <div class="row mb-4 d-flex align-items-stretch">
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Shipment-split by Weight</span>
+                                            <span>Last 30 days</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card-chart">
+                                                <div class="chart-legend-grid" id="weight-grid">
+                                                    <!-- Data will be populated dynamically -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Order Split Across Top 5 States</span>
+                                            <span>Last 30 days</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card-chart">
+                                                <div class="chart-legend-grid" id="states-grid">
+                                                    <!-- Data will be populated dynamically -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Delivery Performance</span>
+                                            <span>Last 30 days</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card-chart">
+                                                <div class="chart-legend-grid" id="delivery-grid">
+                                                    <!-- Data will be populated dynamically -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fourth Row: Earned COD Overview, NDR Overview, Shipment-split by NDR -->
+                            <div class="row mb-4 d-flex align-items-stretch">
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Earned COD Overview</span>
+                                            <span>Last 30 days</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row text-center">
+                                              <!-- COD amount earned -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-money-bill-wave fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">COD amount earned</p>
+                                                </div>
+                                                    </div>
+                                          
+                                              <!-- Earned COD remitted -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-wallet fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">Earned COD remitted</p>
+                                                </div>
+                                                    </div>
+                                          
+                                              <!-- COD amount available -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-coins fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">COD amount available</p>
+                                                </div>
+                                                    </div>
+                                          
+                                              <!-- Last remitted amount -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-exchange-alt fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">Last remitted amount</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                          
+                                </div>
+                                </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                      <!-- Card header -->
+                                      <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>NDR Overview</span>
+                                            <span>Last 30 days</span>
+                                        </div>
+                                  
+                                      <!-- Card body -->
+                                        <div class="card-body">
+                                        <div class="row text-center">
+                                          
+                                          <!-- Total NDR raised -->
+                                          <div class="col-6 mb-4">
+                                            <div class="d-flex flex-column align-items-center">
+                                              <i class="fas fa-exclamation-circle fa-2x mb-2"></i>
+                                              <p class="grid-value mb-0">0</p>
+                                                    <p class="grid-label">Total NDR raised</p>
+                                                </div>
+                                                    </div>
+                                  
+                                          <!-- Action Taken -->
+                                          <div class="col-6 mb-4">
+                                            <div class="d-flex flex-column align-items-center">
+                                              <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                              <p class="grid-value mb-0">0</p>
+                                                    <p class="grid-label">Action Taken</p>
+                                                </div>
+                                                    </div>
+                                  
+                                          <!-- Pending for action -->
+                                          <div class="col-6 mb-4">
+                                            <div class="d-flex flex-column align-items-center">
+                                              <i class="fas fa-clock fa-2x mb-2"></i>
+                                              <p class="grid-value mb-0">0</p>
+                                                    <p class="grid-label">Pending for action</p>
+                                                </div>
+                                                    </div>
+                                  
+                                          <!-- NDR shipments delivered -->
+                                          <div class="col-6 mb-4">
+                                            <div class="d-flex flex-column align-items-center">
+                                              <i class="fas fa-truck-loading fa-2x mb-2"></i>
+                                              <p class="grid-value mb-0">0</p>
+                                                    <p class="grid-label">NDR shipments delivered</p>
+                                                </div>
+                                            </div>
+                                  
+                                        </div>
+                                    </div>
+                                </div>
+                                  </div>
+                                  
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Shipment-split by NDR</span>
+                                            <span>Last 30 days</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card-chart">
+                                                <div class="chart-legend-vertical">
+                                                    <div class="legend-item">
+                                                        <div class="legend-color legend-green"></div>
+                                                        <span>NDR Shipments Delivered</span>
+                                                    </div>
+                                                    <div class="legend-item">
+                                                        <div class="legend-color legend-red"></div>
+                                                        <span>RTO Requested</span>
+                                                    </div>
+                                                    <div class="legend-item">
+                                                        <div class="legend-color legend-blue"></div>
+                                                        <span>Re-Attempt Requests</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Shipments Tab -->
+                        <div class="tab-pane d-none" id="shipments">
+
+                            <!-- Order Summary Cards -->
+                            <div class="row mb-4 d-flex align-items-stretch">
+                                <div class="col-12 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Order Summary</span>
+                                            <span></span>
+                                </div>
+                                        <div class="card-body">
+                                            <div id="metricsGrid"
+                                            style="display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:16px;">
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- First Row: Shipment-split by Shipping Mode, Shipment-split by Zone, Shipment-split by City -->
+                            <div class="row mb-4 d-flex align-items-stretch">
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Shipment-split by Shipping Mode</span>
+                                            <span></span>
+                                    </div>
+                                        <div class="card-body">
+                                        <div class="shipping-mode-counts">
+                                            <div id="airCount" class="mode-count-item">
+                                                <span>Air:</span>
+                                                <span class="count">0</span>
+                                            </div>
+                                            <div id="surfaceCount" class="mode-count-item">
+                                                <span>Surface:</span>
+                                                <span class="count">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                    </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Shipment-split by Zone</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                        <form>
+                                            <div class="zone-checkboxes">
+                                                <label class="zone-checkbox-label">
+                                                    <input type="checkbox" name="zone" value="Zone A" class="zone-checkbox">
+                                                    <span>Zone A</span>
+                                                </label>
+                                                <label class="zone-checkbox-label">
+                                                    <input type="checkbox" name="zone" value="Zone B" class="zone-checkbox">
+                                                    <span>Zone B</span>
+                                                </label>
+                                                <label class="zone-checkbox-label">
+                                                    <input type="checkbox" name="zone" value="Zone C" class="zone-checkbox">
+                                                    <span>Zone C</span>
+                                                </label>
+                                                <label class="zone-checkbox-label">
+                                                    <input type="checkbox" name="zone" value="Zone D" class="zone-checkbox">
+                                                    <span>Zone D</span>
+                                                </label>
+                                                <label class="zone-checkbox-label">
+                                                    <input type="checkbox" name="zone" value="Zone E" class="zone-checkbox">
+                                                    <span>Zone E</span>
+                                                </label>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                    </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Shipment-split by City</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <div class="no-data-text">No Data Found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Courier-wise Status -->
+                            <div class="row mb-4 d-flex align-items-stretch">
+                                <div class="col-12 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Courier-wise Status</span>
+                                            <span></span>
+                                    </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                        <table id="courierStatusTable" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Courier</th>
+                                                    <th>Total Shipments</th>
+                                                    <th>Delivered</th>
+                                                    <th>In-transit</th>
+                                                    <th>RTO</th>
+                                                    <th>Lost/Damaged</th>
+                                                    <th>NDR Raised</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Zone-wise Status -->
+                            <div class="row mb-4 d-flex align-items-stretch">
+                                <div class="col-12 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Zone-wise Status</span>
+                                            <span></span>
+                                    </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Zone</th>
+                                                            <th>Total Shipments</th>
+                                                            <th>Delivered</th>
+                                                            <th>In-transit</th>
+                                                            <th>RTO</th>
+                                                            <th>Lost/Damaged</th>
+                                                            <th>NDR Raised</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="7" class="text-center p-5">
+                                                                <img src="/images/no-data-found.png" alt="No data" class="no-data-image">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RTO Tab -->
+                        <div class="tab-pane d-none" id="rto">
+
+                            <!-- RTO Summary Cards -->
+                            <div class="card p-4 mb-4 h-100 w-100">
+                                <div>
+                                    <span style="font-size: 16px; font-weight: 600; color: #000;">RTO Summary</span>
+                                    <span style="font-size: 14px; color: #52525B;"></span>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 16px;">
+                                    <div id="rtoMetricsGrid" style="display: flex; gap: 24px;">
+                                        <!-- RTO metrics will be dynamically rendered here -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Second Row: Order-split by Channel, RTO Split by Zone, Shipment-split by Courier -->
+                            <div class="row mb-4 d-flex align-items-stretch">
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Order-split by Channel</span>
+                                            <span></span>
+                                    </div>
+                                        <div class="card-body text-center">
+                                            <img src="/images/no-data-found.png" alt="No data found" class="no-data-image-large">
+                                    </div>
+                                </div>
+                                    </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>RTO Split by Zone</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Zone</th>
+                                                            <th>Count</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                            <td>Zone A</td>
+                                                            <td>0</td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td>Zone B</td>
+                                                            <td>0</td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td>Zone C</td>
+                                                            <td>0</td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td>Zone D</td>
+                                                            <td>0</td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td>Zone E</td>
+                                                            <td>0</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                    </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Shipment-split by Courier</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <img src="/images/no-data-found.png" alt="No data found" class="no-data-image-large">
+                                            <div class="text-lg mt-4">No Data Found</div>
+                                    </div>
+                                </div>
+                                    </div>
+                                        </div>
+
+                            <!-- Third Row: RTO Prepaid vs COD -->
+                            <div class="row mb-4 d-flex align-items-stretch">
+                                <div class="col-sm-6 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>RTO Prepaid vs COD</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <img src="/images/no-data-found.png" alt="No data found" class="no-data-image-large">
+                                            <div class="text-lg mt-4">No Data Found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fourth Row: Top RTO Cities and Top RTO Product -->
+                            <div class="row mb-4 d-flex align-items-stretch">
+                                <div class="col-sm-6 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Top RTO Cities</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>City</th>
+                                                            <th>Raised</th>
+                                                            <th>RTO Delivered</th>
+                                                            <th>Count</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colspan="4" class="text-center p-5">
+                                                                <img src="/images/no-data-found.png" alt="No data" class="no-data-image">
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Top RTO Product</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>SKU</th>
+                                                            <th>Count</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colspan="3" class="text-center p-5">
+                                                                <img src="/images/no-data-found.png" alt="No data" class="no-data-image">
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- NDR Tab -->
+                        <div class="tab-pane d-none" id="ndr">
+
+                            <!-- Order Summary Cards -->
+                            <div class="row mb-4 d-flex align-items-stretch">
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Total Orders</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-clipboard-list me-2"></i>
+                                                    <div>
+                                                        <div>0</div>
+                                                        <div>Total Orders</div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <div>▲ 0.00%</div>
+                                                    <div>vs previous 30 days</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Pending Approval</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-hourglass-half me-2"></i>
+                                                    <div>
+                                                        <div>0</div>
+                                                        <div>Pending Approval</div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <div>▲ 0.00%</div>
+                                                    <div>vs previous 30 days</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Processing</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-sync-alt me-2"></i>
+                                                    <div>
+                                                        <div>0</div>
+                                                        <div>Processing</div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <div>▲ 0.00%</div>
+                                                    <div>vs previous 30 days</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Second Row: Partial, Closed, Cancelled -->
+                            <div class="row mb-4 d-flex align-items-stretch">
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Partial</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-adjust me-2"></i>
+                                                    <div>
+                                                        <div>0</div>
+                                                        <div>Partial</div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <div>▲ 0.00%</div>
+                                                    <div>vs previous 30 days</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Closed</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-check-circle me-2"></i>
+                                                    <div>
+                                                        <div>0</div>
+                                                        <div>Closed</div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <div>▲ 0.00%</div>
+                                                    <div>vs previous 30 days</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Cancelled</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-times-circle me-2"></i>
+                                                    <div>
+                                                        <div>0</div>
+                                                        <div>Cancelled</div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <div>▲ 0.00%</div>
+                                                    <div>vs previous 30 days</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Third Row: Shipment-split by Shipping Mode, Shipment-split by Zone, Shipment-split by City -->
+                            <div class="row mb-4">
+                                <div class="col-sm-4">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Shipment-split by Shipping Mode</span>
+                                            <span></span>
+                                    </div>
+                                        <div class="card-body">
+                                        <form>
+                                                <div class="flex-column gap-3 mt-3">
+                                                    <label class="flex-center gap-2 text-sm">
+                                                        <input type="radio" name="shippingMode" value="Air" class="checkbox-purple">
+                                                    Air
+                                                </label>
+                                                    <label class="flex-center gap-2 text-sm">
+                                                        <input type="radio" name="shippingMode" value="Surface" class="checkbox-purple">
+                                                    Surface
+                                                </label>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                    </div>
+                                <div class="col-sm-4">
+                                    <div class="card p-4">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Shipment-split by Zone</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                        <form>
+                                                <div class="flex-column gap-3">
+                                                    <label class="flex-center gap-2 text-sm">
+                                                        <input type="checkbox" name="zone" value="Zone A" class="checkbox-purple">
+                                                    <span>Zone A</span>
+                                                </label>
+                                                    <label class="flex-center gap-2 text-sm">
+                                                        <input type="checkbox" name="zone" value="Zone B" class="checkbox-purple">
+                                                    <span>Zone B</span>
+                                                </label>
+                                                    <label class="flex-center gap-2 text-sm">
+                                                        <input type="checkbox" name="zone" value="Zone C" class="checkbox-purple">
+                                                        <span>Zone C</span>
+                                                </label>
+                                                    <label class="flex-center gap-2 text-sm">
+                                                        <input type="checkbox" name="zone" value="Zone D" class="checkbox-purple">
+                                                    <span>Zone D</span>
+                                                </label>
+                                                    <label class="flex-center gap-2 text-sm">
+                                                        <input type="checkbox" name="zone" value="Zone E" class="checkbox-purple">
+                                                    <span>Zone E</span>
+                                                </label>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                    </div>
+                                <div class="col-sm-4">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Shipment-split by City</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <div class="no-data-text">No Data Found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Courier-wise Status -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Courier-wise Status</span>
+                                            <span></span>
+                                    </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Courier</th>
+                                                            <th>Total Shipments</th>
+                                                            <th>Delivered</th>
+                                                            <th>In-transit</th>
+                                                            <th>RTO</th>
+                                                            <th>Lost/Damaged</th>
+                                                            <th>NDR Raised</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="7" class="text-center p-5">
+                                                                <img src="/images/no-data-found.png" alt="No data" class="no-data-image">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Zone-wise Status and Top 5 Delivered Products -->
+                            <div class="row mb-4">
+                                <div class="col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Zone-wise Status</span>
+                                            <span></span>
+                                    </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Zone</th>
+                                                            <th>Total Shipments</th>
+                                                            <th>Delivered</th>
+                                                            <th>In-transit</th>
+                                                            <th>RTO</th>
+                                                            <th>Lost/Damaged</th>
+                                                            <th>NDR Raised</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="7" class="text-center p-5">
+                                                                <img src="/images/no-data-found.png" alt="No data" class="no-data-image">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Top 5 Delivered Products</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Product</th>
+                                                            <th>Units Sold</th>
+                                                            <th>Revenue</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="3" class="text-center p-5">
+                                                                <img src="/images/no-data-found.png" alt="No data" class="no-data-image">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- COD Tab -->
+                        <div class="tab-pane d-none" id="cod">
+                            <!-- COD Summary Cards -->
+                            <div class="row mb-4">
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Earned COD Overview</span>
+                                            <span>Last 30 days</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row text-center">
+                                              <!-- COD amount earned -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-money-bill-wave fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">COD amount earned</p>
+                                                </div>
+                                                    </div>
+                                          
+                                              <!-- Earned COD remitted -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-wallet fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">Earned COD remitted</p>
+                                                </div>
+                                                    </div>
+                                          
+                                              <!-- COD amount available -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-coins fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">COD amount available</p>
+                                                </div>
+                                                    </div>
+                                          
+                                              <!-- Last remitted amount -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-exchange-alt fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">Last remitted amount</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                          
+                                </div>
+                                </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Earned COD Overview</span>
+                                            <span>Last 30 days</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row text-center">
+                                              <!-- COD amount earned -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-money-bill-wave fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">COD amount earned</p>
+                                                </div>
+                                                    </div>
+                                          
+                                              <!-- Earned COD remitted -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-wallet fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">Earned COD remitted</p>
+                                                </div>
+                                                    </div>
+                                          
+                                              <!-- COD amount available -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-coins fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">COD amount available</p>
+                                                </div>
+                                                    </div>
+                                          
+                                              <!-- Last remitted amount -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-exchange-alt fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">Last remitted amount</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                          
+                                </div>
+                                </div>
+                                <div class="col-sm-4 d-flex">
+                                    <div class="card p-4 h-100 w-100">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>Earned COD Overview</span>
+                                            <span>Last 30 days</span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row text-center">
+                                              <!-- COD amount earned -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-money-bill-wave fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">COD amount earned</p>
+                                                </div>
+                                                    </div>
+                                          
+                                              <!-- Earned COD remitted -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-wallet fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">Earned COD remitted</p>
+                                                </div>
+                                                    </div>
+                                          
+                                              <!-- COD amount available -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-coins fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">COD amount available</p>
+                                                </div>
+                                                    </div>
+                                          
+                                              <!-- Last remitted amount -->
+                                              <div class="col-6 mb-4">
+                                                <div class="d-flex flex-column align-items-center">
+                                                  <i class="fas fa-exchange-alt fa-2x mb-2"></i>
+                                                  <p class="grid-value mb-0">₹0</p>
+                                                    <p class="grid-label">Last remitted amount</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                          
+                                </div>
+                                </div>
+                            </div>
+
+                            <!-- COD Trends and Analysis -->
+                            <div class="row mb-4">
+                                <div class="col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>COD Collection Trends</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <img src="/images/no-data-found.png" alt="No data found" class="no-data-image-large">
+                                            <div class="text-lg mt-4">No Data Found</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>COD by Zone</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Zone</th>
+                                                            <th>COD Amount</th>
+                                                            <th>Orders</th>
+                                                            <th>Collection Rate</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colspan="4" class="text-center p-5">
+                                                                <img src="/images/no-data-found.png" alt="No data" class="no-data-image">
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- COD Courier Performance -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>COD Courier Performance</span>
+                                            <span></span>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Courier</th>
+                                                            <th>Total COD Orders</th>
+                                                            <th>Successful Collections</th>
+                                                            <th>Failed Collections</th>
+                                                            <th>Collection Rate</th>
+                                                            <th>Average COD Value</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td colspan="6" class="text-center p-5">
+                                                                <img src="/images/no-data-found.png" alt="No data" class="no-data-image">
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- End Tab Contents -->
+                </div>
+            </div>
+        </main>
+
+<!-- JS for Tab Switching -->
+<script>
+    const tabs = document.querySelectorAll('#tabMenu .nav-link');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = this.getAttribute('data-tab');
+            switchTab(target);
+        });
+    });
+</script>
+        
+      
+
+        <!-- dashboard data show script -->
+        <script>
+            async function fetchOrderStats() {
+                try {
+                    const response = await axios.post('/getOrders', {
+                        fromDate: '2025-07-01',
+                        toDate: '2025-07-28',
+                        clientID: 0 // or selected client ID
+                    });
+
+                    const data = response.data || [];
+
+                    // Sum values across all dates
+                    const totals = {
+                        totalOrders: 0,
+                        unprocessed: 0,
+                        readyToDispatch: 0,
+                        cancel: 0,
+                        inTransit: 0,
+                        delivered: 0,
+                        rto: 0,
+                        ndr: 0,
+                        pending: 0
+                    };
+
+                    data.forEach(item => {
+                        totals.totalOrders += item.totalOrders || 0;
+                        totals.unprocessed += item.unprocessed || 0;
+                        totals.readyToDispatch += item.readyToDispatch || 0;
+                        totals.cancel += item.cancel || 0;
+                        totals.inTransit += item.inTransit || 0;
+                        totals.delivered += item.delivered || 0;
+                        totals.rto += item.rto || 0;
+                        totals.ndr += item.ndr || 0;
+                        totals.pending += item.pending || 0;
+                    });
+
+                    // Compute % based on totals
+                    const deliveredPercentage = totals.totalOrders > 0
+                        ? ((totals.delivered * 100) / totals.totalOrders).toFixed(2)
+                        : 0;
+                    const rtoPercentage = totals.totalOrders > 0
+                        ? ((totals.rto * 100) / totals.totalOrders).toFixed(2)
+                        : 0;
+                    const pendingPercentage = totals.totalOrders > 0
+                        ? ((totals.pending * 100) / totals.totalOrders).toFixed(2)
+                        : 0;
+
+                    // Update HTML
+                    document.getElementById('totalOrdersCount').textContent = totals.totalOrders;
+                    document.getElementById('unprocessedCount').textContent = totals.unprocessed;
+                    document.getElementById('readyToDispatchCount').textContent = totals.readyToDispatch;
+                    document.getElementById('cancelCount').textContent = totals.cancel;
+                    document.getElementById('inTransitCount').textContent = totals.inTransit;
+                    document.getElementById('deliveredCount').textContent = totals.delivered;
+                    document.getElementById('rtoCount').textContent = totals.rto;
+                    document.getElementById('ndrCount').textContent = totals.ndr;
+                    document.getElementById('pendingCount').textContent = totals.pending;
+
+                    document.getElementById('deliveredPercentage').textContent = deliveredPercentage + '%';
+                    document.getElementById('rtoPercentage').textContent = rtoPercentage + '%';
+                    document.getElementById('pendingPercentage').textContent = pendingPercentage + '%';
+
+                } catch (err) {
+                    console.error('Failed to fetch order stats:', err);
+                }
+            }
+
+            window.addEventListener('DOMContentLoaded', fetchOrderStats);
+        </script>
+        <!--  -->
+        <script>
+            (function () {
+                const tabs = [
+                    {
+                        name: 'shipment',
+                        resetBtnId: 'shipment-reset-filter',
+                        dropdowns: [
+                            { inputId: 'shiporderChannel', default: 'Channel' },
+                            { inputId: 'shiporderPayment', default: 'Payment Mode' },
+                            { inputId: 'shipcourier', default: 'Couriers', isCheckbox: true },
+                            { inputId: 'shiporderZone', default: 'Zone' }
+                        ]
+                    },
+                    {
+                        name: 'rto',
+                        resetBtnId: 'rto-reset-filter',
+                        dropdowns: [
+                            { inputId: 'rtoorderZone', default: 'Zone' }
+                        ]
+                    },
+                    {
+                        name: 'ndr',
+                        resetBtnId: 'ndr-reset-filter',
+                        dropdowns: [
+                            { inputId: 'ndrPaymentSelected', default: 'Payment Mode' },
+                            { inputId: 'ndrCourierSelected', default: 'Couriers', isCheckbox: true },
+                            { inputId: 'ndrModeSelected', default: 'Mode' }
+                        ]
+                    }
+                ];
+
+                document.addEventListener('click', () => closeAllMenus());
+
+                tabs.forEach(tab => {
+                    const resetBtn = document.getElementById(tab.resetBtnId);
+
+                    tab.dropdowns.forEach(({ inputId, default: defaultText, isCheckbox = false }) => {
+                        const input = document.getElementById(inputId);
+                        if (!input) return;
+
+                        const wrapper = input.closest('.dropdown');
+                        const menu = wrapper?.querySelector('.dropdown-menu');
+                        const caret = wrapper?.querySelector('.fa-caret-down');
+
+                        input.setAttribute('data-value', defaultText);
+
+                        // Open/close logic
+                        const toggleMenu = (e) => {
+                            e.stopPropagation();
+                            closeAllMenus(menu);
+                            if (menu) menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+                        };
+
+                        input.addEventListener('click', toggleMenu);
+                        caret?.addEventListener('click', toggleMenu);
+
+                        if (isCheckbox) {
+                            // Parent checkbox selects children
+                            menu?.querySelectorAll('.parent-checkbox').forEach(parentCheckbox => {
+                                parentCheckbox.addEventListener('change', function () {
+                                    const targetClass = parentCheckbox.dataset.target;
+                                    const children = wrapper.querySelectorAll(`.${targetClass} .child-checkbox`);
+                                    children.forEach(child => child.checked = parentCheckbox.checked);
+                                    updateCheckboxInput(input);
+                                    showHideReset(tab);
+                                });
+                            });
+
+                            // Child checkboxes update input only
+                            menu?.querySelectorAll('.child-checkbox').forEach(childCheckbox => {
+                                childCheckbox.addEventListener('change', () => {
+                                    updateCheckboxInput(input);
+                                    showHideReset(tab);
+                                });
+                            });
+
+                            // All checkboxes update input
+                            menu?.querySelectorAll('.courier-checkbox').forEach(cb => {
+                                cb.addEventListener('change', () => {
+                                    updateCheckboxInput(input);
+                                    showHideReset(tab);
+                                });
+                            });
+
+                            input.addEventListener('change', () => showHideReset(tab));
+                        } else {
+                            // Standard dropdown items
+                            menu?.querySelectorAll('.dropdown-item').forEach(item => {
+                                item.addEventListener('click', () => {
+                                    const val = item.getAttribute('data-value');
+                                    input.value = item.textContent;
+                                    input.setAttribute('data-value', val);
+                                    menu.style.display = 'none';
+                                    showHideReset(tab);
+                                });
+                            });
+                            input.addEventListener('change', () => showHideReset(tab));
+                        }
+                    });
+
+                    // Reset button logic
+                    resetBtn?.addEventListener('click', () => {
+                        tab.dropdowns.forEach(({ inputId, default: defaultText }) => {
+                            const el = document.getElementById(inputId);
+                            if (el) {
+                                el.value = defaultText;
+                                el.setAttribute('data-value', defaultText);
+                                el.dispatchEvent(new Event('change'));
+
+                                // Clear checkboxes
+                                const menu = el.closest('.dropdown')?.querySelector('.dropdown-menu');
+                                menu?.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                            }
+                        });
+                        resetBtn.style.display = 'none';
+                    });
+                });
+
+                // Updates value of checkbox-based dropdowns
+                function updateCheckboxInput(input) {
+                    const menu = input.closest('.dropdown')?.querySelector('.dropdown-menu');
+                    const checked = menu?.querySelectorAll('.courier-checkbox:checked');
+                    if (!checked || checked.length === 0) {
+                        input.value = input.getAttribute('data-default') || 'Couriers';
+                        input.setAttribute('data-value', 'Couriers');
+                    } else {
+                        const labels = [];
+                        checked.forEach(cb => {
+                            const label = cb.closest('.dropdown-item')?.innerText?.trim();
+                            if (label) labels.push(label);
+                        });
+                        input.value = labels.join(', ');
+                        input.setAttribute('data-value', labels.join(','));
+                    }
+                }
+
+                // Closes all dropdowns except one (if provided)
+                function closeAllMenus(except = null) {
+                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                        if (menu !== except) menu.style.display = 'none';
+                    });
+                }
+
+                // Show/hide reset
+                function showHideReset(tab) {
+                    const isModified = tab.dropdowns.some(({ inputId, default: defaultText }) => {
+                        const el = document.getElementById(inputId);
+                        return el && el.getAttribute('data-value') !== defaultText;
+                    });
+
+                    const resetBtn = document.getElementById(tab.resetBtnId);
+                    if (resetBtn) resetBtn.style.display = isModified ? 'inline-flex' : 'none';
+                }
+            })();
+        </script>
+
+
+        <script>
+            // --- State ---
+            let currentSelectedDate = { quickRange: "today" };
+            let selectedPaymentMode = '';
+            let selectedZone = '';
+            let selectedTaggedApi = '';
+
+            // Dropdown helpers
+            function updateQuickRangeLabel() {
+                const map = {
+                    today: 'Today',
+                    yesterday: 'Yesterday',
+                    last7days: 'Last 7 Days',
+                    last30days: 'Last 30 Days',
+                    thisMonth: 'This Month',
+                    lastMonth: 'Last Month'
+                };
+                const label = currentSelectedDate.quickRange ? map[currentSelectedDate.quickRange] : 'Quick Range';
+                const quickRangeLabelEl = document.getElementById('quickRangeLabel');
+                if (quickRangeLabelEl) quickRangeLabelEl.textContent = label;
+            }
+
+            // Enhanced tab switching with data loading
+            function switchTab(tabName) {
+                console.log('Switching to tab:', tabName);
+                
+                // Hide all tab panes
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.classList.add('d-none');
+                    pane.classList.remove('active');
+                });
+                
+                // Remove active class from all tabs
+                document.querySelectorAll('#tabMenu .nav-link').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                
+                // Show selected tab pane
+                const targetPane = document.getElementById(tabName);
+                if (targetPane) {
+                    targetPane.classList.remove('d-none');
+                    targetPane.classList.add('active');
+                }
+                
+                // Add active class to clicked tab
+                const activeTab = document.querySelector(`[data-tab="${tabName}"]`);
+                if (activeTab) {
+                    activeTab.classList.add('active');
+                }
+                
+                // Load data based on tab
+                switch(tabName) {
+                    case 'overview':
+                        renderDashboardOverView();
+                        break;
+                    case 'shipments':
+                        loadShipmentDashboardSummary();
+                        break;
+                    case 'rto':
+                        loadRTO();
+                        break;
+                    case 'ndr':
+                        loadNDR();
+                        break;
+                    case 'cod':
+                        loadCOD();
+                        break;
+                }
+            }
+
+            // Dropdown open/close logic for custom dropdowns
+            function setupDropdowns() {
+                // For all elements with .dropdown-toggle, toggle their menu on click
+                document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+                    toggle.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        const menu = this.nextElementSibling;
+                        if (menu && menu.classList.contains('dropdown-menu')) {
+                            // Close all other dropdowns
+                            document.querySelectorAll('.dropdown-menu').forEach(m => {
+                                if (m !== menu) m.style.display = 'none';
+                            });
+                            // Toggle this one
+                            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+                        }
+                    });
+                });
+
+                // Close dropdowns when clicking outside
+                document.addEventListener('click', function () {
+                    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                        menu.style.display = 'none';
+                    });
+                });
+
+                // Prevent menu from closing when clicking inside
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                    });
+                });
+            }
+
+            // myselect function (if you need to use it for dropdowns)
+            function myselect(val) {
+                // Example: set a value somewhere, or handle dropdown selection
+                // You can implement your logic here if needed
+            }
+
+            // --- UI helpers ---
+            const filterBtn = document.getElementById('filterBtn');
+            const defaultText = filterBtn ? filterBtn.querySelector('.default-text') : null;
+            const spinner = filterBtn ? filterBtn.querySelector('.spinner-border') : null;
+
+            const badgeEl = document.getElementById('selectedRangeBadge');
+            const drawerRangeText = document.getElementById('drawerRangeText');
+
+            function humanizeRangeLabel(rangeObj) {
+                if (rangeObj.quickRange) {
+                    const map = {
+                        today: 'Today',
+                        yesterday: 'Yesterday',
+                        last7days: 'Last 7 Days',
+                        last30days: 'Last 30 Days',
+                        thisMonth: 'This Month',
+                        lastMonth: 'Last Month'
+                    };
+                    return map[rangeObj.quickRange] || 'Custom';
+                }
+                if (rangeObj.fromDate && rangeObj.toDate) {
+                    return `Custom: ${rangeObj.fromDate} → ${rangeObj.toDate}`;
+                }
+                return 'Custom';
+            }
+
+            function updateRangeDisplay() {
+                const label = humanizeRangeLabel(currentSelectedDate);
+                if (badgeEl) badgeEl.textContent = label;
+                if (drawerRangeText) drawerRangeText.textContent = label;
+                updateQuickRangeLabel();
+            }
+
+            // --- Loading helper ---
+            function setLoading(isLoading) {
+                if (!filterBtn || !defaultText || !spinner) return;
+                if (isLoading) {
+                    defaultText.classList.add('d-none');
+                    spinner.classList.remove('d-none');
+                    filterBtn.disabled = true;
+                } else {
+                    defaultText.classList.remove('d-none');
+                    spinner.classList.add('d-none');
+                    filterBtn.disabled = false;
+                }
+            }
+
+            // --- Toast helper ---
+            function showToast(message, type = 'success') {
+                const toastEl = document.createElement('div');
+                toastEl.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0 position-fixed bottom-0 end-0 m-3`;
+                toastEl.setAttribute('role', 'alert');
+                toastEl.style.zIndex = 12000;
+                toastEl.innerHTML = `
+      <div class="d-flex">
+        <div class="toast-body">${message}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    `;
+                document.body.appendChild(toastEl);
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+                toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+            }
+
+            // --- Date handling ---
+            function sendManualDate() {
+                const fromDate = document.getElementById("min-date")?.value;
+                const toDate = document.getElementById("max-date")?.value;
+                if (fromDate && toDate) {
+                    currentSelectedDate = { fromDate, toDate };
+                    updateRangeDisplay();
+                    // When manual date is selected, clear quickRange
+                    updateQuickRangeLabel();
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                // Setup dropdown open/close logic
+                setupDropdowns();
+
+                // Show correct label on dropdown button at start
+                updateQuickRangeLabel();
+
+                // Fix offcanvas backdrop behavior
+                const filterSidebar = document.getElementById('filterSidebar');
+                if (filterSidebar) {
+                    // Handle outside click to close offcanvas instantly
+                    filterSidebar.addEventListener('hidden.bs.offcanvas', function () {
+                        // Remove backdrop immediately without fade
+                        const backdrop = document.querySelector('.offcanvas-backdrop');
+                        if (backdrop) {
+                            backdrop.remove();
+                        }
+                    });
+
+                    // Override Bootstrap's backdrop behavior for outside clicks
+                    document.addEventListener('click', function (event) {
+                        if (filterSidebar.classList.contains('show') &&
+                            !filterSidebar.contains(event.target) &&
+                            !event.target.closest('[data-bs-toggle="offcanvas"]')) {
+
+                            // Close offcanvas immediately
+                            const offcanvas = bootstrap.Offcanvas.getInstance(filterSidebar);
+                            if (offcanvas) {
+                                offcanvas.hide();
+                            }
+
+                            // Remove backdrop instantly
+                            const backdrop = document.querySelector('.offcanvas-backdrop');
+                            if (backdrop) {
+                                backdrop.remove();
+                            }
+                        }
+                    });
+                }
+
+                // Listen to quick range clicks
+                document.querySelectorAll(".date-range-option").forEach(el => {
+                    el.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        const range = el.dataset.range;
+                        // Clear manual date fields
+                        const minDateEl = document.getElementById("min-date");
+                        const maxDateEl = document.getElementById("max-date");
+                        if (minDateEl) minDateEl.value = "";
+                        if (maxDateEl) maxDateEl.value = "";
+                        currentSelectedDate = { quickRange: range };
+                        updateRangeDisplay();
+                    });
+                });
+
+                // Manual date changes
+                const minDateEl = document.getElementById("min-date");
+                const maxDateEl = document.getElementById("max-date");
+                if (minDateEl) minDateEl.addEventListener("change", sendManualDate);
+                if (maxDateEl) maxDateEl.addEventListener("change", sendManualDate);
+
+                // Dropdowns for filters
+                const paymentModeEl = document.getElementById('paymentMode');
+                const destinationZoneEl = document.getElementById('destinationZone');
+                const taggedApiEl = document.getElementById('taggedApi');
+                if (paymentModeEl) paymentModeEl.addEventListener('change', (e) => {
+                    selectedPaymentMode = e.target.value || '';
+                });
+                if (destinationZoneEl) destinationZoneEl.addEventListener('change', (e) => {
+                    selectedZone = e.target.value || '';
+                });
+                if (taggedApiEl) taggedApiEl.addEventListener('change', (e) => {
+                    selectedTaggedApi = e.target.value || '';
+                });
+
+                // Initial fetch
+                if (typeof fetchDashboard === "function") {
+                    fetchDashboard({
+                        quickRange: 'today',
+                        payment_mode: '',
+                        destination_zone: '',
+                        tagged_api: ''
+                    });
+                }
+            });
+
+            // Apply filters
+            if (filterBtn) {
+                filterBtn.addEventListener('click', async function () {
+                    let payload = {};
+                    // If quickRange is set, use it and do not send fromDate/toDate
+                    if (currentSelectedDate.quickRange) {
+                        payload = {
+                            quickRange: currentSelectedDate.quickRange,
+                            payment_mode: selectedPaymentMode,
+                            destination_zone: selectedZone,
+                            tagged_api: selectedTaggedApi
+                        };
+                    } else if (currentSelectedDate.fromDate && currentSelectedDate.toDate) {
+                        // If manual date, send fromDate/toDate and quickRange as empty string
+                        payload = {
+                            quickRange: "",
+                            fromDate: currentSelectedDate.fromDate,
+                            toDate: currentSelectedDate.toDate,
+                            payment_mode: selectedPaymentMode,
+                            destination_zone: selectedZone,
+                            tagged_api: selectedTaggedApi
+                        };
+                    } else {
+                        // Default fallback
+                        payload = {
+                            quickRange: 'today',
+                            payment_mode: selectedPaymentMode,
+                            destination_zone: selectedZone,
+                            tagged_api: selectedTaggedApi
+                        };
+                    }
+
+                    setLoading(true);
+                    // Use your data fetch function (replace with your actual function)
+                    loadShipmentDashboardSummary(payload).then(data => {
+                        showToast('Dashboard Updated', 'success');
+                    }).catch(err => {
+                        console.error(err)
+                    }).finally(() => {
+                        setLoading(false);
+                    });
+                });
+            }
+        </script>
+
+        <!-- fetch data on click of tabs -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const tabItems = document.querySelectorAll(".tab-item");
+
+                tabItems.forEach(tab => {
+                    tab.addEventListener("click", () => {
+                        // Remove active class from all
+                        tabItems.forEach(item => item.classList.remove("active"));
+                        // Add active to clicked
+                        tab.classList.add("active");
+
+                        // Get tab key from data-tab
+                        const selectedTab = tab.getAttribute("data-tab");
+
+                        // Call corresponding function
+                        switch (selectedTab) {
+                            case "overview":
+                                loadOverview();
+                                break;
+                            case "shipments":
+                                loadShipments();
+                                break;
+                            case "rto":
+                                loadRTO();
+                                break;
+                            case "ndr":
+                                loadNDR();
+                                break;
+                            case "cod":
+                                loadCOD();
+                                break;
+                            default:
+                                console.warn("No function defined for tab:", selectedTab);
+                        }
+                    });
+                });
+
+                // Optionally call default tab on load
+                loadOverview(); // or whichever you want default
+            });
+
+            // === Example placeholder functions ===
+            function loadOverview() {
+                console.log("Loading Overview");
+                // Your logic here...
+                renderDashboardOverView()
+            }
+
+            function loadShipments() {
+                console.log("Loading Shipments");
+                // Load shipment dashboard data
+                loadShipmentDashboardSummary();
+            }
+
+            function loadRTO() {
+                console.log("Loading RTO");
+                // TODO: Add RTO data loading logic
+                // For now, just show a message
+                console.log("RTO data loading not implemented yet");
+            }
+
+            function loadNDR() {
+                console.log("Loading NDR");
+                // TODO: Add NDR data loading logic
+                // For now, just show a message
+                console.log("NDR data loading not implemented yet");
+            }
+
+            function loadCOD() {
+                console.log("Loading COD");
+                // TODO: Add COD data loading logic
+                // For now, just show a message
+                console.log("COD data loading not implemented yet");
+            }
+        </script>
+
+
+        <script>
+            async function renderDashboardOverView() {
+                const courierType = "<%= courierType %>";
+                console.log('Rendering dashboard overview for courier type:', courierType);
+                try {
+                    const res = await axios.get(`/api/dashboard`, {
+                        params: { courier_type: courierType }
+                    });
+                    const data = res.data;
+                    console.log('Dashboard data received:', data);
+
+                    // === BUSINESS INSIGHTS ===
+                    const insight = data.businessInsightObj;
+                    document.querySelectorAll('.dashboard-card .card-metric').forEach(cardMetric => {
+                        const label = cardMetric.querySelector('.metric-label')?.textContent.trim();
+                        const valueEl = cardMetric.querySelector('.metric-value');
+                        const changeEl = cardMetric.querySelector('.metric-change');
+
+                        if (!label || !valueEl || !changeEl) return;
+
+                        if (label.includes('Average Daily Orders')) {
+                            valueEl.textContent = insight.currentAvgOrders.toFixed(2);
+                            changeEl.textContent = `${insight.orderChangePct >= 0 ? '▲' : '▼'} ${Math.abs(insight.orderChangePct).toFixed(2)} %`;
+                        }
+
+                        if (label.includes('Average Order Value')) {
+                            valueEl.textContent = '₹' + insight.currentAvgValue.toFixed(2);
+                            changeEl.textContent = `${insight.valueChangePct >= 0 ? '▲' : '▼'} ${Math.abs(insight.valueChangePct).toFixed(2)} %`;
+                        }
+                    });
+
+                    // === TODAY'S ORDERS & VALUE ===
+                    const { todayOrders, weekOrders, monthOrders, quarterOrders } = data.orderJsonResponse;
+                    const { todayValue, weekValue, monthValue, quarterValue } = data.valueJsonResponse;
+
+                    // Update Today's Orders card (second card in the row)
+                    const todayOrdersCard = document.querySelectorAll('.col-sm-4')[1];
+                    if (todayOrdersCard) {
+                        const metricValue = todayOrdersCard.querySelector('.metric-value');
+                        const metricChange = todayOrdersCard.querySelector('.metric-change');
+                        if (metricValue) metricValue.textContent = todayOrders.count;
+                        if (metricChange) metricChange.textContent = `${todayOrders.change >= 0 ? '▲' : '▼'} ${Math.abs(todayOrders.percentage || 0)} %`;
+
+                        const statItems = todayOrdersCard.querySelectorAll('.stat-item');
+                        if (statItems[0]) {
+                            const statValue = statItems[0].querySelector('.stat-value');
+                            const statChange = statItems[0].querySelector('.stat-change');
+                            if (statValue) statValue.textContent = weekOrders.count;
+                            if (statChange) statChange.textContent = `${weekOrders.change >= 0 ? '▲' : '▼'} ${Math.abs(weekOrders.percentage || 0)} %`;
+                        }
+                        if (statItems[1]) {
+                            const statValue = statItems[1].querySelector('.stat-value');
+                            const statChange = statItems[1].querySelector('.stat-change');
+                            if (statValue) statValue.textContent = monthOrders.count;
+                            if (statChange) statChange.textContent = `${monthOrders.change >= 0 ? '▲' : '▼'} ${Math.abs(monthOrders.percentage || 0)} %`;
+                        }
+                        if (statItems[2]) {
+                            const statValue = statItems[2].querySelector('.stat-value');
+                            const statChange = statItems[2].querySelector('.stat-change');
+                            if (statValue) statValue.textContent = quarterOrders.count;
+                            if (statChange) statChange.textContent = `${quarterOrders.change >= 0 ? '▲' : '▼'} ${Math.abs(quarterOrders.percentage || 0)} %`;
+                        }
+                    }
+
+                    // Update Today's Order Value card (third card in the row)
+                    const todayValueCard = document.querySelectorAll('.col-sm-4')[2];
+                    if (todayValueCard) {
+                        const metricValue = todayValueCard.querySelector('.metric-value');
+                        if (metricValue) metricValue.textContent = '₹' + todayValue.value.toFixed(2);
+
+                        const valStats = todayValueCard.querySelectorAll('.stat-item');
+                        if (valStats[0]) {
+                            const statValue = valStats[0].querySelector('.stat-value');
+                            const statChange = valStats[0].querySelector('.stat-change');
+                            if (statValue) statValue.textContent = '₹' + weekValue.value.toFixed(2);
+                            if (statChange) statChange.textContent = `${weekValue.change >= 0 ? '▲' : '▼'} ${Math.abs(weekValue.percentage || 0)} %`;
+                        }
+                        if (valStats[1]) {
+                            const statValue = valStats[1].querySelector('.stat-value');
+                            const statChange = valStats[1].querySelector('.stat-change');
+                            if (statValue) statValue.textContent = '₹' + monthValue.value.toFixed(2);
+                            if (statChange) statChange.textContent = `${monthValue.change >= 0 ? '▲' : '▼'} ${Math.abs(monthValue.percentage || 0)} %`;
+                        }
+                        if (valStats[2]) {
+                            const statValue = valStats[2].querySelector('.stat-value');
+                            const statChange = valStats[2].querySelector('.stat-change');
+                            if (statValue) statValue.textContent = '₹' + quarterValue.value.toFixed(2);
+                            if (statChange) statChange.textContent = `${quarterValue.change >= 0 ? '▲' : '▼'} ${Math.abs(quarterValue.percentage || 0)} %`;
+                        }
+                    }
+
+                    // === PAYMENT MODE SPLIT ===
+                    const paymentModeGrid = document.getElementById('payment-mode-grid');
+                    if (data.orderSplitByPaymentMode && data.orderSplitByPaymentMode.length > 0) {
+                        const items = data.orderSplitByPaymentMode.map(pm => {
+                            const label = pm.payment_mode === 'cod' ? 'COD' : 'Prepaid';
+                            return `
+                                <div class="legend-item">
+                                    <span class="count-number" style="font-size: 18px; margin-bottom: 6px;">${pm.total || 0}</span>
+                                    <span style="font-size: 12px; font-weight: 500; color: #6b7280;">${label}</span>
+                                </div>
+                            `;
+                        });
+
+                        // Apply positioning classes based on number of items
+                        if (items.length === 2) {
+                            items[0] = items[0].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                            items[1] = items[1].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                        } else if (items.length === 3) {
+                            items[0] = items[0].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                            items[1] = items[1].replace('class="legend-item"', 'class="legend-item" style="margin: 0 auto;"');
+                            items[2] = items[2].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                        }
+
+                        paymentModeGrid.innerHTML = items.join('');
+                    } else {
+                        paymentModeGrid.innerHTML = '<p style="text-align: center; color: #6b7280;">No Data Found</p>';
+                    }
+
+                    // === SHIPPING MODE SPLIT ===
+                    const shippingModeGrid = document.getElementById('shipping-mode-grid');
+                    if (data.shipmentSplitByShippingMode && data.shipmentSplitByShippingMode.length > 0) {
+                        const items = data.shipmentSplitByShippingMode.map(sm => {
+                            return `
+                                <div class="legend-item">
+                                    <span class="count-number" style="font-size: 18px; margin-bottom: 6px;">${sm.total || 0}</span>
+                                    <span style="font-size: 12px; font-weight: 500; color: #6b7280;">${sm.shipping_mode}</span>
+                                </div>
+                            `;
+                        });
+
+                        // Apply positioning classes based on number of items
+                        if (items.length === 2) {
+                            items[0] = items[0].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                            items[1] = items[1].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                        } else if (items.length === 3) {
+                            items[0] = items[0].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                            items[1] = items[1].replace('class="legend-item"', 'class="legend-item" style="margin: 0 auto;"');
+                            items[2] = items[2].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                        }
+
+                        shippingModeGrid.innerHTML = items.join('');
+                    } else {
+                        shippingModeGrid.innerHTML = '<p style="text-align: center; color: #6b7280;">No Data Found</p>';
+                    }
+
+                    // === SHIPMENT COURIER SPLIT ===
+                    const courierGrid = document.getElementById('courier-grid');
+                    if (data.shipmentSplitByCourier && data.shipmentSplitByCourier.length > 0) {
+                        const items = data.shipmentSplitByCourier.map(c => `
+                            <div class="legend-item">
+                                <span class="count-number" style="font-size: 18px; margin-bottom: 6px;">${c.total || 0}</span>
+                                <img src="${c.imageUrl}" alt="${c.courier_name}" style="width: 40px; height: 15px; object-fit: contain; margin-bottom: 6px;">
+                                
+                            </div>
+                        `);
+
+                        // Apply positioning classes based on number of items
+                        if (items.length === 2) {
+                            items[0] = items[0].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                            items[1] = items[1].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                        } else if (items.length === 3) {
+                            items[0] = items[0].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                            items[1] = items[1].replace('class="legend-item"', 'class="legend-item" style="margin: 0 auto;"');
+                            items[2] = items[2].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                        }
+
+                        courierGrid.innerHTML = items.join('');
+                    } else {
+                        courierGrid.innerHTML = '<p style="text-align: center; color: #6b7280;">No Data Found</p>';
+                    }
+
+                    // === SHIPMENT SPLIT BY WEIGHT ===
+                    const weightGrid = document.getElementById('weight-grid');
+                    const weightMap = {
+                        "0-0.5kg": { color: "#ef4444", label: "0 kg to 0.5kg" },
+                        "0.5-1kg": { color: "#f97316", label: "0.5kg to 1kg" },
+                        "1-2kg": { color: "#eab308", label: "1kg to 2kg" },
+                        "2-5kg": { color: "#22c55e", label: "2kg to 5kg" },
+                        "5-10kg": { color: "#3b82f6", label: "5kg to 10kg" },
+                        ">10kg": { color: "#9333ea", label: "> 10kg" }
+                    };
+
+                    if (Array.isArray(data.ShipmentSplitByWeight) && data.ShipmentSplitByWeight.length > 0) {
+                        const items = data.ShipmentSplitByWeight.map(({ weight_bucket, total }) => {
+                            const weightInfo = weightMap[weight_bucket] || { color: "#60a5fa", label: weight_bucket };
+                            return `
+                                <div class="legend-item">
+                                    <span class="count-number" style="font-size: 18px; margin-bottom: 6px;">${total || 0}</span>
+                                    <span style="font-size: 12px; font-weight: 500; color: #6b7280;">${weightInfo.label}</span>
+                                </div>
+                            `;
+                        });
+
+                        // Apply positioning for weight items (always 6 items)
+                        if (items.length === 6) {
+                            // First row: Left, Center, Right
+                            items[0] = items[0].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                            items[1] = items[1].replace('class="legend-item"', 'class="legend-item" style="margin: 0 auto;"');
+                            items[2] = items[2].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                            // Second row: Left, Center, Right
+                            items[3] = items[3].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                            items[4] = items[4].replace('class="legend-item"', 'class="legend-item" style="margin: 0 auto;"');
+                            items[5] = items[5].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                        }
+
+                        weightGrid.innerHTML = items.join('');
+                    } else {
+                        // Show all weight buckets with 0 count if no data
+                        const items = Object.entries(weightMap).map(([key, info]) => `
+                            <div class="legend-item">
+                                <span class="count-number" style="font-size: 18px; margin-bottom: 6px;">0</span>
+                                <span style="font-size: 12px; font-weight: 500; color: #6b7280;">${info.label}</span>
+                            </div>
+                        `);
+
+                        // Apply positioning for weight items (always 6 items)
+                        if (items.length === 6) {
+                            // First row: Left, Center, Right
+                            items[0] = items[0].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                            items[1] = items[1].replace('class="legend-item"', 'class="legend-item" style="margin: 0 auto;"');
+                            items[2] = items[2].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                            // Second row: Left, Center, Right
+                            items[3] = items[3].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                            items[4] = items[4].replace('class="legend-item"', 'class="legend-item" style="margin: 0 auto;"');
+                            items[5] = items[5].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                        }
+
+                        weightGrid.innerHTML = items.join('');
+                    }
+
+                    // === TOP STATES SPLIT ===
+                    const statesGrid = document.getElementById('states-grid');
+                    if (Array.isArray(data.OrderSplitAcrossTopStates) && data.OrderSplitAcrossTopStates.length > 0) {
+                        const items = data.OrderSplitAcrossTopStates.map(st => `
+                            <div class="legend-item">
+                                <span class="count-number" style="font-size: 18px; margin-bottom: 6px;">${st.total_orders || 0}</span>
+                                <span style="font-size: 12px; font-weight: 500; color: #6b7280;">${st.state}</span>
+                            </div>
+                        `);
+
+                        // Apply positioning classes based on number of items
+                        if (items.length === 2) {
+                            items[0] = items[0].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                            items[1] = items[1].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                        } else if (items.length === 3) {
+                            items[0] = items[0].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                            items[1] = items[1].replace('class="legend-item"', 'class="legend-item" style="margin: 0 auto;"');
+                            items[2] = items[2].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                        } else if (items.length > 3) {
+                            // For more than 3 items, apply positioning in groups of 3
+                            for (let i = 0; i < items.length; i += 3) {
+                                if (i < items.length) items[i] = items[i].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                                if (i + 1 < items.length) items[i + 1] = items[i + 1].replace('class="legend-item"', 'class="legend-item" style="margin: 0 auto;"');
+                                if (i + 2 < items.length) items[i + 2] = items[i + 2].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                            }
+                        }
+
+                        statesGrid.innerHTML = items.join('');
+                    } else {
+                        statesGrid.innerHTML = '<p style="text-align: center; color: #6b7280;">No Data Found</p>';
+                    }
+
+                    // === DELIVERY PERFORMANCE ===
+                    const deliveryGrid = document.getElementById('delivery-grid');
+                    const delivery = data.DeliveryPerformance[0] || {};
+
+                    const deliveryData = [
+                        { label: 'On-time Deliveries', count: delivery.on_time || 0, color: '#22c55e' },
+                        { label: 'Delayed Deliveries', count: delivery.delay || 0, color: '#eab308' },
+                        { label: 'RTO', count: delivery.rto || 0, color: '#ef4444' }
+                    ];
+
+                    const items = deliveryData.map(item => `
+                        <div class="legend-item">
+                            <span class="count-number" style="font-size: 18px; margin-bottom: 6px;">${item.count}</span>
+                            <span style="font-size: 12px; font-weight: 500; color: #6b7280;">${item.label}</span>
+                        </div>
+                    `);
+
+                    // Apply positioning for delivery performance (always 3 items)
+                    if (items.length === 3) {
+                        items[0] = items[0].replace('class="legend-item"', 'class="legend-item" style="margin-right: auto;"');
+                        items[1] = items[1].replace('class="legend-item"', 'class="legend-item" style="margin: 0 auto;"');
+                        items[2] = items[2].replace('class="legend-item"', 'class="legend-item" style="margin-left: auto;"');
+                    }
+
+                    deliveryGrid.innerHTML = items.join('');
+
+                } catch (err) {
+                    console.error('Error fetching dashboard data:', err);
+                    // Show error message to user
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'alert alert-danger';
+                    errorDiv.innerHTML = 'Failed to load dashboard data. Please refresh the page.';
+                    document.querySelector('#main-content .container').prepend(errorDiv);
+                }
+
+                // Check for overflow and add scroll indicators
+                checkChartOverflow();
+            }
+
+            // Function to check if chart legends have overflow and add visual indicators
+            function checkChartOverflow() {
+                const chartLegends = document.querySelectorAll('.chart-legend, .chart-legend-vertical, .chart-legend-grid');
+
+                chartLegends.forEach(legend => {
+                    if (legend.scrollHeight > legend.clientHeight) {
+                        legend.classList.add('overflow');
+                    } else {
+                        legend.classList.remove('overflow');
+                    }
+                });
+            }
+
+            // ---- Config for RTO metric cards ----
+            const RTO_METRIC_DEFS = [
+                {
+                    key: 'totalRto',
+                    label: 'Total RTO',
+                    percentKey: null,
+                    icon: 'fas fa-clipboard-list',
+                  
+                    iconColor: '#1C1B1F',
+                    tooltip: 'Total RTO orders for the selected period.'
+                },
+                {
+                    key: 'rtoInitiated',
+                    label: 'RTO Initiated',
+                    percentKey: 'rtoInitiated',
+                    icon: 'fas fa-hourglass-half',
+                 
+                    iconColor: '#C59C21',
+                    tooltip: 'RTO requests that have been initiated.'
+                },
+                {
+                    key: 'rtoTransit',
+                    label: 'RTO Transit',
+                    percentKey: 'rtoTransit',
+                    icon: 'fas fa-sync-alt',
+               
+                    iconColor: '#D28DFF',
+                    tooltip: 'RTO orders currently in transit back to origin.'
+                },
+                {
+                    key: 'rtoDelivered',
+                    label: 'RTO Delivered',
+                    percentKey: 'rtoDelivered',
+                    icon: 'fas fa-check-circle',
+              
+                    iconColor: '#1C1B1F',
+                    tooltip: 'RTO orders successfully delivered back to origin.'
+                }
+            ];
+
+            // ---- Config for each metric card ----
+            const METRIC_DEFS = [
+                {
+                    key: 'totalOrders',
+                    label: 'Total Orders',
+                    percentKey: null,               // no percentage for totals (usually)
+                    icon: 'glyph-icon simple-icon-layers',
+                 
+                    iconColor: '#2563EB',
+                    tooltip: 'All shipments found for the selected filters.'
+                },
+                {
+                    key: 'readyToDispatch',
+                    label: 'Ready to Dispatch',
+                    percentKey: 'readyToDispatch',
+                    icon: 'glyph-icon simple-icon-basket-loaded',
+                   
+                    iconColor: '#059669',
+                    tooltip: 'Packed and ready to hand over to courier.'
+                },
+                {
+                    key: 'readyToDispatchPost',
+                    label: 'Ready to Dispatch (Post)',
+                    percentKey: 'readyToDispatchPost',
+                    icon: 'glyph-icon iconsminds-gift-box',
+                 
+                    iconColor: '#D97706',
+                    tooltip: 'Ready for post/letter channel.'
+                },
+                {
+                    key: 'inTransit',
+                    label: 'In Transit',
+                    percentKey: 'inTransit',
+                    icon: 'glyph-icon fa fa-truck-fast',
+                 
+                    iconColor: '#2563EB',
+                    tooltip: 'Shipment is moving between facilities.'
+                },
+                {
+                    key: 'outForDelivery',
+                    label: 'Out for Delivery',
+                    percentKey: 'outForDelivery',
+                    icon: 'fas fa-truck',
+                   
+                    iconColor: '#0EA5E9',
+                    tooltip: 'Loaded on vehicle for final delivery.'
+                },
+                {
+                    key: 'delivered',
+                    label: 'Delivered',
+                    percentKey: 'delivered',
+                    icon: 'fas fa-check-circle',
+                   
+                    iconColor: '#10B981',
+                    tooltip: 'Successfully delivered to consignee.'
+                },
+                {
+                    key: 'rtoInTransit',
+                    label: 'RTO In-Transit',
+                    percentKey: 'rtoInTransit',
+                    icon: 'fas fa-route',
+                   
+                    iconColor: '#8B5CF6',
+                    tooltip: 'Return to origin while in movement.'
+                },
+                {
+                    key: 'rto',
+                    label: 'RTO',
+                    percentKey: 'rto',
+                    icon: 'fas fa-undo',
+                 
+                    iconColor: '#D97706',
+                    tooltip: 'Returned to origin.'
+                },
+                {
+                    key: 'ndr',
+                    label: 'NDR',
+                    percentKey: 'ndr',
+                    icon: 'fas fa-exclamation-triangle',
+                    
+                    iconColor: '#DC2626',
+                    tooltip: 'Non-delivery reported; action required.'
+                },
+                // If you still want to show placeholders for old metrics, uncomment:
+                // { key: 'unprocessedOrders', label:'Unprocessed Orders', percentKey:'unprocessedOrders', icon:'fas fa-hourglass-half', iconBg:'#E3F0FF', iconColor:'#2563EB', tooltip:'Orders created but not yet processed.', fallbackDash:true },
+                // { key: 'cancelledOrders', label:'Cancelled Orders', percentKey:'cancelledOrders', icon:'fas fa-ban', iconBg:'#FEE2E2', iconColor:'#DC2626', tooltip:'Orders that were cancelled.', fallbackDash:true },
+            ];
+
+            // ---- Builder ----
+            function renderMetricCards(data) {
+                const grid = document.getElementById('metricsGrid');
+                if (!grid) return;
+
+                const percent = data?.percent || {};
+                const cardsHtml = METRIC_DEFS.map(def => {
+                    const val = (data?.[def.key] ?? (def.fallbackDash ? '-' : 0));
+                    const pctVal = def.percentKey
+                        ? ((percent?.[def.percentKey] ?? (def.fallbackDash ? '-' : 0)) + (typeof percent?.[def.percentKey] === 'number' ? '%' : ''))
+                        : ''; // no percent for totals
+
+                    return `
+      <div class="card metric-card">
+        <div class="card-body sm" style="padding:1.25rem 1.75rem;">
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <div style="min-width:40px; min-height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:${def.iconBg};">
+              <i class="${def.icon}" context-menu-list style="font-size:14px; color:${def.iconColor};" title="${def.label}"></i>
+            </div>
+            <div>
+              <div style="display:flex; align-items:flex-end; margin-top:5px; gap:8px;">
+                <span style="font-size:20px; font-weight:700; color:#0F172A;">${val}</span>
+                ${def.percentKey ? `<span style="font-size:14px; color:#475569;">${pctVal || '0%'}</span>` : ''}
+              </div>
+              <div style="margin-top:4px; display:flex; align-items:center; gap:4px;">
+                <div style="font-weight:600; color:#0F172A; max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                  ${def.label}
+                </div>
+                <span class="card-icon" style="position:relative; right:5px; top:5px; cursor:pointer;">
+                  <i class="fas fa-info-circle" style="font-size:12px; color:#d7d7d7;" title="${def.tooltip || def.label}"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+                }).join('');
+
+                grid.innerHTML = cardsHtml;
+            }
+
+            // ---- RTO Metric Cards Renderer ----
+            function renderRtoMetricCards(data) {
+                const grid = document.getElementById('rtoMetricsGrid');
+                if (!grid) return;
+
+                const percent = data?.percent || {};
+                const cardsHtml = RTO_METRIC_DEFS.map(def => {
+                    const val = (data?.[def.key] ?? (def.fallbackDash ? '-' : 0));
+                    const pctVal = def.percentKey
+                        ? ((percent?.[def.percentKey] ?? (def.fallbackDash ? '-' : 0)) + (typeof percent?.[def.percentKey] === 'number' ? '%' : ''))
+                        : ''; // no percent for totals
+
+                    return `
+      <div class="card metric-card" style="flex: 1 1 0; min-width: 0; max-width: 25%;">
+        <div class="card-body sm" style="padding:1.25rem 1.75rem;">
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <div style="min-width:40px; min-height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:${def.iconBg};">
+              <i class="${def.icon}" style="font-size:18px; color:${def.iconColor};" title="${def.tooltip}"></i>
+            </div>
+            <div>
+              <div style="display:flex; align-items:flex-end; margin-top:5px; gap:8px;">
+                <span style="font-size:20px; font-weight:700; color:#0F172A;">${val}</span>
+                ${def.percentKey ? `<span style="font-size:14px; color:#475569;">${pctVal || '0.00%'}</span>` : ''}
+              </div>
+              <div style="margin-top:4px; display:flex; align-items:center; gap:4px;">
+                <div style="font-weight:600; color:#0F172A; max-width:130px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                  ${def.label}
+                </div>
+                <span class="card-icon" style="position:relative; right:5px; top:5px; cursor:pointer;">
+                  <i class="fas fa-info-circle" style="font-size:12px; color:#d7d7d7;" title="${def.tooltip || def.label}"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+                }).join('');
+
+                grid.innerHTML = cardsHtml;
+            }
+
+            // ---- Courier Status Table Renderer ----
+            function renderCourierStatusTable(data) {
+                const tbody = document.querySelector('#courierStatusTable tbody');
+                if (!tbody) return;
+
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center p-5">No Data Found</td></tr>';
+                    return;
+                }
+
+                const rows = data.map(item => `
+                    <tr>
+                        <td>${item.courier_name || 'N/A'}</td>
+                        <td>${item.total_shipments || 0}</td>
+                        <td>${item.delivered || 0}</td>
+                        <td>${item.in_transit || 0}</td>
+                        <td>${item.rto || 0}</td>
+                        <td>${item.lost_damaged || 0}</td>
+                        <td>${item.ndr_raised || 0}</td>
+                    </tr>
+                `).join('');
+
+                tbody.innerHTML = rows;
+            }
+
+            // ---- Your existing loader, trimmed to call renderMetricCards ----
+            async function loadShipmentDashboardSummary(payload = {}) {
+                const courierType = "<%= courierType %>";
+                console.log('Loading shipment dashboard summary for courier type:', courierType);
+                console.log('Payload:', payload);
+                
+                try {
+                    const response = await axios.post('/api/dashboard/shipments', {
+                        courier_type: courierType, ...payload
+                    });
+                    const data = response.data || {};
+                    console.log('Shipment dashboard data received:', data);
+
+                    // Render dynamic metric cards
+                    renderMetricCards(data);
+
+                    // Render RTO metric cards
+                    renderRtoMetricCards(data);
+
+                    // Optional: update mode counts if present
+                    const setText = (sel, v) => { const el = document.querySelector(sel); if (el) el.textContent = v ?? 0; };
+                    setText('#airCount .count', data.courierMode?.air ?? 0);
+                    setText('#surfaceCount .count', data.courierMode?.surface ?? 0);
+
+                    // Courier-wise table (your existing function)
+                    renderCourierStatusTable(Array.isArray(data.courierWiseStatus) ? data.courierWiseStatus : []);
+
+                    // Last updated
+                    const now = new Date();
+                    const formattedTime = now.toLocaleString('en-IN', {
+                        hour: '2-digit', minute: '2-digit', hour12: true,
+                        day: '2-digit', month: 'short', year: 'numeric'
+                    });
+                    setText('#modified-last-updated', `Last updated on ${formattedTime}`);
+                    
+                    console.log('Shipment dashboard data loaded successfully');
+                } catch (error) {
+                    console.error('Failed to load shipment dashboard summary:', error);
+                    // Show error message to user
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'alert alert-danger';
+                    errorDiv.innerHTML = 'Failed to load shipment data. Please refresh the page.';
+                    document.querySelector('#main-content .container').prepend(errorDiv);
+                }
+            }
+
+            // Ensure data loads when page is ready
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('DOM loaded, initializing dashboard...');
+                renderDashboardOverView();
+                // Also load shipment data for the shipments tab
+                loadShipmentDashboardSummary();
+            });
+
+            // Also try to load data immediately if DOM is already loaded
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    renderDashboardOverView();
+                    loadShipmentDashboardSummary();
+                });
+            } else {
+                renderDashboardOverView();
+                loadShipmentDashboardSummary();
+            }
+
+            // Global function for testing - you can call this from browser console
+            window.testDashboardData = function() {
+                console.log('Testing dashboard data loading...');
+                renderDashboardOverView();
+                loadShipmentDashboardSummary();
+            };
+
+        </script>
+
+        <!-- FOOTER -->
+        <%- include('../partials/footer') %>

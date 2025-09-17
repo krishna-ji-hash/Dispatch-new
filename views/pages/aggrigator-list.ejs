@@ -1,0 +1,1260 @@
+
+
+  <%- include('../partials/header') %>
+  <%- include('../partials/left-sidebar') %>
+
+  <main>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1>Datatables Rows</h1>
+
+                <div class="top-right-button-container">
+                    <div class="btn-group">
+                        <button class="btn btn-outline-primary btn-lg dropdown-toggle" type="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            EXPORT
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" id="dataTablesCopy" href="#">Copy</a>
+                            <a class="dropdown-item" id="dataTablesExcel" href="#">Excel</a>
+                            <a class="dropdown-item" id="dataTablesCsv" href="#">Csv</a>
+                            <a class="dropdown-item" id="dataTablesPdf" href="#">Pdf</a>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
+                    <ol class="breadcrumb pt-0">
+                        <li class="breadcrumb-item">
+                            <a href="#">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="#">Library</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Data</li>
+                    </ol>
+                </nav>
+                <div class="mb-2">
+                    <a class="btn pt-0 pl-0 d-inline-block d-md-none" data-toggle="collapse" href="#displayOptions"
+                        role="button" aria-expanded="true" aria-controls="displayOptions">
+                        Display Options
+                        <i class="simple-icon-arrow-down align-middle"></i>
+                    </a>
+                    <div class="collapse dont-collapse-sm" id="displayOptions">
+                        <div class="d-block d-md-inline-block">
+                            <div class="search-sm d-inline-block float-md-left mr-1 mb-1 align-top">
+                                <input class="form-control" placeholder="Search Table" id="searchDatatable">
+                            </div>
+                        </div>
+                        <div class="float-md-right dropdown-as-select" id="pageCountDatatable">
+                            <span class="text-muted text-small">Displaying 1-10 of 40 items </span>
+                            <button class="btn btn-outline-dark btn-xs dropdown-toggle" type="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                10
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#">5</a>
+                                <a class="dropdown-item active" href="#">10</a>
+                                <a class="dropdown-item" href="#">20</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="separator"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 mb-4 data-table-rows data-tables-hide-filter">
+                <table id="datatableRows" class="data-table responsive nowrap"
+                    data-order="[[ 1, &quot;desc&quot; ]]">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Sales</th>
+                            <th>Stock</th>
+                            <th>Category</th>
+                            <th class="empty">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Marble Cake</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1452</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">62</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Hummingbird</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1414</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">85</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Mantecada</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1401</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">21</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Batik Cake</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1387</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">114</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Kransekake</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1356</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">27</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Aranygaluska</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1323</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">57</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Lamington</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1301</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">11</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Kremówka</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1287</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">94</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Kladdkaka</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1261</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">37</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Fruitcake</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1245</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">65</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Blondie</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1218</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">19</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Chocolate Cake</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1200</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">45</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Banoffee Pie</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1192</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">22</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Croquembouche</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1176</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">48</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Basbousa</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1154</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">13</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Bebinca</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1150</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">4</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Punschkrapfen</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1108</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">87</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Crystal Cake</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1068</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">43</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Napoleonshat</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1050</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">41</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Bibingka</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">1024</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">12</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Magdalena</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">998</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">24</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Butterkuchen</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">981</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">17</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Charlotte</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">976</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">26</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Avocado Cake</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">961</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">106</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Fig Cake</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">948</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">37</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Šakotis</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">931</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">54</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Chenna Poda</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">930</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">7</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Salzburger Nockerl</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">924</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">20</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Pavlova</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">918</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">14</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Soufflé</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">905</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">64</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Cremeschnitte</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">845</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">12</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Kolaczki</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">838</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">21</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Cheesecake</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">830</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">36</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Gingerbread</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">807</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">21</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Goose Breast</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">795</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">9</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Baumkuchen</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">792</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">18</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Faworki</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">783</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">38</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Kabuni</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">749</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">148</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Cupcakes</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Buccellato</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">738</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">51</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p class="list-item-heading">Vínarterta</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">711</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">49</p>
+                            </td>
+                            <td>
+                                <p class="text-muted">Desserts</p>
+                            </td>
+                            <td>
+                                <label
+                                    class="custom-control custom-checkbox mb-1 align-self-center data-table-rows-check">
+                                    <input type="checkbox" class="custom-control-input">
+                                    <span class="custom-control-label">&nbsp;</span>
+                                </label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Prevent global DataTables from initializing our table
+    window.addEventListener('load', function() {
+        // Protect our table from global DataTables initialization
+        if (typeof $ !== 'undefined') {
+            // Temporarily override the global DataTables selector for our table
+            const originalDataTable = $.fn.DataTable;
+            const protectedTables = ['aggregatorTable'];
+
+            $.fn.DataTable = function(options) {
+                // Check if this is trying to initialize our protected table
+                if (this.selector && protectedTables.some(tableId => this.selector.includes(tableId))) {
+                    console.log('Skipping global DataTables initialization for protected table:', this.selector);
+                    return this; // Return jQuery object without initializing DataTables
+                }
+                // For other tables, use original DataTables
+                return originalDataTable.apply(this, arguments);
+            };
+        }
+    });
+
+    let editModal, departmentalModal, additionalChargesModal, parentalModal, rateListModal, zoneMappingModal, tatModal;
+
+    // Simple DataTable initialization with error handling
+    $(document).ready(function() {
+        // Check if table exists and DataTables is available
+        if ($('#aggregatorTable').length > 0 && typeof $.fn.DataTable !== 'undefined') {
+            // Destroy any existing DataTable instance
+            if ($.fn.DataTable.isDataTable('#aggregatorTable')) {
+                $('#aggregatorTable').DataTable().destroy();
+            }
+
+            try {
+                // Simple DataTable configuration
+                $('#aggregatorTable').DataTable({
+                    responsive: false, // Disable responsive to avoid conflicts
+                    searching: true,
+                    paging: true,
+                    ordering: true,
+                    info: true,
+                    lengthChange: true,
+                    pageLength: 10,
+                    lengthMenu: [5, 10, 20, 25, 50],
+                    autoWidth: false,
+                    language: {
+                        search: "",
+                        searchPlaceholder: "Search aggregators...",
+                        lengthMenu: "Show _MENU_ entries",
+                        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                        infoEmpty: "No entries found",
+                        infoFiltered: "(filtered from _MAX_ total entries)",
+                        zeroRecords: "No matching records found",
+                        emptyTable: "No data available in table",
+                        paginate: {
+                            previous: "<i class='simple-icon-arrow-left'></i>",
+                            next: "<i class='simple-icon-arrow-right'></i>"
+                        }
+                    },
+                    columnDefs: [
+                        {
+                            targets: -1, // Last column (checkbox)
+                            orderable: false,
+                            searchable: false
+                        }
+                    ],
+                    dom: '<"top"i>rt<"bottom"flp><"clear">',
+                    pagingType: "simple_numbers",
+                    initComplete: function() {
+                        console.log('Aggregator DataTable initialized successfully');
+
+                        // Apply custom pagination styling
+                        $('.dataTables_paginate').addClass('paging_simple_numbers');
+                        $('.dataTables_paginate ul').addClass('pagination pagination-sm');
+
+                        // Sync search input
+                        $('#searchDatatable').on('input', function() {
+                            $('#aggregatorTable').DataTable().search($(this).val()).draw();
+                        });
+
+                        // Update pagination styling on draw
+                        this.api().on('draw', function() {
+                            $('.dataTables_paginate').addClass('paging_simple_numbers');
+                            $('.dataTables_paginate ul').addClass('pagination pagination-sm');
+                        });
+                    }
+                });
+
+                console.log('Aggregator DataTable setup complete');
+
+            } catch (error) {
+                console.error('DataTable initialization failed:', error);
+                // Fallback: basic table functionality
+                $('#searchDatatable').on('input', function() {
+                    const searchTerm = $(this).val().toLowerCase();
+                    $('#aggregatorTable tbody tr').each(function() {
+                        const text = $(this).text().toLowerCase();
+                        $(this).toggle(text.indexOf(searchTerm) > -1);
+                    });
+                });
+            }
+        } else {
+            console.warn('DataTable requirements not met');
+            // Fallback search functionality
+            $('#searchDatatable').on('input', function() {
+                const searchTerm = $(this).val().toLowerCase();
+                $('#aggregatorTable tbody tr').each(function() {
+                    const text = $(this).text().toLowerCase();
+                    $(this).toggle(text.indexOf(searchTerm) > -1);
+                });
+            });
+        }
+    });
+
+        // Initialize modals only if they exist
+        const editAggrigatorModalEl = document.getElementById('editAggrigatorModal');
+        if (editAggrigatorModalEl) {
+            try {
+                editModal = new bootstrap.Modal(editAggrigatorModalEl);
+            } catch (error) {
+                console.warn('editAggrigatorModal initialization failed:', error);
+            }
+        }
+
+        const departmentalInfoModalEl = document.getElementById('departmentalInfoModal');
+        if (departmentalInfoModalEl) {
+            try {
+                departmentalModal = new bootstrap.Modal(departmentalInfoModalEl);
+            } catch (error) {
+                console.warn('departmentalInfoModal initialization failed:', error);
+            }
+        }
+
+        const additionalChargesModalEl = document.getElementById('additionalChargesModal');
+        if (additionalChargesModalEl) {
+            try {
+                additionalChargesModal = new bootstrap.Modal(additionalChargesModalEl);
+            } catch (error) {
+                console.warn('additionalChargesModal initialization failed:', error);
+            }
+        }
+
+        const parentalDetailsModalEl = document.getElementById('parentalDetailsModal');
+        if (parentalDetailsModalEl) {
+            try {
+                parentalModal = new bootstrap.Modal(parentalDetailsModalEl);
+            } catch (error) {
+                console.warn('parentalDetailsModal initialization failed:', error);
+            }
+        }
+
+        const rateListModalEl = document.getElementById('rateListModal');
+        if (rateListModalEl) {
+            try {
+                rateListModal = new bootstrap.Modal(rateListModalEl);
+            } catch (error) {
+                console.warn('rateListModal initialization failed:', error);
+            }
+        }
+
+        const zoneMappingModalEl = document.getElementById('zoneMappingModal');
+        if (zoneMappingModalEl) {
+            try {
+                zoneMappingModal = new bootstrap.Modal(zoneMappingModalEl);
+            } catch (error) {
+                console.warn('zoneMappingModal initialization failed:', error);
+            }
+        }
+
+        const tatModalEl = document.getElementById('tatModal');
+        if (tatModalEl) {
+            try {
+                tatModal = new bootstrap.Modal(tatModalEl);
+            } catch (error) {
+                console.warn('tatModal initialization failed:', error);
+            }
+        }
+
+        // Export functionality with error handling
+        $('#dataTablesCopy').on('click', function(e) {
+            e.preventDefault();
+            if (typeof $ !== 'undefined' && $.fn.DataTable && $('#datatableRows').DataTable()) {
+                try {
+                    $('#datatableRows').DataTable().button('.buttons-copy').trigger();
+                } catch (error) {
+                    console.warn('Copy export failed:', error);
+                }
+            }
+        });
+
+        $('#dataTablesExcel').on('click', function(e) {
+            e.preventDefault();
+            if (typeof $ !== 'undefined' && $.fn.DataTable && $('#datatableRows').DataTable()) {
+                try {
+                    $('#datatableRows').DataTable().button('.buttons-excel').trigger();
+                } catch (error) {
+                    console.warn('Excel export failed:', error);
+                }
+            }
+        });
+
+        $('#dataTablesCsv').on('click', function(e) {
+            e.preventDefault();
+            if (typeof $ !== 'undefined' && $.fn.DataTable && $('#datatableRows').DataTable()) {
+                try {
+                    $('#datatableRows').DataTable().button('.buttons-csv').trigger();
+                } catch (error) {
+                    console.warn('CSV export failed:', error);
+                }
+            }
+        });
+
+        $('#dataTablesPdf').on('click', function(e) {
+            e.preventDefault();
+            if (typeof $ !== 'undefined' && $.fn.DataTable && $('#datatableRows').DataTable()) {
+                try {
+                    $('#datatableRows').DataTable().button('.buttons-pdf').trigger();
+                } catch (error) {
+                    console.warn('PDF export failed:', error);
+                }
+            }
+        });
+    });
+
+    // Function to edit parental details
+
+
+
+
+    async function editAdditionalCharges(id) {
+        // Implementation for editing additional charges
+    }
+
+    async function editRateList(id) {
+        // Implementation for editing rate list
+    }
+
+    async function editZoneMapping(id) {
+        // Implementation for editing zone mapping
+    }
+
+    async function editTAT(id) {
+        // Implementation for editing TAT
+    }
+
+    // Additional functions for LTL and Express editing
+    function editLTLRateList(id) {
+        // Implementation for LTL rate list
+        console.log('Edit LTL Rate List for ID:', id);
+    }
+
+    function editLTLZoneMapping(id) {
+        // Implementation for LTL zone mapping
+        console.log('Edit LTL Zone Mapping for ID:', id);
+    }
+
+    function editLTLTAT(id) {
+        // Implementation for LTL TAT
+        console.log('Edit LTL TAT for ID:', id);
+    }
+
+    function editExpressRateList(id, type) {
+        // Implementation for Express rate list
+        console.log('Edit Express Rate List for ID:', id, 'Type:', type);
+    }
+</script>
+
+
+<script>
+    function deleteAggregator(aggregatorId) {
+        // Show confirmation dialog
+        Swal.fire({
+            title: 'Delete Aggregator',
+            text: 'Are you sure you want to delete this aggregator?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show loading state
+                Swal.fire({
+                    title: 'Deleting...',
+                    text: 'Please wait while we delete the aggregator',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Make API call to delete the aggregator
+                axios.delete(`/api/aggrigator/${aggregatorId}`)
+                    .then(response => {
+                        if (response.data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted!',
+                                text: 'Aggregator has been deleted successfully.',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                // Reload the page to reflect changes
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: response.data.message || 'Failed to delete aggregator.'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error deleting aggregator:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'An error occurred while deleting the aggregator.'
+                        });
+                    });
+            }
+        });
+    }
+</script>
+  <%- include('../partials/footer') %>
+
+
+
+
+
+
